@@ -1,13 +1,13 @@
 <template>
-  <div class="container">
+  <div  class="container">
     <!-- Area Chart -->
-    <div class="col-xl-8 col-lg-7">
+    <div class="col-xl-6 col-lg-6">
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <i class="far fa-user"></i>
+          <i class="fas fa-users fa-3x"></i>
           <h6 class="m-0 font-weight-bold text-primary">Users</h6>
-          <i @click="openCreateUserModal" class="fas fa-plus-circle"></i>
+          <i @click="openCreateUserModal" class="fas fa-plus-circle fa-2x"></i>
           
         </div>
         <!-- Card Body -->
@@ -16,21 +16,21 @@
         <table  class="table " v-if="users.length > 0">
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Name</th>
-              <th>E-mail</th>
-              <th>Function</th>
-              <th>         </th>
+              <th scope="col">Id</th>
+              <th scope="col">Name</th>
+              <th scope="col">E-mail</th>
+              <th scope="col">Function</th>
+              <th scope="col">         </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(user, index) in users">
               <td>{{index + 1}}</td>
               <td>{{user.name}}</td>
-              <td>{{user.name}}</td>
+              <td>{{user.email}}</td>
               <td v-if="user.role_id == 1">Admin</td>
               <td v-else>Technician</td>
-              <td><i @click="deleteUser(index)" class="fas fa-minus-circle"></i></td>
+              <td><i @click="deleteUser(index)" class="fas fa-minus-circle fa-1x"></i></td>
             </tr>
           </tbody>
         </table>
@@ -121,7 +121,9 @@ export default {
       this.user.role_id = "2";
     },
     openCreateUserModal() {
+      this.user.role_id ="2"
       $("#adminButton").hide();
+      $("#technicianButton").show();
       $("#create-modal").modal("show");
     },
     closeCreateUserModal() {

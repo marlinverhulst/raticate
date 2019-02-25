@@ -1918,7 +1918,9 @@ __webpack_require__.r(__webpack_exports__);
       this.user.role_id = "2";
     },
     openCreateUserModal: function openCreateUserModal() {
+      this.user.role_id = "2";
       $("#adminButton").hide();
+      $("#technicianButton").show();
       $("#create-modal").modal("show");
     },
     closeCreateUserModal: function closeCreateUserModal() {
@@ -37557,7 +37559,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "col-xl-8 col-lg-7" }, [
+    _c("div", { staticClass: "col-xl-6 col-lg-6" }, [
       _c("div", { staticClass: "card shadow mb-4" }, [
         _c(
           "div",
@@ -37566,14 +37568,14 @@ var render = function() {
               "card-header py-3 d-flex flex-row align-items-center justify-content-between"
           },
           [
-            _c("i", { staticClass: "far fa-user" }),
+            _c("i", { staticClass: "fas fa-users fa-3x" }),
             _vm._v(" "),
             _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
               _vm._v("Users")
             ]),
             _vm._v(" "),
             _c("i", {
-              staticClass: "fas fa-plus-circle",
+              staticClass: "fas fa-plus-circle fa-2x",
               on: { click: _vm.openCreateUserModal }
             })
           ]
@@ -37592,7 +37594,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(user.name))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(user.name))]),
+                      _c("td", [_vm._v(_vm._s(user.email))]),
                       _vm._v(" "),
                       user.role_id == 1
                         ? _c("td", [_vm._v("Admin")])
@@ -37600,7 +37602,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [
                         _c("i", {
-                          staticClass: "fas fa-minus-circle",
+                          staticClass: "fas fa-minus-circle fa-1x",
                           on: {
                             click: function($event) {
                               return _vm.deleteUser(index)
@@ -37789,15 +37791,15 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Id")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Id")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Name")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", [_vm._v("E-mail")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("E-mail")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Function")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Function")]),
         _vm._v(" "),
-        _c("th")
+        _c("th", { attrs: { scope: "col" } })
       ])
     ])
   },
