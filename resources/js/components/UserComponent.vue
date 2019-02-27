@@ -1,7 +1,7 @@
 <template>
-  <div  class="container">
+  <div  class="col-6">
     <!-- Area Chart -->
-    <div class="col-xl-6 col-lg-6">
+    <div >
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -12,28 +12,30 @@
         </div>
         <!-- Card Body -->
         <div class="card-body">
-
+          <div class="costumheight">
         <table  class="table " v-if="users.length > 0">
           <thead>
             <tr>
-              <th scope="col">Id</th>
+              <!-- <th scope="col">Id</th> -->
               <th scope="col">Name</th>
-              <th scope="col">E-mail</th>
+              <!-- <th scope="col">E-mail</th> -->
               <th scope="col">Function</th>
-              <th scope="col">         </th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
+            
             <tr v-for="(user, index) in users">
-              <td>{{index + 1}}</td>
+              <!-- <td>{{index + 1}}</td> -->
               <td>{{user.name}}</td>
-              <td>{{user.email}}</td>
+              <!-- <td>{{user.email}}</td> -->
               <td v-if="user.role_id == 1">Admin</td>
               <td v-else>Technician</td>
               <td><i @click="deleteUser(index)" class="fas fa-minus-circle fa-1x"></i></td>
             </tr>
           </tbody>
         </table>
+          </div>
         </div>
       </div>
     </div>

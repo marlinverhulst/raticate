@@ -22,7 +22,7 @@
   <!-- Custom styles for this template-->
   <link href="admin/css/sb-admin-2.min.css" rel="stylesheet">
   <script src="{{ asset('js/app.js') }}" defer></script>
-
+  <link rel="stylesheet" type="text/css" href="{{ url('/css/costom.css') }}" />
   
   {{-- <!-- Bootstrap core JavaScript-->
   <script src="admin/vendor/jquery/jquery.min.js"></script>
@@ -252,6 +252,7 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
+            
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -264,13 +265,17 @@
           
 
           <div class="row">
-
-            <user-component></user-component>
             
-
+              <user-component></user-component>
+              <client-component></client-component>
+                
+            </div>
+            
+            
+              
         </div>
         <!-- /.container-fluid -->
-
+        
       </div>
       <!-- End of Main Content -->
 
