@@ -1,21 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Client;
-use App\PriceTag;
+
 use Illuminate\Http\Request;
 
-class ClientsController extends Controller
+class PriceTagController extends Controller
 {
-     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -24,12 +14,6 @@ class ClientsController extends Controller
     public function index()
     {
         //
-        // $clients = Client::all();
-        $clients = Client::with('pricetags')->get();
-
-        return response()->json([
-            'clients' => $clients 
-        ],200);
     }
 
     /**
@@ -51,14 +35,6 @@ class ClientsController extends Controller
     public function store(Request $request)
     {
         //
-        //
-        $client = Client::create([
-            'name' => $request->name
-        ]);
-        return response()->json([
-            'client' => $client,
-            'message' => 'client has been added'
-        ],200);
     }
 
     /**

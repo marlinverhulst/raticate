@@ -1834,6 +1834,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1895,6 +1896,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     console.log("Component mounted.");
+    console.log(this.clients);
     this.getClients();
   }
 });
@@ -37659,20 +37661,28 @@ var render = function() {
                   _c(
                     "tbody",
                     _vm._l(_vm.clients, function(client, index) {
-                      return _c("tr", [
-                        _c("td", [_vm._v(_vm._s(client.name))]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("i", {
-                            staticClass: "fas fa-tools fa-1x",
-                            on: {
-                              click: function($event) {
-                                return _vm.UpdateClient(index)
+                      return _c(
+                        "tr",
+                        [
+                          _c("td", [_vm._v(_vm._s(client.name))]),
+                          _vm._v(" "),
+                          _vm._l(client.pricetags, function(pricetag) {
+                            return _c("td", [_vm._v(_vm._s(pricetag.name))])
+                          }),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("i", {
+                              staticClass: "fas fa-tools fa-1x",
+                              on: {
+                                click: function($event) {
+                                  return _vm.UpdateClient(index)
+                                }
                               }
-                            }
-                          })
-                        ])
-                      ])
+                            })
+                          ])
+                        ],
+                        2
+                      )
                     }),
                     0
                   )

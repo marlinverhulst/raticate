@@ -10,4 +10,8 @@ class Client extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function priceTags(){
+        return $this->hasMany('App\PriceTag');
+    }
 }

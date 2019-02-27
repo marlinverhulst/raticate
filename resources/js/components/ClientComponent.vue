@@ -24,6 +24,7 @@
               <tr v-for="(client, index) in clients">
                 <!-- <td>{{index + 1}}</td> -->
                 <td>{{client.name}}</td>
+                <td v-for="pricetag in client.pricetags  " >{{pricetag.name}}</td>
 
                 <td>
                   <i @click="UpdateClient(index)" class="fas fa-tools fa-1x"></i>
@@ -130,6 +131,7 @@ export default {
 
   mounted() {
     console.log("Component mounted.");
+    console.log(this.clients);
     this.getClients();
   }
 };
