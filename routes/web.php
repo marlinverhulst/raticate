@@ -21,4 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/users','UsersController');
 Route::resource('/clients','ClientsController');
+Route::resource('/pricetags','PriceTagController');
 

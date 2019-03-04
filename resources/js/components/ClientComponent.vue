@@ -1,7 +1,7 @@
 <template>
-  <div class="col-6" >
+  <div class="col-6">
     <!-- Area Chart -->
-    <div >
+    <div>
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -12,26 +12,30 @@
         <!-- Card Body -->
         <div class="card-body">
           <div class="costumheight">
-          <table class="table" v-if="clients.length > 0">
-            <thead>
-              <tr>
-                <!-- <th scope="col">Id</th> -->
-                <th scope="col">Name</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(client, index) in clients">
-                <!-- <td>{{index + 1}}</td> -->
-                <td>{{client.name}}</td>
-                
+            <table class="table" v-if="clients.length > 0">
+              <thead>
+                <tr>
+                  <!-- <th scope="col">Id</th> -->
+                  <th scope="col">Name</th>
+                  <th scope="col"></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(client, index) in clients">
+                  <!-- <td>{{index + 1}}</td> -->
+                  <td style="width: 50%">{{client.name}}</td>
 
-                <td>
-                  <i @click="openEditClientModal(index)" class="fas fa-tools fa-1x"></i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td style="width: 25%">
+                    <i @click="openEditClientModal(index)" class="fas fa-tools fa-1x"></i>
+                  </td>
+                  <td style="width: 50%">
+                    <i @click="deleteClient(index)" class="fas fa-minus-circle fa-1x"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -58,7 +62,6 @@
               <label for="clientname">Name:</label>
               <input v-model="client.name" type="text" id="clientsname" class="form-control">
             </div>
-            
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeCreateClientModal">Close</button>
@@ -88,19 +91,68 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="updateclientname">Name:</label>
-              <input v-model="new_update_client.name" type="text" id="updateclientname" class="form-control">
+              <input
+                v-model="new_update_client.name"
+                type="text"
+                id="updateclientname"
+                class="form-control"
+              >
 
-              <div class="form-group">
-              <label for="pricetagname">Pricetags:</label>
-              <input v-model="pricetag.name" type="text" id="pricetagname" class="form-control">
-              <label for="pricetagcost">cost:</label>
-               <input v-model="pricetag.cost" type="text" id="pricetagcost" class="form-control" width="50">
+              <div class="form-group row">
+                <div class="col-5 mt-2">
+                  <label for="pricetagname">Pricetags:</label>
+                  <input v-model="pricetag.name" type="text" id="pricetagname" class="form-control">
+                </div>
+                <div class="col-4 mt-2">
+                  <label for="pricetagcost">cost:</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text" id="btnGroupAddon">€</div>
+                    </div>
+                    <input
+                      v-model="pricetag.cost"
+                      type="text"
+                      id="pricetagcost"
+                      class="form-control"
+                      aria-describedby="btnGroupAddon"
+                    >
+                  </div>
+                </div>
+                <div class="col-3 mt-2">
+                  <label for="pricetagcost">Save:</label>
+                  <div>
+                    <i @click="createPriceTag()" class="far fa-check-circle fa-2x"></i>
+                  </div>
+                </div>
+              </div>
             </div>
+            <div>
+              <hr>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <table class="table" v-if="new_update_client.pricetags">
+                  <thead>
+                    <th style="width: 50%">available tags</th>
+                    <th style="width: 25%">Cost in €</th>
+                    <th style="width: 25%"></th>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(pricetag, index) in new_update_client.pricetags">
+                      <td>{{pricetag.name}}</td>
+                      <td>{{pricetag.cost}}</td>
+                      <td>
+                        <i @click="deletePriceTag(index)" class="far fa-times-circle fa-2x"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeEditClientModal">Close</button>
-              <button type="button" @click="createClient" class="btn btn-primary">Save changes</button>
+              <button type="button" @click="updateClient" class="btn btn-primary">Save changes</button>
             </div>
           </div>
         </div>
@@ -116,8 +168,8 @@ export default {
       client: {
         name: ""
       },
-      pricetag:{
-        name:"",
+      pricetag: {
+        name: "",
         cost: "",
         client_id: ""
       },
@@ -126,13 +178,13 @@ export default {
 
       clients: [],
 
-      toast: toastr.options = { positionClass: "toast-top-full-width" },
+      toast: (toastr.options = { positionClass: "toast-top-full-width" }),
 
       errors: [],
 
       new_update_client: [],
 
-      uri: "http://raticate.test/clients/"
+      uri: "/clients/"
     };
   },
   methods: {
@@ -142,7 +194,7 @@ export default {
     openCreateClientModal() {
       $("#create-client-modal").modal("show");
     },
-    openEditClientModal(index){
+    openEditClientModal(index) {
       this.errors = [];
       $("#edit-client-modal").modal("show");
       this.new_update_client = this.clients[index];
@@ -165,16 +217,43 @@ export default {
           toastr.success(response.data.message);
         });
     },
-    getClients() {
+    createPriceTag() {
       axios
-        .get(this.uri)
+        .post("/pricetags", {
+          name: this.pricetag.name,
+          cost: this.pricetag.cost,
+          client_id: this.new_update_client.id
+        })
         .then(response => {
-          this.clients = response.data.clients;
+          this.new_update_client.pricetags.push(response.data.pricetag);
+           resetPriceTagData();
+
+          toastr.success(response.data.message);
+        });
+    },
+    getClients() {
+      axios.get(this.uri).then(response => {
+        this.clients = response.data.clients;
+      });
+    },
+
+    updateClient() {
+      axios
+        .patch(this.uri + this.new_update_client.id, {
+          name: this.new_update_client.name
+        })
+        .then(response => {
+          $("#edit-client-modal").modal("hide");
+        })
+        .catch(error => {
+          this.errors = [];
         });
     },
 
     deleteClient(index) {
-      let confirmbox = confirm("Do you realy want to delete this Client ?");
+      let confirmbox = confirm(
+        "Do you realy want to delete this Client ? Pricetags won't be deleted. If you want them gone delete them first"
+      );
 
       if (confirmbox == true) {
         axios
@@ -186,6 +265,28 @@ export default {
             console.log("could not delete");
           });
       }
+    },
+    deletePriceTag(index) {
+      let confirmbox = confirm(
+        "Let's think over the consequences first shall we ? It's best to update all jobs with a new pricetag first"
+      );
+
+      if (confirmbox == true) {
+        axios
+          .delete("/pricetags/" + this.new_update_client.pricetags[index].id)
+          .then(response => {
+            this.$delete(this.new_update_client.pricetags, index);
+          })
+          .catch(error => {
+            consol.log("can't delete");
+          });
+      }
+    },
+    resetPriceTagData(){
+      this.pricetag.name = "";
+      this.pricetag.cost = "";
+      this.pricetag.client_id = "";
+    
     }
   },
 

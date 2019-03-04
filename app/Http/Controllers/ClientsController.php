@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Client;
 use App\PriceTag;
+use illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
@@ -51,6 +52,9 @@ class ClientsController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' =>'required'
+        ]);
         //
         $client = Client::create([
             'name' => $request->name
@@ -93,6 +97,16 @@ class ClientsController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'name' =>'required'
+        ]);
+
+        $client = Client::findOrFail($id)->update($request->all());
+
+        return response()->json([
+            'client' => $client,
+            'message' => 'Client info updated'
+        ]);
     }
 
     /**
@@ -101,8 +115,13 @@ class ClientsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Client $client)
     {
         //
+        $client->delete();
+        return response()->json([
+            'client' => $client,
+            'message' => 'Client has been deleted'
+        ]);
     }
 }

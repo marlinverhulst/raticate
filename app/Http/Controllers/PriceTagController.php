@@ -1,11 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use illuminate\Support\Facades\Auth;
+use App\PriceTag;
 use Illuminate\Http\Request;
 
 class PriceTagController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +24,7 @@ class PriceTagController extends Controller
     public function index()
     {
         //
+        
     }
 
     /**
@@ -34,7 +45,21 @@ class PriceTagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' =>'required',
+            'cost' => 'required',
+            'client_id'=> 'required'
+        ]);
+        $pricetag = PriceTag::create([
+            'name' => $request->name,
+            'cost' => $request->cost,
+            'client_id'=>$request->client_id
+
+        ]);
+        return response()->json([
+            'pricetag' => $pricetag,
+            'message' => 'pricetag has been added'
+        ],200);
     }
 
     /**
@@ -77,8 +102,14 @@ class PriceTagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PriceTag $pricetag)
     {
         //
+        $pricetag->delete();
+
+        return response()->json([
+            '$pricetag' => $pricetag,
+            'message' => 'Pricetag has been deleted'
+        ]);
     }
 }

@@ -1874,6 +1874,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1892,7 +1944,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       errors: [],
       new_update_client: [],
-      uri: "http://raticate.test/clients/"
+      uri: "/clients/"
     };
   },
   methods: {
@@ -1928,25 +1980,68 @@ __webpack_require__.r(__webpack_exports__);
         toastr.success(response.data.message);
       });
     },
-    getClients: function getClients() {
+    createPriceTag: function createPriceTag() {
       var _this2 = this;
 
+      axios.post("/pricetags", {
+        name: this.pricetag.name,
+        cost: this.pricetag.cost,
+        client_id: this.new_update_client.id
+      }).then(function (response) {
+        _this2.new_update_client.pricetags.push(response.data.pricetag);
+
+        resetPriceTagData();
+        toastr.success(response.data.message);
+      });
+    },
+    getClients: function getClients() {
+      var _this3 = this;
+
       axios.get(this.uri).then(function (response) {
-        _this2.clients = response.data.clients;
+        _this3.clients = response.data.clients;
+      });
+    },
+    updateClient: function updateClient() {
+      var _this4 = this;
+
+      axios.patch(this.uri + this.new_update_client.id, {
+        name: this.new_update_client.name
+      }).then(function (response) {
+        $("#edit-client-modal").modal("hide");
+      }).catch(function (error) {
+        _this4.errors = [];
       });
     },
     deleteClient: function deleteClient(index) {
-      var _this3 = this;
+      var _this5 = this;
 
-      var confirmbox = confirm("Do you realy want to delete this Client ?");
+      var confirmbox = confirm("Do you realy want to delete this Client ? Pricetags won't be deleted. If you want them gone delete them first");
 
       if (confirmbox == true) {
         axios.delete(this.uri + this.clients[index].id).then(function (response) {
-          _this3.$delete(_this3.clients, index);
+          _this5.$delete(_this5.clients, index);
         }).catch(function (error) {
           console.log("could not delete");
         });
       }
+    },
+    deletePriceTag: function deletePriceTag(index) {
+      var _this6 = this;
+
+      var confirmbox = confirm("Let's think over the consequences first shall we ? It's best to update all jobs with a new pricetag first");
+
+      if (confirmbox == true) {
+        axios.delete("/pricetags/" + this.new_update_client.pricetags[index].id).then(function (response) {
+          _this6.$delete(_this6.new_update_client.pricetags, index);
+        }).catch(function (error) {
+          consol.log("can't delete");
+        });
+      }
+    },
+    resetPriceTagData: function resetPriceTagData() {
+      this.pricetag.name = "";
+      this.pricetag.cost = "";
+      this.pricetag.client_id = "";
     }
   },
   mounted: function mounted() {
@@ -37717,14 +37812,27 @@ var render = function() {
                     "tbody",
                     _vm._l(_vm.clients, function(client, index) {
                       return _c("tr", [
-                        _c("td", [_vm._v(_vm._s(client.name))]),
+                        _c("td", { staticStyle: { width: "50%" } }, [
+                          _vm._v(_vm._s(client.name))
+                        ]),
                         _vm._v(" "),
-                        _c("td", [
+                        _c("td", { staticStyle: { width: "25%" } }, [
                           _c("i", {
                             staticClass: "fas fa-tools fa-1x",
                             on: {
                               click: function($event) {
                                 return _vm.openEditClientModal(index)
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticStyle: { width: "50%" } }, [
+                          _c("i", {
+                            staticClass: "fas fa-minus-circle fa-1x",
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteClient(index)
                               }
                             }
                           })
@@ -37869,58 +37977,129 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "pricetagname" } }, [
-                      _vm._v("Pricetags:")
+                  _c("div", { staticClass: "form-group row" }, [
+                    _c("div", { staticClass: "col-5 mt-2" }, [
+                      _c("label", { attrs: { for: "pricetagname" } }, [
+                        _vm._v("Pricetags:")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.pricetag.name,
+                            expression: "pricetag.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", id: "pricetagname" },
+                        domProps: { value: _vm.pricetag.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.pricetag, "name", $event.target.value)
+                          }
+                        }
+                      })
                     ]),
                     _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.pricetag.name,
-                          expression: "pricetag.name"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text", id: "pricetagname" },
-                      domProps: { value: _vm.pricetag.name },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                    _c("div", { staticClass: "col-4 mt-2" }, [
+                      _c("label", { attrs: { for: "pricetagcost" } }, [
+                        _vm._v("cost:")
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group" }, [
+                        _vm._m(3),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.pricetag.cost,
+                              expression: "pricetag.cost"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            id: "pricetagcost",
+                            "aria-describedby": "btnGroupAddon"
+                          },
+                          domProps: { value: _vm.pricetag.cost },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.pricetag,
+                                "cost",
+                                $event.target.value
+                              )
+                            }
                           }
-                          _vm.$set(_vm.pricetag, "name", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("label", { attrs: { for: "pricetagcost" } }, [
-                      _vm._v("cost:")
+                        })
+                      ])
                     ]),
                     _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.pricetag.cost,
-                          expression: "pricetag.cost"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text", id: "pricetagcost", width: "50" },
-                      domProps: { value: _vm.pricetag.cost },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                    _c("div", { staticClass: "col-3 mt-2" }, [
+                      _c("label", { attrs: { for: "pricetagcost" } }, [
+                        _vm._v("Save:")
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c("i", {
+                          staticClass: "far fa-check-circle fa-2x",
+                          on: {
+                            click: function($event) {
+                              return _vm.createPriceTag()
+                            }
                           }
-                          _vm.$set(_vm.pricetag, "cost", $event.target.value)
-                        }
-                      }
-                    })
+                        })
+                      ])
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(4),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12" }, [
+                    _vm.new_update_client.pricetags
+                      ? _c("table", { staticClass: "table" }, [
+                          _vm._m(5),
+                          _vm._v(" "),
+                          _c(
+                            "tbody",
+                            _vm._l(_vm.new_update_client.pricetags, function(
+                              pricetag,
+                              index
+                            ) {
+                              return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(pricetag.name))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(pricetag.cost))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("i", {
+                                    staticClass: "far fa-times-circle fa-2x",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.deletePriceTag(index)
+                                      }
+                                    }
+                                  })
+                                ])
+                              ])
+                            }),
+                            0
+                          )
+                        ])
+                      : _vm._e()
                   ])
                 ]),
                 _vm._v(" "),
@@ -37940,7 +38119,7 @@ var render = function() {
                     {
                       staticClass: "btn btn-primary",
                       attrs: { type: "button" },
-                      on: { click: _vm.createClient }
+                      on: { click: _vm.updateClient }
                     },
                     [_vm._v("Save changes")]
                   )
@@ -37962,7 +38141,11 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } })
+        _c("th", { attrs: { scope: "col" } }),
+        _vm._v(" "),
+        _c("th"),
+        _vm._v(" "),
+        _c("th")
       ])
     ])
   },
@@ -38014,6 +38197,36 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "div",
+        { staticClass: "input-group-text", attrs: { id: "btnGroupAddon" } },
+        [_vm._v("€")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("hr")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", { staticStyle: { width: "50%" } }, [_vm._v("available tags")]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { width: "25%" } }, [_vm._v("Cost in €")]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { width: "25%" } })
     ])
   }
 ]
