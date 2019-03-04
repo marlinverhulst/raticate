@@ -1835,16 +1835,63 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       client: {
         name: ""
       },
+      pricetag: {
+        name: "",
+        cost: "",
+        client_id: ""
+      },
+      pricetags: [],
       clients: [],
       toast: toastr.options = {
         positionClass: "toast-top-full-width"
       },
+      errors: [],
+      new_update_client: [],
       uri: "http://raticate.test/clients/"
     };
   },
@@ -1855,8 +1902,16 @@ __webpack_require__.r(__webpack_exports__);
     openCreateClientModal: function openCreateClientModal() {
       $("#create-client-modal").modal("show");
     },
+    openEditClientModal: function openEditClientModal(index) {
+      this.errors = [];
+      $("#edit-client-modal").modal("show");
+      this.new_update_client = this.clients[index];
+    },
     closeCreateClientModal: function closeCreateClientModal() {
       $("#create-client-modal").modal("hide");
+    },
+    closeEditClientModal: function closeEditClientModal() {
+      $("#edit-client-modal").modal("hide");
     },
     createClient: function createClient() {
       var _this = this;
@@ -37661,28 +37716,20 @@ var render = function() {
                   _c(
                     "tbody",
                     _vm._l(_vm.clients, function(client, index) {
-                      return _c(
-                        "tr",
-                        [
-                          _c("td", [_vm._v(_vm._s(client.name))]),
-                          _vm._v(" "),
-                          _vm._l(client.pricetags, function(pricetag) {
-                            return _c("td", [_vm._v(_vm._s(pricetag.name))])
-                          }),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("i", {
-                              staticClass: "fas fa-tools fa-1x",
-                              on: {
-                                click: function($event) {
-                                  return _vm.UpdateClient(index)
-                                }
+                      return _c("tr", [
+                        _c("td", [_vm._v(_vm._s(client.name))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("i", {
+                            staticClass: "fas fa-tools fa-1x",
+                            on: {
+                              click: function($event) {
+                                return _vm.openEditClientModal(index)
                               }
-                            })
-                          ])
-                        ],
-                        2
-                      )
+                            }
+                          })
+                        ])
+                      ])
                     }),
                     0
                   )
@@ -37768,6 +37815,141 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "edit-client-modal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "updateclientname" } }, [
+                    _vm._v("Name:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.new_update_client.name,
+                        expression: "new_update_client.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "updateclientname" },
+                    domProps: { value: _vm.new_update_client.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.new_update_client,
+                          "name",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "pricetagname" } }, [
+                      _vm._v("Pricetags:")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.pricetag.name,
+                          expression: "pricetag.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", id: "pricetagname" },
+                      domProps: { value: _vm.pricetag.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.pricetag, "name", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "pricetagcost" } }, [
+                      _vm._v("cost:")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.pricetag.cost,
+                          expression: "pricetag.cost"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", id: "pricetagcost", width: "50" },
+                      domProps: { value: _vm.pricetag.cost },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.pricetag, "cost", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      attrs: { type: "button" },
+                      on: { click: _vm.closeEditClientModal }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button" },
+                      on: { click: _vm.createClient }
+                    },
+                    [_vm._v("Save changes")]
+                  )
+                ])
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -37793,6 +37975,31 @@ var staticRenderFns = [
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
         [_vm._v("Create Client")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Edit Client")]
       ),
       _vm._v(" "),
       _c(

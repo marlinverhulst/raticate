@@ -13,7 +13,7 @@ class CreatePricetagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pricetags', function (Blueprint $table) {
+        Schema::create('price_tags', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('client_id')->index()->unsigned()->nullable();
             $table->string('name');
@@ -29,6 +29,6 @@ class CreatePricetagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pricetags');
+        Schema::dropIfExists('price_tags');
     }
 }

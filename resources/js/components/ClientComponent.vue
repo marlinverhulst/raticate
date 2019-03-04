@@ -24,10 +24,10 @@
               <tr v-for="(client, index) in clients">
                 <!-- <td>{{index + 1}}</td> -->
                 <td>{{client.name}}</td>
-                <td v-for="pricetag in client.pricetags  " >{{pricetag.name}}</td>
+                
 
                 <td>
-                  <i @click="UpdateClient(index)" class="fas fa-tools fa-1x"></i>
+                  <i @click="openEditClientModal(index)" class="fas fa-tools fa-1x"></i>
                 </td>
               </tr>
             </tbody>
@@ -58,9 +58,48 @@
               <label for="clientname">Name:</label>
               <input v-model="client.name" type="text" id="clientsname" class="form-control">
             </div>
+            
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeCreateClientModal">Close</button>
+              <button type="button" @click="createClient" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Update Modal -->
+    <div
+      class="modal fade"
+      id="edit-client-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Client</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="updateclientname">Name:</label>
+              <input v-model="new_update_client.name" type="text" id="updateclientname" class="form-control">
+
+              <div class="form-group">
+              <label for="pricetagname">Pricetags:</label>
+              <input v-model="pricetag.name" type="text" id="pricetagname" class="form-control">
+              <label for="pricetagcost">cost:</label>
+               <input v-model="pricetag.cost" type="text" id="pricetagcost" class="form-control" width="50">
+            </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" @click="closeEditClientModal">Close</button>
               <button type="button" @click="createClient" class="btn btn-primary">Save changes</button>
             </div>
           </div>
@@ -77,8 +116,21 @@ export default {
       client: {
         name: ""
       },
+      pricetag:{
+        name:"",
+        cost: "",
+        client_id: ""
+      },
+
+      pricetags: [],
+
       clients: [],
-      toast: (toastr.options = { positionClass: "toast-top-full-width" }),
+
+      toast: toastr.options = { positionClass: "toast-top-full-width" },
+
+      errors: [],
+
+      new_update_client: [],
 
       uri: "http://raticate.test/clients/"
     };
@@ -90,8 +142,16 @@ export default {
     openCreateClientModal() {
       $("#create-client-modal").modal("show");
     },
+    openEditClientModal(index){
+      this.errors = [];
+      $("#edit-client-modal").modal("show");
+      this.new_update_client = this.clients[index];
+    },
     closeCreateClientModal() {
       $("#create-client-modal").modal("hide");
+    },
+    closeEditClientModal() {
+      $("#edit-client-modal").modal("hide");
     },
     createClient() {
       axios
