@@ -16,21 +16,21 @@
               <thead>
                 <tr>
                   <!-- <th scope="col">Id</th> -->
-                  <th scope="col">Name</th>
-                  <th scope="col"></th>
-                  <th></th>
-                  <th></th>
+                  <th style="width: 50%" scope="col">Name</th>
+                  <th style="width: 10%" scope="col"></th>
+                  
+                  <th style="width: 10%"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(client, index) in clients">
                   <!-- <td>{{index + 1}}</td> -->
-                  <td style="width: 50%">{{client.name}}</td>
+                  <td >{{client.name}}</td>
 
-                  <td style="width: 25%">
+                  <td >
                     <i @click="openEditClientModal(index)" class="fas fa-tools fa-1x"></i>
                   </td>
-                  <td style="width: 50%">
+                  <td >
                     <i @click="deleteClient(index)" class="fas fa-minus-circle fa-1x"></i>
                   </td>
                 </tr>
@@ -229,6 +229,8 @@ export default {
            resetPriceTagData();
 
           toastr.success(response.data.message);
+        }).catch(error => {
+          console.log(error);
         });
     },
     getClients() {
@@ -268,7 +270,7 @@ export default {
     },
     deletePriceTag(index) {
       let confirmbox = confirm(
-        "Let's think over the consequences first shall we ? It's best to update all jobs with a new pricetag first"
+        "Let's think of the consequences first shall we ? It's best to update all jobs with a new pricetag first"
       );
 
       if (confirmbox == true) {

@@ -51,6 +51,12 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' =>'required',
+            'email' => 'required',
+            'password' =>'required',
+            'role_id'=> 'required']);
+            
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -87,7 +93,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+         
+
     }
 
     /**
@@ -99,7 +106,40 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' =>'required',
+            'email' => 'required',
+            
+            'role_id'=> 'required']);
+            if($request->password){
+                
+                $user = User::findOrFail($id)->update(['name' => $request->name,'email' => $request->email,
+            
+                'password' => Hash::make($request->password),
+                'role_id' => $request->role_id,]);
+                
+                return response()->json([
+                    'user' => $user,
+                    'message' => 'user has been updated'
+                ]);
+
+            } 
+            else {
+                $user = User::findOrFail($id);
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->role_id = $request->role_id;
+                $user->save();
+                return response()->json([
+                    'user' => $user,
+                    'message' => 'user has been updated'
+                ]);
+            }
+
+
+            
+
+            
     }
 
     /**

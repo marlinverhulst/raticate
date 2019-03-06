@@ -1992,6 +1992,8 @@ __webpack_require__.r(__webpack_exports__);
 
         resetPriceTagData();
         toastr.success(response.data.message);
+      }).catch(function (error) {
+        console.log(error);
       });
     },
     getClients: function getClients() {
@@ -2028,7 +2030,7 @@ __webpack_require__.r(__webpack_exports__);
     deletePriceTag: function deletePriceTag(index) {
       var _this6 = this;
 
-      var confirmbox = confirm("Let's think over the consequences first shall we ? It's best to update all jobs with a new pricetag first");
+      var confirmbox = confirm("Let's think of the consequences first shall we ? It's best to update all jobs with a new pricetag first");
 
       if (confirmbox == true) {
         axios.delete("/pricetags/" + this.new_update_client.pricetags[index].id).then(function (response) {
@@ -2162,6 +2164,81 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2172,18 +2249,51 @@ __webpack_require__.r(__webpack_exports__);
         role_id: "2"
       },
       users: [],
+      new_update_user: [],
+      errors: [],
       toast: toastr.options = {
-        "positionClass": "toast-top-full-width"
+        positionClass: "toast-top-full-width"
       },
-      uri: "http://raticate.test/users/"
+      uri: "/users/"
     };
   },
   methods: {
+    openEditUserModal: function openEditUserModal(index) {
+      this.errors = [];
+      this.new_update_user = this.users[index];
+
+      if (this.new_update_user.role_id == "2") {
+        $("#adminUpdateButton").hide();
+        $("#technicianUpdateButton").show();
+      } else {
+        $("#adminUpdateButton").show();
+        $("#technicianUpdateButton").hide();
+      }
+
+      $("#update-user-modal").modal("show");
+    },
+    closeUserUpdateModal: function closeUserUpdateModal() {
+      $("#update-user-modal").modal("hide");
+    },
     resetData: function resetData() {
       this.user.name = "";
       this.user.password = "";
       this.user.email = "";
       this.user.role_id = "2";
+    },
+    updateUser: function updateUser() {
+      var _this = this;
+
+      axios.patch(this.uri + this.new_update_user.id, {
+        name: this.new_update_user.name,
+        password: this.new_update_user.password,
+        email: this.new_update_user.email,
+        role_id: this.new_update_user.role_id
+      }).then(function (response) {
+        _this.closeUserUpdateModal();
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     openCreateUserModal: function openCreateUserModal() {
       this.user.role_id = "2";
@@ -2204,8 +2314,18 @@ __webpack_require__.r(__webpack_exports__);
       this.user.role_id = "2";
       $("#technicianButton").show();
     },
+    setUpdateFunctionToTechnician: function setUpdateFunctionToTechnician() {
+      $("#adminUpdateButton").hide();
+      this.new_update_user.role_id = "2";
+      $("#technicianUpdateButton").show();
+    },
+    setUpdateFunctionToAdmin: function setUpdateFunctionToAdmin() {
+      $("#technicianUpdateButton").hide();
+      this.new_update_user.role_id = "1";
+      $("#adminUpdateButton").show();
+    },
     createUser: function createUser() {
-      var _this = this;
+      var _this2 = this;
 
       axios.post(this.uri, {
         name: this.user.name,
@@ -2213,33 +2333,35 @@ __webpack_require__.r(__webpack_exports__);
         password: this.user.password,
         role_id: this.user.role_id
       }).then(function (response) {
-        _this.users.push(response.data.user);
+        _this2.users.push(response.data.user);
 
-        _this.resetData();
+        _this2.resetData();
 
-        _this.closeCreateUserModal();
+        _this2.closeCreateUserModal();
 
         toastr.success(response.data.message);
+      }).catch(function (error) {
+        console.log(error);
       });
     },
     getUsers: function getUsers() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get(this.uri, {
         name: "none",
         email: "none@none.com"
       }).then(function (response) {
-        _this2.users = response.data.users;
+        _this3.users = response.data.users;
       });
     },
     deleteUser: function deleteUser(index) {
-      var _this3 = this;
+      var _this4 = this;
 
       var confirmbox = confirm("Do you realy want to delete this User ?");
 
       if (confirmbox == true) {
         axios.delete(this.uri + this.users[index].id).then(function (response) {
-          _this3.$delete(_this3.users, index);
+          _this4.$delete(_this4.users, index);
         }).catch(function (error) {
           console.log("could not delete");
         });
@@ -37812,11 +37934,9 @@ var render = function() {
                     "tbody",
                     _vm._l(_vm.clients, function(client, index) {
                       return _c("tr", [
-                        _c("td", { staticStyle: { width: "50%" } }, [
-                          _vm._v(_vm._s(client.name))
-                        ]),
+                        _c("td", [_vm._v(_vm._s(client.name))]),
                         _vm._v(" "),
-                        _c("td", { staticStyle: { width: "25%" } }, [
+                        _c("td", [
                           _c("i", {
                             staticClass: "fas fa-tools fa-1x",
                             on: {
@@ -37827,7 +37947,7 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _c("td", { staticStyle: { width: "50%" } }, [
+                        _c("td", [
                           _c("i", {
                             staticClass: "fas fa-minus-circle fa-1x",
                             on: {
@@ -38139,13 +38259,13 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
+        _c("th", { staticStyle: { width: "50%" }, attrs: { scope: "col" } }, [
+          _vm._v("Name")
+        ]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }),
+        _c("th", { staticStyle: { width: "10%" }, attrs: { scope: "col" } }),
         _vm._v(" "),
-        _c("th"),
-        _vm._v(" "),
-        _c("th")
+        _c("th", { staticStyle: { width: "10%" } })
       ])
     ])
   },
@@ -38277,7 +38397,7 @@ var render = function() {
         _c("div", { staticClass: "card-body" }, [
           _c("div", { staticClass: "costumheight" }, [
             _vm.users.length > 0
-              ? _c("table", { staticClass: "table " }, [
+              ? _c("table", { staticClass: "table" }, [
                   _vm._m(0),
                   _vm._v(" "),
                   _c(
@@ -38289,6 +38409,17 @@ var render = function() {
                         user.role_id == 1
                           ? _c("td", [_vm._v("Admin")])
                           : _c("td", [_vm._v("Technician")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("i", {
+                            staticClass: "fas fa-tools fa-1x",
+                            on: {
+                              click: function($event) {
+                                return _vm.openEditUserModal(index)
+                              }
+                            }
+                          })
+                        ]),
                         _vm._v(" "),
                         _c("td", [
                           _c("i", {
@@ -38472,6 +38603,193 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "update-user-modal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "updateusernamename" } }, [
+                    _vm._v("Name:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.new_update_user.name,
+                        expression: "new_update_user.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "updateusername" },
+                    domProps: { value: _vm.new_update_user.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.new_update_user,
+                          "name",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "updateuseremail" } }, [
+                    _vm._v("E-mail")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.new_update_user.email,
+                        expression: "new_update_user.email"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "email", id: "updateuseremail" },
+                    domProps: { value: _vm.new_update_user.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.new_update_user,
+                          "email",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "updateuserpassword" } }, [
+                    _vm._v("Password:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.new_update_user.password,
+                        expression: "new_update_user.password"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "password", id: "updateuserpassword" },
+                    domProps: { value: _vm.new_update_user.password },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.new_update_user,
+                          "password",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "updateuserfunction" } }, [
+                    _vm._v("Function:")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm",
+                      attrs: {
+                        type: "button",
+                        id: "technicianUpdateButton",
+                        name: "function"
+                      },
+                      on: { click: _vm.setUpdateFunctionToAdmin }
+                    },
+                    [_vm._v("Technician")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger btn-sm",
+                      attrs: {
+                        type: "button",
+                        id: "adminUpdateButton",
+                        name: "function"
+                      },
+                      on: { click: _vm.setUpdateFunctionToTechnician }
+                    },
+                    [_vm._v("Admin")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.closeUserUpdateModal()
+                        }
+                      }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.updateUser()
+                        }
+                      }
+                    },
+                    [_vm._v("Save changes")]
+                  )
+                ])
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -38482,11 +38800,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
+        _c("th", { staticStyle: { width: "30%" }, attrs: { scope: "col" } }, [
+          _vm._v("Name")
+        ]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Function")]),
+        _c("th", { staticStyle: { width: "30%" }, attrs: { scope: "col" } }, [
+          _vm._v("Function")
+        ]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } })
+        _c("th", { staticStyle: { width: "10%" }, attrs: { scope: "col" } }),
+        _vm._v(" "),
+        _c("th", { staticStyle: { width: "10%" }, attrs: { scope: "col" } })
       ])
     ])
   },
@@ -38499,6 +38823,31 @@ var staticRenderFns = [
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
         [_vm._v("Create User")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Edit User")]
       ),
       _vm._v(" "),
       _c(
