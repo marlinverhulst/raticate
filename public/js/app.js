@@ -1939,6 +1939,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       pricetags: [],
       clients: [],
+      restoreClient: {},
       toast: toastr.options = {
         positionClass: "toast-top-full-width"
       },
@@ -1952,17 +1953,22 @@ __webpack_require__.r(__webpack_exports__);
       this.client.name = "";
     },
     openCreateClientModal: function openCreateClientModal() {
+      this.resetData();
       $("#create-client-modal").modal("show");
     },
     openEditClientModal: function openEditClientModal(index) {
       this.errors = [];
       $("#edit-client-modal").modal("show");
-      this.new_update_client = this.clients[index];
+      this.new_update_client = this.clients[index]; // resores Client to previous when canceled
+
+      this.restoreClient = Object.assign({}, this.clients[index]);
     },
     closeCreateClientModal: function closeCreateClientModal() {
       $("#create-client-modal").modal("hide");
     },
     closeEditClientModal: function closeEditClientModal() {
+      Object.assign(this.new_update_client, this.restoreClient);
+      this.restoreClient = null;
       $("#edit-client-modal").modal("hide");
     },
     createClient: function createClient() {
@@ -2047,8 +2053,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    console.log("Component mounted.");
-    console.log(this.clients);
+    console.log("Client Component mounted.");
     this.getClients();
   }
 });
@@ -2250,6 +2255,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       users: [],
       new_update_user: [],
+      restoreUser: {},
       errors: [],
       toast: toastr.options = {
         positionClass: "toast-top-full-width"
@@ -2260,7 +2266,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     openEditUserModal: function openEditUserModal(index) {
       this.errors = [];
-      this.new_update_user = this.users[index];
+      this.new_update_user = this.users[index]; // resores User to previous when canceled 
+
+      this.restoreUser = Object.assign({}, this.users[index]);
 
       if (this.new_update_user.role_id == "2") {
         $("#adminUpdateButton").hide();
@@ -2273,6 +2281,8 @@ __webpack_require__.r(__webpack_exports__);
       $("#update-user-modal").modal("show");
     },
     closeUserUpdateModal: function closeUserUpdateModal() {
+      Object.assign(this.new_update_user, this.restoreUser);
+      this.restoreUser = null;
       $("#update-user-modal").modal("hide");
     },
     resetData: function resetData() {
@@ -2282,21 +2292,19 @@ __webpack_require__.r(__webpack_exports__);
       this.user.role_id = "2";
     },
     updateUser: function updateUser() {
-      var _this = this;
-
       axios.patch(this.uri + this.new_update_user.id, {
         name: this.new_update_user.name,
         password: this.new_update_user.password,
         email: this.new_update_user.email,
         role_id: this.new_update_user.role_id
       }).then(function (response) {
-        _this.closeUserUpdateModal();
+        $('#update-user-modal').modal('hide');
       }).catch(function (error) {
         console.log(error);
       });
     },
     openCreateUserModal: function openCreateUserModal() {
-      this.user.role_id = "2";
+      this.resetData();
       $("#adminButton").hide();
       $("#technicianButton").show();
       $("#create-modal").modal("show");
@@ -2325,7 +2333,7 @@ __webpack_require__.r(__webpack_exports__);
       $("#adminUpdateButton").show();
     },
     createUser: function createUser() {
-      var _this2 = this;
+      var _this = this;
 
       axios.post(this.uri, {
         name: this.user.name,
@@ -2333,11 +2341,11 @@ __webpack_require__.r(__webpack_exports__);
         password: this.user.password,
         role_id: this.user.role_id
       }).then(function (response) {
-        _this2.users.push(response.data.user);
+        _this.users.push(response.data.user);
 
-        _this2.resetData();
+        _this.resetData();
 
-        _this2.closeCreateUserModal();
+        _this.closeCreateUserModal();
 
         toastr.success(response.data.message);
       }).catch(function (error) {
@@ -2345,23 +2353,23 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getUsers: function getUsers() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.get(this.uri, {
         name: "none",
         email: "none@none.com"
       }).then(function (response) {
-        _this3.users = response.data.users;
+        _this2.users = response.data.users;
       });
     },
     deleteUser: function deleteUser(index) {
-      var _this4 = this;
+      var _this3 = this;
 
       var confirmbox = confirm("Do you realy want to delete this User ?");
 
       if (confirmbox == true) {
         axios.delete(this.uri + this.users[index].id).then(function (response) {
-          _this4.$delete(_this4.users, index);
+          _this3.$delete(_this3.users, index);
         }).catch(function (error) {
           console.log("could not delete");
         });
@@ -2369,7 +2377,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    console.log("Component mounted.");
+    console.log("Users Component mounted.");
     this.getUsers();
     toastr.info("LOaded");
   }
@@ -38063,7 +38071,30 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(2),
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v("Edit Client")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "aria-label": "Close" },
+                    on: { click: _vm.closeEditClientModal }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "form-group" }, [
@@ -38132,7 +38163,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "input-group" }, [
-                        _vm._m(3),
+                        _vm._m(2),
                         _vm._v(" "),
                         _c("input", {
                           directives: [
@@ -38185,13 +38216,13 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(4),
+                _vm._m(3),
                 _vm._v(" "),
                 _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col-12" }, [
                     _vm.new_update_client.pricetags
                       ? _c("table", { staticClass: "table" }, [
-                          _vm._m(5),
+                          _vm._m(4),
                           _vm._v(" "),
                           _c(
                             "tbody",
@@ -38278,31 +38309,6 @@ var staticRenderFns = [
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
         [_vm._v("Create Client")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "h5",
-        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Edit Client")]
       ),
       _vm._v(" "),
       _c(
@@ -38623,7 +38629,30 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(2),
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v("Edit User")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "aria-label": "Close" },
+                    on: { click: _vm.closeUserUpdateModal }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "form-group" }, [
@@ -38823,31 +38852,6 @@ var staticRenderFns = [
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
         [_vm._v("Create User")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "h5",
-        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Edit User")]
       ),
       _vm._v(" "),
       _c(

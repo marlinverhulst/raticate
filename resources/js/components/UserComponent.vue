@@ -112,7 +112,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" @click = "closeUserUpdateModal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -186,6 +186,8 @@ export default {
       },
       users: [],
       new_update_user: [],
+      
+      restoreUser: {},
 
       errors: [],
       toast: (toastr.options = { positionClass: "toast-top-full-width" }),
@@ -199,6 +201,10 @@ export default {
 
       this.new_update_user = this.users[index];
 
+      // resores User to previous when canceled 
+
+      this.restoreUser = Object.assign({},this.users[index]);
+
       if (this.new_update_user.role_id == "2") {
         $("#adminUpdateButton").hide();
         $("#technicianUpdateButton").show();
@@ -209,6 +215,8 @@ export default {
       $("#update-user-modal").modal("show");
     },
     closeUserUpdateModal() {
+      Object.assign(this.new_update_user, this.restoreUser);
+      this.restoreUser = null ;
       $("#update-user-modal").modal("hide");
     },
     resetData() {
@@ -226,14 +234,15 @@ export default {
           role_id: this.new_update_user.role_id
         })
         .then(response => {
-          this.closeUserUpdateModal();
+          $('#update-user-modal').modal('hide');
         })
         .catch(error => {
           console.log(error);
         });
     },
     openCreateUserModal() {
-      this.user.role_id = "2";
+      
+      this.resetData();
       $("#adminButton").hide();
       $("#technicianButton").show();
       $("#create-modal").modal("show");
@@ -301,7 +310,7 @@ export default {
   },
 
   mounted() {
-    console.log("Component mounted.");
+    console.log("Users Component mounted.");
     this.getUsers();
     toastr.info("LOaded");
   }

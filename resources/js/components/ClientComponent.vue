@@ -18,19 +18,19 @@
                   <!-- <th scope="col">Id</th> -->
                   <th style="width: 50%" scope="col">Name</th>
                   <th style="width: 10%" scope="col"></th>
-                  
+
                   <th style="width: 10%"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(client, index) in clients">
                   <!-- <td>{{index + 1}}</td> -->
-                  <td >{{client.name}}</td>
+                  <td>{{client.name}}</td>
 
-                  <td >
+                  <td>
                     <i @click="openEditClientModal(index)" class="fas fa-tools fa-1x"></i>
                   </td>
-                  <td >
+                  <td>
                     <i @click="deleteClient(index)" class="fas fa-minus-circle fa-1x"></i>
                   </td>
                 </tr>
@@ -84,7 +84,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Edit Client</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" @click="closeEditClientModal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -178,6 +178,8 @@ export default {
 
       clients: [],
 
+      restoreClient: {},
+
       toast: (toastr.options = { positionClass: "toast-top-full-width" }),
 
       errors: [],
@@ -192,17 +194,22 @@ export default {
       this.client.name = "";
     },
     openCreateClientModal() {
+      this.resetData();
       $("#create-client-modal").modal("show");
     },
     openEditClientModal(index) {
       this.errors = [];
       $("#edit-client-modal").modal("show");
       this.new_update_client = this.clients[index];
+      // resores Client to previous when canceled
+      this.restoreClient = Object.assign({}, this.clients[index]);
     },
     closeCreateClientModal() {
       $("#create-client-modal").modal("hide");
     },
     closeEditClientModal() {
+      Object.assign(this.new_update_client, this.restoreClient);
+      this.restoreClient = null;
       $("#edit-client-modal").modal("hide");
     },
     createClient() {
@@ -226,10 +233,11 @@ export default {
         })
         .then(response => {
           this.new_update_client.pricetags.push(response.data.pricetag);
-           resetPriceTagData();
+          resetPriceTagData();
 
           toastr.success(response.data.message);
-        }).catch(error => {
+        })
+        .catch(error => {
           console.log(error);
         });
     },
@@ -284,17 +292,16 @@ export default {
           });
       }
     },
-    resetPriceTagData(){
+    resetPriceTagData() {
       this.pricetag.name = "";
       this.pricetag.cost = "";
       this.pricetag.client_id = "";
-    
     }
   },
 
   mounted() {
-    console.log("Component mounted.");
-    console.log(this.clients);
+    console.log("Client Component mounted.");
+
     this.getClients();
   }
 };
