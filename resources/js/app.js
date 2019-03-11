@@ -22,6 +22,7 @@ window.Vue = require('vue');
 
 Vue.component('client-component', require('./components/ClientComponent.vue').default);
 Vue.component('user-component', require('./components/UserComponent.vue').default);
+Vue.component('job-component', require('./components/JobComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31,5 +32,39 @@ Vue.component('user-component', require('./components/UserComponent.vue').defaul
 
 const app = new Vue({
     el: '#app',
+
+   
+    data() {
+        return {
+
+            clients: [],
+            users:[],
+
+            uri2: "/users/"
+        }
+    },
+    methods: {
+        getClients() {
+            axios.get('/clients/').then(response => {
+              this.clients = response.data.clients;
+            });
+          },
+          getUsers() {
+            axios
+              .get(this.uri2, { name: "none", email: "none@none.com" })
+              .then(response => {
+                this.users = response.data.users;
+              });
+          },
+        
+    },
+    mounted() {
+        this.getClients();
+        this.getUsers();
+        console.log("root mounted");
+    },
+    
+
+
     
 });

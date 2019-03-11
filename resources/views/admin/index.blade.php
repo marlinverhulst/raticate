@@ -266,9 +266,14 @@
 
           <div class="row">
             
-              <user-component></user-component>
-              <client-component></client-component>
+              <user-component :users = 'users'></user-component>
+              <client-component :clients = 'clients'></client-component>
+            
                 
+            </div>
+
+            <div class="row">
+              <job-component></job-component>
             </div>
             
             

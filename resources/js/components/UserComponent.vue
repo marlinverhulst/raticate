@@ -184,7 +184,7 @@ export default {
 
         role_id: "2"
       },
-      users: [],
+      // users: [],
       new_update_user: [],
       
       restoreUser: {},
@@ -194,7 +194,11 @@ export default {
 
       uri: "/users/"
     };
+    
   },
+  props:{
+      users: Array,
+    },
   methods: {
     openEditUserModal(index) {
       this.errors = [];
@@ -285,13 +289,7 @@ export default {
           toastr.success(response.data.message);
         }).catch(error => {console.log(error);});
     },
-    getUsers() {
-      axios
-        .get(this.uri, { name: "none", email: "none@none.com" })
-        .then(response => {
-          this.users = response.data.users;
-        });
-    },
+    
 
     deleteUser(index) {
       let confirmbox = confirm("Do you realy want to delete this User ?");
@@ -311,7 +309,7 @@ export default {
 
   mounted() {
     console.log("Users Component mounted.");
-    this.getUsers();
+    
     toastr.info("LOaded");
   }
 };

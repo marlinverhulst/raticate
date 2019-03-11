@@ -176,7 +176,7 @@ export default {
 
       pricetags: [],
 
-      clients: [],
+      // clients: [],
 
       restoreClient: {},
 
@@ -188,8 +188,16 @@ export default {
 
       uri: "/clients/"
     };
+
+    
+  },
+  props: {
+
+    clients: Array,
   },
   methods: {
+    
+    
     resetData() {
       this.client.name = "";
     },
@@ -241,10 +249,9 @@ export default {
           console.log(error);
         });
     },
-    getClients() {
-      axios.get(this.uri).then(response => {
-        this.clients = response.data.clients;
-      });
+    
+    init(){
+      this.clients = this.$root.$data;
     },
 
     updateClient() {
@@ -300,9 +307,12 @@ export default {
   },
 
   mounted() {
+    
     console.log("Client Component mounted.");
+    
+    
 
-    this.getClients();
+    
   }
 };
 </script>
