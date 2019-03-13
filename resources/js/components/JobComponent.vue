@@ -5,9 +5,9 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <i class="fas fa-users fa-3x"></i>
+          <i class="fas fa-briefcase fa-3x"></i>
           <h6 class="m-0 font-weight-bold text-primary">Jobs</h6>
-          <i class="fas fa-plus-circle fa-2x"></i>
+          <i class="fas fa-plus-circle fa-2x" @click="openCreateJobsModal"></i>
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -22,29 +22,19 @@
                   role="tab"
                   aria-controls="home"
                   aria-selected="true"
-                >Home</a>
+                >All</a>
               </li>
-              <li class="nav-item">
+              <li v-for="(client, index) in clients" class="nav-item">
                 <a
-                  class="nav-link"
-                  id="profile-tab"
+                  @click="makeActive(index)"
+                  class="nav-link {'active' :index == selected }"
+                  id="home-tab"
                   data-toggle="tab"
-                  href="#profile"
+                  href="#home"
                   role="tab"
-                  aria-controls="profile"
-                  aria-selected="false"
-                >Profile</a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  id="contact-tab"
-                  data-toggle="tab"
-                  href="#contact"
-                  role="tab"
-                  aria-controls="contact"
-                  aria-selected="false"
-                >Contact</a>
+                  aria-controls="home"
+                  aria-selected="true"
+                >{{client.name}}</a>
               </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -53,30 +43,160 @@
                 id="home"
                 role="tabpanel"
                 aria-labelledby="home-tab"
-              >...</div>
-              <div
-                class="tab-pane fade"
-                id="profile"
-                role="tabpanel"
-                aria-labelledby="profile-tab"
-              >...</div>
-              <div
-                class="tab-pane fade"
-                id="contact"
-                role="tabpanel"
-                aria-labelledby="contact-tab"
-              >...</div>
+              >...
+                <p>{{job.client_id}}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
+
+    <!-- create Modal -->
+    <div
+      class="modal fade"
+      id="create-job-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create Job</h5>
+            <button type="button" class="close" @click="closeCreateJobsModal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="clientSelect">Select Client:</label>
+              <select
+                v-model="selectedIndex"
+                class="form-control"
+                id="clientSelect"
+                @change="makeSelectedClient()"
+              >
+                <option v-for="(client, index) in clients" :value="index">{{client.name}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="priceTagSelect">Select Pricetag:</label>
+              
+              <select
+                v-model="job.pricetag_id"
+                v-if="selectedClient.pricetags"
+                class="form-control"
+                id="priceTagSelect"
+                @change="check()"
+              >
+                <option disabled value>Select a Pricetag</option>
+                <option
+                  v-for="priceTag in selectedClient.pricetags"
+                  :value="priceTag.id"
+                >{{priceTag.name}}: &#160;&#160;&#160;&#160;&#160;€&#160; {{priceTag.cost}}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="adres">Address:</label>
+              <input v-model="job.adres" type="text" id="adres" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="zip">Zipcode:</label>
+              <input v-model="job.zip" type="text" id="zip" class="form-control" maxlength="6">
+            </div>
+            <div class="form-group">
+              <label for="city">City:</label>
+              <input v-model="job.city" type="text" id="city" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="tel">tel:</label>
+              <input v-model="job.tel" type="text" id="tel" class="form-control"  maxlength="10" >
+            </div>
+            <div class="form-group">
+              <label for="description">Description:</label>
+           
+              <textarea v-model="job.description" name="description" id="description" cols="30" rows="6" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="callbefore">Call before visit:</label>
+              <input type="checkbox" name="callfirst" v-model="job.callfirst" id="callbefore">
+              
+            </div>
+            <div class="form-group">
+              <label for="time">Time restriction:</label>
+              <input v-model="job.time" type="text" id="time" class="form-control"   >
+              
+            </div>
+            
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" @click="closeCreateJobsModal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      job: {
+        address:"",
+        zip:"",
+        tel:"",
+        city:"",
+        client_id: "0",
+        pricetag_id: "",
+        description:"",
+        callfirst:false,
+        time:""
+
+      },
+      selectedTab: 0,
+      selectedIndex: 0,
+      selectedClient: []
+    };
+  },
+  props: {
+    clients: Array
+  },
+
+  methods: {
+    clearPricetagId() {
+      this.job.pricetag_id = "";
+    },
+    check() {
+      console.log(this.job.pricetag_id);
+      console.log(this.job.callfirst);
+    },
+    makeActive(index) {
+      this.selectedTab = index;
+    },
+    makeSelectedClient() {
+      this.clearPricetagId();
+
+      this.selectedClient = this.clients[this.selectedIndex];
+    },
+
+    openCreateJobsModal() {
+      this.selectedClient = this.clients[this.selectedIndex];
+      $("#create-job-modal").modal("show");
+    },
+    closeCreateJobsModal() {
+      $("#create-job-modal").modal("hide");
+      console.log(this.selectedClient.id);
+      console.log(this.job.client_id);
+      this.check();
+    }
+  },
+
   mounted() {
     console.log("Job Component mounted.");
   }

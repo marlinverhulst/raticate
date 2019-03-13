@@ -241,7 +241,7 @@ export default {
         })
         .then(response => {
           this.new_update_client.pricetags.push(response.data.pricetag);
-          resetPriceTagData();
+          this.resetPriceTagData();
 
           toastr.success(response.data.message);
         })

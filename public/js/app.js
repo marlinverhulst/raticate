@@ -1999,7 +1999,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this2.new_update_client.pricetags.push(response.data.pricetag);
 
-        resetPriceTagData();
+        _this2.resetPriceTagData();
+
         toastr.success(response.data.message);
       }).catch(function (error) {
         console.log(error);
@@ -2144,7 +2145,122 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      job: {
+        adres: "",
+        zip: "",
+        tel: "",
+        city: "",
+        client_id: "0",
+        pricetag_id: "",
+        description: "",
+        callfirst: false,
+        time: ""
+      },
+      selectedTab: 0,
+      selectedIndex: 0,
+      selectedClient: []
+    };
+  },
+  props: {
+    clients: Array
+  },
+  methods: {
+    clearPricetagId: function clearPricetagId() {
+      this.job.pricetag_id = "";
+    },
+    check: function check() {
+      console.log(this.job.pricetag_id);
+      console.log(this.job.callfirst);
+    },
+    makeActive: function makeActive(index) {
+      this.selectedTab = index;
+    },
+    makeSelectedClient: function makeSelectedClient() {
+      this.clearPricetagId();
+      this.selectedClient = this.clients[this.selectedIndex];
+    },
+    openCreateJobsModal: function openCreateJobsModal() {
+      this.selectedClient = this.clients[this.selectedIndex];
+      $("#create-job-modal").modal("show");
+    },
+    closeCreateJobsModal: function closeCreateJobsModal() {
+      $("#create-job-modal").modal("hide");
+      console.log(this.selectedClient.id);
+      console.log(this.job.client_id);
+      this.check();
+    }
+  },
   mounted: function mounted() {
     console.log("Job Component mounted.");
   }
@@ -38461,47 +38577,46 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12" }, [
-      _c("div", [
-        _c("div", { staticClass: "card shadow mb-4" }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "card-header py-3 d-flex flex-row align-items-center justify-content-between"
-            },
-            [
-              _c("i", { staticClass: "fas fa-users fa-3x" }),
-              _vm._v(" "),
-              _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
-                _vm._v("Jobs")
-              ]),
-              _vm._v(" "),
-              _c("i", { staticClass: "fas fa-plus-circle fa-2x" })
-            ]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "costumheight" }, [
-              _c(
-                "ul",
-                {
-                  staticClass: "nav nav-tabs",
-                  attrs: { id: "myTab", role: "tablist" }
-                },
-                [
-                  _c("li", { staticClass: "nav-item" }, [
+  return _c("div", { staticClass: "col-12" }, [
+    _c("div", [
+      _c("div", { staticClass: "card shadow mb-4" }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "card-header py-3 d-flex flex-row align-items-center justify-content-between"
+          },
+          [
+            _c("i", { staticClass: "fas fa-briefcase fa-3x" }),
+            _vm._v(" "),
+            _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
+              _vm._v("Jobs")
+            ]),
+            _vm._v(" "),
+            _c("i", {
+              staticClass: "fas fa-plus-circle fa-2x",
+              on: { click: _vm.openCreateJobsModal }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "costumheight" }, [
+            _c(
+              "ul",
+              {
+                staticClass: "nav nav-tabs",
+                attrs: { id: "myTab", role: "tablist" }
+              },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._l(_vm.clients, function(client, index) {
+                  return _c("li", { staticClass: "nav-item" }, [
                     _c(
                       "a",
                       {
-                        staticClass: "nav-link active",
+                        staticClass: "nav-link {'active' :index == selected }",
                         attrs: {
                           id: "home-tab",
                           "data-toggle": "tab",
@@ -38509,98 +38624,474 @@ var staticRenderFns = [
                           role: "tab",
                           "aria-controls": "home",
                           "aria-selected": "true"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.makeActive(index)
+                          }
                         }
                       },
-                      [_vm._v("Home")]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "nav-item" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link",
-                        attrs: {
-                          id: "profile-tab",
-                          "data-toggle": "tab",
-                          href: "#profile",
-                          role: "tab",
-                          "aria-controls": "profile",
-                          "aria-selected": "false"
-                        }
-                      },
-                      [_vm._v("Profile")]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "nav-item" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link",
-                        attrs: {
-                          id: "contact-tab",
-                          "data-toggle": "tab",
-                          href: "#contact",
-                          role: "tab",
-                          "aria-controls": "contact",
-                          "aria-selected": "false"
-                        }
-                      },
-                      [_vm._v("Contact")]
+                      [_vm._v(_vm._s(client.name))]
                     )
                   ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "tab-content", attrs: { id: "myTabContent" } },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "tab-pane fade show active",
-                      attrs: {
-                        id: "home",
-                        role: "tabpanel",
-                        "aria-labelledby": "home-tab"
-                      }
-                    },
-                    [_vm._v("...")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "tab-pane fade",
-                      attrs: {
-                        id: "profile",
-                        role: "tabpanel",
-                        "aria-labelledby": "profile-tab"
-                      }
-                    },
-                    [_vm._v("...")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "tab-pane fade",
-                      attrs: {
-                        id: "contact",
-                        role: "tabpanel",
-                        "aria-labelledby": "contact-tab"
-                      }
-                    },
-                    [_vm._v("...")]
-                  )
-                ]
-              )
-            ])
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "tab-content", attrs: { id: "myTabContent" } },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "tab-pane fade show active",
+                    attrs: {
+                      id: "home",
+                      role: "tabpanel",
+                      "aria-labelledby": "home-tab"
+                    }
+                  },
+                  [
+                    _vm._v("...\n              "),
+                    _c("p", [_vm._v(_vm._s(_vm.job.client_id))])
+                  ]
+                )
+              ]
+            )
           ])
         ])
       ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "create-job-modal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v("Create Job")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "aria-label": "Close" },
+                    on: { click: _vm.closeCreateJobsModal }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "clientSelect" } }, [
+                    _vm._v("Select Client:")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selectedIndex,
+                          expression: "selectedIndex"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "clientSelect" },
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selectedIndex = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                          function($event) {
+                            return _vm.makeSelectedClient()
+                          }
+                        ]
+                      }
+                    },
+                    _vm._l(_vm.clients, function(client, index) {
+                      return _c("option", { domProps: { value: index } }, [
+                        _vm._v(_vm._s(client.name))
+                      ])
+                    }),
+                    0
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "priceTagSelect" } }, [
+                    _vm._v("Select Pricetag:")
+                  ]),
+                  _vm._v(" "),
+                  _vm.selectedClient.pricetags
+                    ? _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.job.pricetag_id,
+                              expression: "job.pricetag_id"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { id: "priceTagSelect" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.job,
+                                  "pricetag_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                return _vm.check()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { disabled: "", value: "" } }, [
+                            _vm._v("Select a Pricetag")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.selectedClient.pricetags, function(
+                            priceTag
+                          ) {
+                            return _c(
+                              "option",
+                              { domProps: { value: priceTag.id } },
+                              [
+                                _vm._v(
+                                  _vm._s(priceTag.name) +
+                                    ":      €  " +
+                                    _vm._s(priceTag.cost)
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "adres" } }, [_vm._v("Adres:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.job.adres,
+                        expression: "job.adres"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "adres", required: "" },
+                    domProps: { value: _vm.job.adres },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.job, "adres", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "zip" } }, [_vm._v("Zipcode:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.job.zip,
+                        expression: "job.zip"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "zip", maxlength: "6" },
+                    domProps: { value: _vm.job.zip },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.job, "zip", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "city" } }, [_vm._v("City:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.job.city,
+                        expression: "job.city"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "city", required: "" },
+                    domProps: { value: _vm.job.city },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.job, "city", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "tel" } }, [_vm._v("tel:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.job.tel,
+                        expression: "job.tel"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "tel", maxlength: "10" },
+                    domProps: { value: _vm.job.tel },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.job, "tel", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "description" } }, [
+                    _vm._v("Description:")
+                  ]),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.job.description,
+                        expression: "job.description"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      name: "description",
+                      id: "description",
+                      cols: "30",
+                      rows: "6"
+                    },
+                    domProps: { value: _vm.job.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.job, "description", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "callbefore" } }, [
+                    _vm._v("Call before visit:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.job.callfirst,
+                        expression: "job.callfirst"
+                      }
+                    ],
+                    attrs: {
+                      type: "checkbox",
+                      name: "callfirst",
+                      id: "callbefore"
+                    },
+                    domProps: {
+                      checked: Array.isArray(_vm.job.callfirst)
+                        ? _vm._i(_vm.job.callfirst, null) > -1
+                        : _vm.job.callfirst
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.job.callfirst,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(_vm.job, "callfirst", $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.job,
+                                "callfirst",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.job, "callfirst", $$c)
+                        }
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "time" } }, [
+                    _vm._v("Time restriction:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.job.time,
+                        expression: "job.time"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "time" },
+                    domProps: { value: _vm.job.time },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.job, "time", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      attrs: { type: "button" },
+                      on: { click: _vm.closeCreateJobsModal }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button" }
+                    },
+                    [_vm._v("Save changes")]
+                  )
+                ])
+              ])
+            ])
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "nav-item" }, [
+      _c(
+        "a",
+        {
+          staticClass: "nav-link active",
+          attrs: {
+            id: "home-tab",
+            "data-toggle": "tab",
+            href: "#home",
+            role: "tab",
+            "aria-controls": "home",
+            "aria-selected": "true"
+          }
+        },
+        [_vm._v("All")]
+      )
     ])
   }
 ]
