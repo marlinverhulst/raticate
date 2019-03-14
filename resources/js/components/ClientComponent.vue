@@ -227,6 +227,7 @@ export default {
         })
         .then(response => {
           this.clients.push(response.data.client);
+          this.$root.getClients();
           this.resetData();
           this.closeCreateClientModal();
           toastr.success(response.data.message);

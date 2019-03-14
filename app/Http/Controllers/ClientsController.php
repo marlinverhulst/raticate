@@ -59,6 +59,12 @@ class ClientsController extends Controller
         $client = Client::create([
             'name' => $request->name
         ]);
+        $client->pricetags()->create([
+            
+                'name' => 'Normal',
+                'cost' => '0.00',
+                'client_id'=>$client->id
+        ]);
         return response()->json([
             'client' => $client,
             'message' => 'client has been added'

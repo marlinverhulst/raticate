@@ -70,19 +70,21 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="form-group">
-              <label for="clientSelect">Select Client:</label>
+            <div class="form-row">
+            <div class="form-group col-6">
+              <label for="clientSelect"> Client:</label>
               <select
                 v-model="selectedIndex"
                 class="form-control"
                 id="clientSelect"
                 @change="makeSelectedClient()"
               >
+              
                 <option v-for="(client, index) in clients" :value="index">{{client.name}}</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="priceTagSelect">Select Pricetag:</label>
+            <div class="form-group col-6">
+              <label for="priceTagSelect">&#160;</label>
               
               <select
                 v-model="job.pricetag_id"
@@ -98,39 +100,44 @@
                 >{{priceTag.name}}: &#160;&#160;&#160;&#160;&#160;€&#160; {{priceTag.cost}}</option>
               </select>
             </div>
+            </div>
 
-            <div class="form-group">
-              <label for="adres">Address:</label>
-              <input v-model="job.adres" type="text" id="adres" class="form-control" required>
+            <div class="form-row">
+              <div class="form-group col-6">
+              <input v-model="job.address" type="text" id="adres" class="form-control" required placeholder="Address">
+              </div>
+
+            
+              <div class="form-group col-3">
+              <input v-model="job.zip" type="text" id="zip" class="form-control" maxlength="6" placeholder="Zipcode">
+              </div>
+
+              <div class="form-group col-3">
+              
+              <input v-model="job.city" type="text" id="city" class="form-control" required placeholder="City">
+              </div>
             </div>
             <div class="form-group">
-              <label for="zip">Zipcode:</label>
-              <input v-model="job.zip" type="text" id="zip" class="form-control" maxlength="6">
+              
+              <input v-model="job.tel" type="text" id="tel" class="form-control"  maxlength="10" placeholder="Tel" >
             </div>
             <div class="form-group">
-              <label for="city">City:</label>
-              <input v-model="job.city" type="text" id="city" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="tel">tel:</label>
-              <input v-model="job.tel" type="text" id="tel" class="form-control"  maxlength="10" >
-            </div>
-            <div class="form-group">
-              <label for="description">Description:</label>
+              
            
-              <textarea v-model="job.description" name="description" id="description" cols="30" rows="6" class="form-control"></textarea>
+              <textarea v-model="job.description" name="description" id="description" cols="30" rows="6" class="form-control" placeholder="Description.."></textarea>
             </div>
-            <div class="form-group">
-              <label for="callbefore">Call before visit:</label>
+            <div class="form-row">
+            <div class="form-group col-4">
+              <label for="callbefore">Call before visit ?:</label>
               <input type="checkbox" name="callfirst" v-model="job.callfirst" id="callbefore">
               
             </div>
-            <div class="form-group">
-              <label for="time">Time restriction:</label>
-              <input v-model="job.time" type="text" id="time" class="form-control"   >
+            <div class="form-group col-8">
+              
+              <input v-model="job.time" type="text" id="time" class="form-control" placeholder="Time restrictions here ..."  >
               
             </div>
-            
+            </div>
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeCreateJobsModal">Close</button>
