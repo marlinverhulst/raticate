@@ -71,72 +71,127 @@
           </div>
           <div class="modal-body">
             <div class="form-row">
-            <div class="form-group col-6">
-              <label for="clientSelect"> Client:</label>
-              <select
-                v-model="selectedIndex"
-                class="form-control"
-                id="clientSelect"
-                @change="makeSelectedClient()"
-              >
-              
-                <option v-for="(client, index) in clients" :value="index">{{client.name}}</option>
-              </select>
-            </div>
-            <div class="form-group col-6">
-              <label for="priceTagSelect">&#160;</label>
-              
-              <select
-                v-model="job.pricetag_id"
-                v-if="selectedClient.pricetags"
-                class="form-control"
-                id="priceTagSelect"
-                @change="check()"
-              >
-                <option disabled value>Select a Pricetag</option>
-                <option
-                  v-for="priceTag in selectedClient.pricetags"
-                  :value="priceTag.id"
-                >{{priceTag.name}}: &#160;&#160;&#160;&#160;&#160;€&#160; {{priceTag.cost}}</option>
-              </select>
-            </div>
+              <div class="form-group col-6">
+                <label for="clientSelect">Client:</label>
+                <select
+                  v-model="selectedIndex"
+                  class="form-control"
+                  id="clientSelect"
+                  @change="makeSelectedClient()"
+                >
+                  <option v-for="(client, index) in clients" :value="index">{{client.name}}</option>
+                </select>
+              </div>
+              <div class="form-group col-6">
+                <label for="priceTagSelect">&#160;</label>
+                
+                <select
+                  v-model="job.pricetag_id"
+                  v-if="selectedClient.pricetags"
+                  class="form-control"
+                  id="priceTagSelect"
+                  @change="check()"
+                >
+                  <option disabled value>Select a Pricetag</option>
+                  <option
+                    v-for="priceTag in selectedClient.pricetags"
+                    :value="priceTag.id"
+                  >{{priceTag.name}}: &#160;&#160;&#160;&#160;&#160;€&#160; {{priceTag.cost}}</option>
+                </select>
+              </div>
             </div>
 
             <div class="form-row">
               <div class="form-group col-6">
-              <input v-model="job.address" type="text" id="adres" class="form-control" required placeholder="Address">
+                <input
+                  v-model="job.address"
+                  type="text"
+                  id="adres"
+                  class="form-control"
+                  required
+                  placeholder="Address"
+                >
               </div>
 
-            
               <div class="form-group col-3">
-              <input v-model="job.zip" type="text" id="zip" class="form-control" maxlength="6" placeholder="Zipcode">
+                <input
+                  v-model="job.zip"
+                  type="text"
+                  id="zip"
+                  class="form-control"
+                  maxlength="6"
+                  placeholder="Zipcode"
+                >
               </div>
 
               <div class="form-group col-3">
-              
-              <input v-model="job.city" type="text" id="city" class="form-control" required placeholder="City">
+                <input
+                  v-model="job.city"
+                  type="text"
+                  id="city"
+                  class="form-control"
+                  required
+                  placeholder="City"
+                >
               </div>
             </div>
             <div class="form-group">
-              
-              <input v-model="job.tel" type="text" id="tel" class="form-control"  maxlength="10" placeholder="Tel" >
+              <input
+                v-model="job.tel"
+                type="text"
+                id="tel"
+                class="form-control"
+                maxlength="10"
+                placeholder="Tel"
+              >
             </div>
             <div class="form-group">
-              
-           
-              <textarea v-model="job.description" name="description" id="description" cols="30" rows="6" class="form-control" placeholder="Description.."></textarea>
+              <textarea
+                v-model="job.description"
+                name="description"
+                id="description"
+                cols="30"
+                rows="6"
+                class="form-control"
+                placeholder="Description.."
+              ></textarea>
             </div>
             <div class="form-row">
-            <div class="form-group col-4">
-              <label for="callbefore">Call before visit ?:</label>
-              <input type="checkbox" name="callfirst" v-model="job.callfirst" id="callbefore">
-              
+              <div class="form-group col-4">
+                <label for="callbefore">Call before visit ?:</label>
+                <input type="checkbox" name="callfirst" v-model="job.callfirst" id="callbefore">
+              </div>
             </div>
-            <div class="form-group col-8">
-              
-              <input v-model="job.time" type="text" id="time" class="form-control" placeholder="Time restrictions here ..."  >
-              
+            <div class="form-row">
+              <div class="form-group col-8">
+                <input
+                  v-model="job.time"
+                  type="text"
+                  id="time"
+                  class="form-control"
+                  placeholder="Time restrictions here ..."
+                >
+              </div>
             </div>
+            <div>
+              <hr>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-8">
+                <label for="clientSelect">Assign to:</label>
+                <select
+                  v-model="job.user_id"
+                  class="form-control"
+                  id="clientSelect"
+                  @change="check()"
+                >
+                  <option disabled value>Select a Technician</option>
+                  <option
+                    v-for="technician in getTechnicians"
+                    :value="technician.id"
+                  >{{technician.name}}</option>
+                </select>
+              </div>
             </div>
 
             <div class="modal-footer">
@@ -155,16 +210,16 @@ export default {
   data() {
     return {
       job: {
-        address:"",
-        zip:"",
-        tel:"",
-        city:"",
+        address: "",
+        zip: "",
+        tel: "",
+        city: "",
         client_id: "0",
         pricetag_id: "",
-        description:"",
-        callfirst:false,
-        time:""
-
+        user_id: "",
+        description: "",
+        callfirst: false,
+        time: ""
       },
       selectedTab: 0,
       selectedIndex: 0,
@@ -172,7 +227,16 @@ export default {
     };
   },
   props: {
-    clients: Array
+    clients: Array,
+    users: Array
+  },
+
+  computed: {
+    getTechnicians: function() {
+      return this.users.filter(user => {
+        return user.role_id == 2;
+      });
+    }
   },
 
   methods: {
@@ -182,6 +246,7 @@ export default {
     check() {
       console.log(this.job.pricetag_id);
       console.log(this.job.callfirst);
+      console.log(this.job.user_id);
     },
     makeActive(index) {
       this.selectedTab = index;

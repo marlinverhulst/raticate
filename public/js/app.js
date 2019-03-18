@@ -2222,6 +2222,63 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2232,6 +2289,7 @@ __webpack_require__.r(__webpack_exports__);
         city: "",
         client_id: "0",
         pricetag_id: "",
+        user_id: "",
         description: "",
         callfirst: false,
         time: ""
@@ -2242,7 +2300,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: {
-    clients: Array
+    clients: Array,
+    users: Array
+  },
+  computed: {
+    getTechnicians: function getTechnicians() {
+      return this.users.filter(function (user) {
+        return user.role_id == 2;
+      });
+    }
   },
   methods: {
     clearPricetagId: function clearPricetagId() {
@@ -2251,6 +2317,7 @@ __webpack_require__.r(__webpack_exports__);
     check: function check() {
       console.log(this.job.pricetag_id);
       console.log(this.job.callfirst);
+      console.log(this.job.user_id);
     },
     makeActive: function makeActive(index) {
       this.selectedTab = index;
@@ -38721,7 +38788,7 @@ var render = function() {
                 _c("div", { staticClass: "form-row" }, [
                   _c("div", { staticClass: "form-group col-6" }, [
                     _c("label", { attrs: { for: "clientSelect" } }, [
-                      _vm._v(" Client:")
+                      _vm._v("Client:")
                     ]),
                     _vm._v(" "),
                     _c(
@@ -39043,8 +39110,10 @@ var render = function() {
                         }
                       }
                     })
-                  ]),
-                  _vm._v(" "),
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-row" }, [
                   _c("div", { staticClass: "form-group col-8" }, [
                     _c("input", {
                       directives: [
@@ -39071,6 +39140,70 @@ var render = function() {
                         }
                       }
                     })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(1),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-row" }, [
+                  _c("div", { staticClass: "form-group col-8" }, [
+                    _c("label", { attrs: { for: "clientSelect" } }, [
+                      _vm._v("Assign to:")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.job.user_id,
+                            expression: "job.user_id"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { id: "clientSelect" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.job,
+                                "user_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            function($event) {
+                              return _vm.check()
+                            }
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { disabled: "", value: "" } }, [
+                          _vm._v("Select a Technician")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.getTechnicians, function(technician) {
+                          return _c(
+                            "option",
+                            { domProps: { value: technician.id } },
+                            [_vm._v(_vm._s(technician.name))]
+                          )
+                        })
+                      ],
+                      2
+                    )
                   ])
                 ]),
                 _vm._v(" "),
@@ -39124,6 +39257,12 @@ var staticRenderFns = [
         [_vm._v("All")]
       )
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("hr")])
   }
 ]
 render._withStripped = true

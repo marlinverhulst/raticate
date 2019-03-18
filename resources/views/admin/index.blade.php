@@ -262,7 +262,7 @@
           </div>
 
           <!-- Content Row -->
-          
+          <div class="container">
 
           <div class="row">
             
@@ -273,11 +273,11 @@
             </div>
 
             <div class="row">
-              <job-component :clients = 'clients'></job-component>
+              <job-component :clients = 'clients' :users = 'users'></job-component>
             </div>
             
             
-              
+          </div>
         </div>
         <!-- /.container-fluid -->
         
