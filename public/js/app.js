@@ -2342,10 +2342,17 @@ __webpack_require__.r(__webpack_exports__);
     makeSelectedClient: function makeSelectedClient() {
       this.clearPricetagId();
       this.selectedClient = this.clients[this.selectedIndex];
+      this.job.client_id = this.selectedClient.id;
     },
     openCreateJobsModal: function openCreateJobsModal() {
-      this.selectedClient = this.clients[this.selectedIndex];
-      $("#create-job-modal").modal("show");
+      if (this.clients.length > 0) {
+        this.selectedClient = this.clients[this.selectedIndex];
+        this.job.client_id = this.clients[0].id;
+        $("#create-job-modal").modal("show");
+        console.log(this.job.client_id);
+      } else {
+        console.log("No Clients ");
+      }
     },
     closeCreateJobsModal: function closeCreateJobsModal() {
       $("#create-job-modal").modal("hide");
