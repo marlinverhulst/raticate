@@ -196,7 +196,7 @@
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeCreateJobsModal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" @click="createJob()" class="btn btn-primary">Save changes</button>
             </div>
           </div>
         </div>
@@ -219,8 +219,10 @@ export default {
         user_id: "",
         description: "",
         callfirst: false,
-        time: ""
+        time: "",
+        done: false
       },
+      uri: "/jobs/",
       selectedTab: 0,
       selectedIndex: 0,
       selectedClient: []
@@ -240,6 +242,26 @@ export default {
   },
 
   methods: {
+    createJob() {
+      axios
+        .post(this.uri, {
+          address: this.job.address,
+          zip: this.job.zip,
+          tel: this.job.tel,
+          city: this.job.city,
+          client_id: this.job.client_id,
+          pricetag_id: this.job.pricetag_id,
+          user_id: this.job.user_id,
+          description: this.job.description,
+          callfirst: this.job.callfirst,
+          time: this.job.time,
+          done: this.job.done
+        })
+        .then(response => {
+          console.log(response);
+        });
+    },
+
     clearPricetagId() {
       this.job.pricetag_id = "";
     },

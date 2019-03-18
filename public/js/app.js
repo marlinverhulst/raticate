@@ -2277,8 +2277,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2292,8 +2290,10 @@ __webpack_require__.r(__webpack_exports__);
         user_id: "",
         description: "",
         callfirst: false,
-        time: ""
+        time: "",
+        done: false
       },
+      uri: "/jobs/",
       selectedTab: 0,
       selectedIndex: 0,
       selectedClient: []
@@ -2311,6 +2311,23 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    createJob: function createJob() {
+      axios.post(this.uri, {
+        address: this.job.address,
+        zip: this.job.zip,
+        tel: this.job.tel,
+        city: this.job.city,
+        client_id: this.job.client_id,
+        pricetag_id: this.job.pricetag_id,
+        user_id: this.job.user_id,
+        description: this.job.description,
+        callfirst: this.job.callfirst,
+        time: this.job.time,
+        done: this.job.done
+      }).then(function (response) {
+        console.log(response);
+      });
+    },
     clearPricetagId: function clearPricetagId() {
       this.job.pricetag_id = "";
     },
@@ -39222,7 +39239,12 @@ var render = function() {
                     "button",
                     {
                       staticClass: "btn btn-primary",
-                      attrs: { type: "button" }
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.createJob()
+                        }
+                      }
                     },
                     [_vm._v("Save changes")]
                   )
