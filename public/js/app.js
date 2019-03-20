@@ -2277,6 +2277,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2301,7 +2324,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     clients: Array,
-    users: Array
+    users: Array,
+    jobs: Array
   },
   computed: {
     getTechnicians: function getTechnicians() {
@@ -2359,6 +2383,11 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.selectedClient.id);
       console.log(this.job.client_id);
       this.check();
+    },
+    representStatus: function representStatus(done) {
+      if (done === 0) {
+        return "Open";
+      } else return "Closed";
     }
   },
   mounted: function mounted() {
@@ -38754,8 +38783,35 @@ var render = function() {
                     }
                   },
                   [
-                    _vm._v("...\n              "),
-                    _c("p", [_vm._v(_vm._s(_vm.job.client_id))])
+                    _c("div", { staticClass: "container" }, [
+                      _c("table", { staticClass: "table" }, [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.jobs, function(job, index) {
+                            return _c("tr", [
+                              _c("td", [_vm._v(_vm._s(job.client.name))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(job.address))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(job.zip))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(job.city))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(_vm._s(_vm.representStatus(job.done)))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("2")]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(job.user.name))])
+                            ])
+                          }),
+                          0
+                        )
+                      ])
+                    ])
                   ]
                 )
               ]
@@ -39167,7 +39223,7 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(1),
+                _vm._m(2),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-row" }, [
                   _c("div", { staticClass: "form-group col-8" }, [
@@ -39285,6 +39341,26 @@ var staticRenderFns = [
         },
         [_vm._v("All")]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", [_vm._v("Client")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Address")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("zip-code")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("city")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Status")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("# of Visits")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Technician")])
     ])
   },
   function() {
@@ -51966,31 +52042,42 @@ var app = new Vue({
     return {
       clients: [],
       users: [],
-      uri2: "/users/"
+      jobs: [],
+      userUri: "/users/",
+      jobUri: "/jobs/",
+      clientUri: "/clients"
     };
   },
   methods: {
     getClients: function getClients() {
       var _this = this;
 
-      axios.get('/clients/').then(function (response) {
+      axios.get(this.clientUri).then(function (response) {
         _this.clients = response.data.clients;
       });
     },
     getUsers: function getUsers() {
       var _this2 = this;
 
-      axios.get(this.uri2, {
+      axios.get(this.userUri, {
         name: "none",
         email: "none@none.com"
       }).then(function (response) {
         _this2.users = response.data.users;
+      });
+    },
+    getJobs: function getJobs() {
+      var _this3 = this;
+
+      axios.get(this.jobUri).then(function (response) {
+        _this3.jobs = response.data.jobs;
       });
     }
   },
   mounted: function mounted() {
     this.getClients();
     this.getUsers();
+    this.getJobs();
     console.log("root mounted");
   }
 });

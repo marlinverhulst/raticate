@@ -39,28 +39,36 @@ const app = new Vue({
 
             clients: [],
             users:[],
+            jobs:[],
 
-            uri2: "/users/"
+            userUri: "/users/",
+            jobUri: "/jobs/",
+            clientUri: "/clients"
         }
     },
     methods: {
         getClients() {
-            axios.get('/clients/').then(response => {
+            axios.get(this.clientUri).then(response => {
               this.clients = response.data.clients;
             });
           },
           getUsers() {
             axios
-              .get(this.uri2, { name: "none", email: "none@none.com" })
+              .get(this.userUri, { name: "none", email: "none@none.com" })
               .then(response => {
                 this.users = response.data.users;
               });
           },
+
+          getJobs(){
+              axios.get(this.jobUri).then(response => {this.jobs = response.data.jobs});
+          }
         
     },
     mounted() {
         this.getClients();
         this.getUsers();
+        this.getJobs();
         console.log("root mounted");
     },
     

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use App\Job;
+use App\Client;
 
 class JobsController extends Controller
 {
@@ -26,7 +27,8 @@ class JobsController extends Controller
     public function index()
     {
         //
-        $jobs = Job::all();
+        $jobs = Job::with(['client', 'pricetag', 'user'])->get();
+        
         return response()->json([
             'jobs' => $jobs
         ], 200);

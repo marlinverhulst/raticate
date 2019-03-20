@@ -26,14 +26,14 @@ class Job extends Model
     ];
 
     public function client(){
-        return $this->belongesTo('App\Client');
+        return $this->belongsTo('App\Client');
     }
     public function pricetag(){
-        return $this->belongesTo('App\PriceTag');
+        return $this->belongsTo('App\PriceTag');
 
     }
     public function user(){
-        return $this->belongesTo('App\User');
+        return $this->belongsTo('App\User');
     }
     
 

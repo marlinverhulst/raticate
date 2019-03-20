@@ -20,7 +20,7 @@ class CreateJobsTable extends Migration
             $table->string('zip')->nullable();
             $table->string('tel')->nullable();
             $table->string('city');
-            $table->integer('client_id')->index()->unsigned()->nullable();
+            $table->integer('client_id')->index()->unsigned();
             $table->integer('pricetag_id')->index()->unsigned()->nullable();
             $table->integer('user_id')->index()->unsigned()->nullable();
             $table->text('description')->nullable();

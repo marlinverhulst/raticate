@@ -14,4 +14,10 @@ class Client extends Model
     public function priceTags(){
         return $this->hasMany('App\PriceTag');
     }
+
+    public function jobs(){
+        return $this->hasMany('App\Job');
+    }
+
+    
 }

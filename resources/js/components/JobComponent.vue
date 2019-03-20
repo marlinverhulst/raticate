@@ -43,8 +43,31 @@
                 id="home"
                 role="tabpanel"
                 aria-labelledby="home-tab"
-              >...
-                <p>{{job.client_id}}</p>
+              >
+                <div class="container">
+                  <table class="table">
+                    <thead>
+                      <th>Client</th>
+                      <th>Address</th>
+                      <th>zip-code</th>
+                      <th>city</th>
+                      <th>Status</th>
+                      <th># of Visits</th>
+                      <th>Technician</th>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(job , index) in jobs">
+                        <td>{{job.client.name}}</td>
+                        <td>{{job.address}}</td>
+                        <td>{{job.zip}}</td>
+                        <td>{{job.city}}</td>
+                        <td>{{representStatus(job.done)}}</td>
+                        <td>2</td>
+                        <td>{{job.user.name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -230,7 +253,8 @@ export default {
   },
   props: {
     clients: Array,
-    users: Array
+    users: Array,
+    jobs: Array
   },
 
   computed: {
@@ -281,9 +305,7 @@ export default {
     },
 
     openCreateJobsModal() {
-
       if (this.clients.length > 0) {
-        
         this.selectedClient = this.clients[this.selectedIndex];
         this.job.client_id = this.clients[0].id;
         $("#create-job-modal").modal("show");
@@ -297,6 +319,11 @@ export default {
       console.log(this.selectedClient.id);
       console.log(this.job.client_id);
       this.check();
+    },
+    representStatus(done) {
+      if (done === 0) {
+        return "Open";
+      } else return "Closed";
     }
   },
 

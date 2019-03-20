@@ -273,7 +273,7 @@
             </div>
 
             <div class="row">
-              <job-component :clients = 'clients' :users = 'users'></job-component>
+              <job-component :clients = 'clients' :users = 'users' :jobs = 'jobs'></job-component>
             </div>
             
             
