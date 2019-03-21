@@ -3,3 +3,8 @@
     height: 200px;
 
 }
+.jobscard {
+    overflow: auto;
+    height: 300px;
+
+}

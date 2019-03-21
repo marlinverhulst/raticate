@@ -21,6 +21,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('client-component', require('./components/ClientComponent.vue').default);
+Vue.component('search-component', require('./components/searchComponent.vue').default);
 Vue.component('user-component', require('./components/UserComponent.vue').default);
 Vue.component('job-component', require('./components/JobComponent.vue').default);
 
@@ -33,37 +34,51 @@ Vue.component('job-component', require('./components/JobComponent.vue').default)
 const app = new Vue({
     el: '#app',
 
-   
+
     data() {
         return {
 
             clients: [],
-            users:[],
-            jobs:[],
+            users: [],
+            jobs: [],
+            jobstatus: 0,
+            searchString: "",
 
             userUri: "/users/",
             jobUri: "/jobs/",
             clientUri: "/clients"
         }
     },
+    computed: {
+        applySearchJobs: function () {
+            return this.jobs.filter(job => {
+                return job.address.toLowerCase().match(this.searchString.toLowerCase());
+            });
+        }
+    },
     methods: {
         getClients() {
             axios.get(this.clientUri).then(response => {
-              this.clients = response.data.clients;
+                this.clients = response.data.clients;
             });
-          },
-          getUsers() {
+        },
+        getUsers() {
             axios
-              .get(this.userUri, { name: "none", email: "none@none.com" })
-              .then(response => {
-                this.users = response.data.users;
-              });
-          },
+                .get(this.userUri, { name: "none", email: "none@none.com" })
+                .then(response => {
+                    this.users = response.data.users;
+                });
+        },
 
-          getJobs(){
-              axios.get(this.jobUri).then(response => {this.jobs = response.data.jobs});
-          }
-        
+        getJobs() {
+            axios.get(this.jobUri, { params: { status: this.jobstatus } }).then(response => { this.jobs = response.data.jobs });
+        },
+
+        setJobStatus(status) {
+            this.jobstatus = status;
+            this.getJobs();
+        }
+
     },
     mounted() {
         this.getClients();
@@ -71,8 +86,8 @@ const app = new Vue({
         this.getJobs();
         console.log("root mounted");
     },
-    
 
 
-    
+
+
 });

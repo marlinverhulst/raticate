@@ -24,10 +24,12 @@ class JobsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $jobs = Job::with(['client', 'pricetag', 'user'])->get();
+        $status = $request->status;
+        $jobs = Job::with(['client', 'pricetag', 'user'])->where('done',$status)->get();
+        
         
         return response()->json([
             'jobs' => $jobs

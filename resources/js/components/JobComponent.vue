@@ -5,17 +5,18 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <i class="fas fa-briefcase fa-3x"></i>
+          <i @click="$root.setJobStatus(1)" v-if="$root.jobstatus == 0" class="fas fa-folder-open fa-3x"></i><i @click="$root.setJobStatus(0)" v-else class="fas fa-folder fa-3x" ></i>
           <h6 class="m-0 font-weight-bold text-primary">Jobs</h6>
           <i class="fas fa-plus-circle fa-2x" @click="openCreateJobsModal"></i>
         </div>
         <!-- Card Body -->
         <div class="card-body">
-          <div class="costumheight">
+          <div class="jobscard">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
               <li class="nav-item">
                 <a
                   class="nav-link active"
+                  @click="setSearchName('')"
                   id="home-tab"
                   data-toggle="tab"
                   href="#home"
@@ -26,7 +27,7 @@
               </li>
               <li v-for="(client, index) in clients" class="nav-item">
                 <a
-                  @click="makeActive(index)"
+                  @click="setSearchName(client.name)"
                   class="nav-link {'active' :index == selected }"
                   id="home-tab"
                   data-toggle="tab"
@@ -56,7 +57,7 @@
                       <th>Technician</th>
                     </thead>
                     <tbody>
-                      <tr v-for="(job , index) in jobs">
+                      <tr v-for="(job , index) in getJobByName">
                         <td>{{job.client.name}}</td>
                         <td>{{job.address}}</td>
                         <td>{{job.zip}}</td>
@@ -248,7 +249,8 @@ export default {
       uri: "/jobs/",
       selectedTab: 0,
       selectedIndex: 0,
-      selectedClient: []
+      selectedClient: [],
+      searchName: "",
     };
   },
   props: {
@@ -262,10 +264,20 @@ export default {
       return this.users.filter(user => {
         return user.role_id == 2;
       });
+    },
+    getJobByName: function() {
+      return this.jobs.filter(job => {
+        return job.client.name.match(this.searchName);
+      });
     }
   },
 
   methods: {
+    setSearchName(name){
+
+      this.searchName = name;
+
+    },
     createJob() {
       axios
         .post(this.uri, {
@@ -282,7 +294,8 @@ export default {
           done: this.job.done
         })
         .then(response => {
-          console.log(response);
+          this.closeCreateJobsModal();
+          this.$root.getJobs();
         });
     },
 
