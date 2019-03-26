@@ -54,6 +54,7 @@
                       <th>city</th>
                       <th>Status</th>
                       <th># of Visits</th>
+                      <th>Planned on:</th>
                       <th>Technician</th>
                     </thead>
                     <tbody>
@@ -63,7 +64,9 @@
                         <td>{{job.zip}}</td>
                         <td>{{job.city}}</td>
                         <td>{{representStatus(job.done)}}</td>
-                        <td>2</td>
+                        <td v-if="job.visits != undefined">{{jobs.visits.count()}}</td>
+                        <td v-else >0</td>
+                        <td v-if="job.visit != undefined">{{job.visit}}</td><td v-else>Not Planned</td>
                         <td>{{job.user.name}}</td>
                       </tr>
                     </tbody>
@@ -181,6 +184,13 @@
               ></textarea>
             </div>
             <div class="form-row">
+              <div class="form-group">
+             <vuejs-datepicker v-model="job.visitDate" ></vuejs-datepicker>
+              <label for="novisit">No Visit:</label>
+                <input type="checkbox" name="novisit" v-model="job.noVisit" id="novisit">
+              </div>
+            </div>
+            <div class="form-row">
               <div class="form-group col-4">
                 <label for="callbefore">Call before visit ?:</label>
                 <input type="checkbox" name="callfirst" v-model="job.callfirst" id="callbefore">
@@ -230,10 +240,16 @@
 </template>
 
 <script>
+import vuejsDatepicker from 'vuejs-datepicker';
+
 export default {
+  components:{
+     vuejsDatepicker
+  },
   data() {
     return {
       job: {
+        
         address: "",
         zip: "",
         tel: "",
@@ -242,9 +258,11 @@ export default {
         pricetag_id: "",
         user_id: "",
         description: "",
+        visitDate: new Date(),
         callfirst: false,
         time: "",
-        done: false
+        done: false,
+        noVisit: false,
       },
       uri: "/jobs/",
       selectedTab: 0,
@@ -269,16 +287,20 @@ export default {
       return this.jobs.filter(job => {
         return job.client.name.match(this.searchName);
       });
-    }
+    },
+    
   },
 
   methods: {
+    
+    
     setSearchName(name){
 
       this.searchName = name;
 
     },
     createJob() {
+     
       axios
         .post(this.uri, {
           address: this.job.address,
@@ -291,7 +313,9 @@ export default {
           description: this.job.description,
           callfirst: this.job.callfirst,
           time: this.job.time,
-          done: this.job.done
+          done: this.job.done,
+          visitDate: this.job.visitDate,
+          noVisit: this.job.noVisit
         })
         .then(response => {
           this.closeCreateJobsModal();
@@ -303,9 +327,11 @@ export default {
       this.job.pricetag_id = "";
     },
     check() {
-      console.log(this.job.pricetag_id);
-      console.log(this.job.callfirst);
-      console.log(this.job.user_id);
+      // console.log(this.job.pricetag_id);
+      // console.log(this.job.callfirst);
+      // console.log(this.job.user_id);
+      // console.log(this.job.visitDate);
+      console.log(this.job.noVisit);
     },
     makeActive(index) {
       this.selectedTab = index;
@@ -318,6 +344,7 @@ export default {
     },
 
     openCreateJobsModal() {
+      
       if (this.clients.length > 0) {
         this.selectedClient = this.clients[this.selectedIndex];
         this.job.client_id = this.clients[0].id;

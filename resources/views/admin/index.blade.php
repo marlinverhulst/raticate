@@ -24,6 +24,10 @@
   <script src="{{ asset('js/app.js') }}" defer></script>
   <link rel="stylesheet" type="text/css" href="{{ url('/css/costom.css') }}" />
   
+  
+
+  
+  
   {{-- <!-- Bootstrap core JavaScript-->
   <script src="admin/vendor/jquery/jquery.min.js"></script>
   <script src="admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -47,6 +51,8 @@
   
   <!-- Page Wrapper -->
   <div id="app">
+     
+      
   <div id="wrapper">
     
      
@@ -253,11 +259,13 @@
 
           <!-- Content Row -->
           <div class="container">
+              
 
           <div class="row">
             
               <user-component :users = 'users'></user-component>
               <client-component :clients = 'clients'></client-component>
+             
             
                 
             </div>
@@ -266,7 +274,7 @@
               <job-component :clients = 'clients' :users = 'users' :jobs = 'applySearchJobs'></job-component>
             </div>
             
-            
+         
           </div>
         </div>
         <!-- /.container-fluid -->
@@ -320,7 +328,7 @@
 
 
 </div> <!-- end of app-->
-   
+
 
 </body>
 

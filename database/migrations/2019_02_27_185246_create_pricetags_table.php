@@ -15,7 +15,7 @@ class CreatePricetagsTable extends Migration
     {
         Schema::create('price_tags', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('client_id')->index()->unsigned()->nullable();
+            $table->integer('client_id')->index();
             $table->string('name');
             $table->float('cost');
             $table->timestamps();

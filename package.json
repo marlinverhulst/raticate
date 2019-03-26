@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.7"
     },
     "dependencies": {
-        "toastr": "^2.1.4"
+        "toastr": "^2.1.4",
+        "vuejs-datepicker": "^1.5.4"
     }
 }

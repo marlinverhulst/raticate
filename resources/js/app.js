@@ -25,6 +25,9 @@ Vue.component('search-component', require('./components/searchComponent.vue').de
 Vue.component('user-component', require('./components/UserComponent.vue').default);
 Vue.component('job-component', require('./components/JobComponent.vue').default);
 
+
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -33,6 +36,9 @@ Vue.component('job-component', require('./components/JobComponent.vue').default)
 
 const app = new Vue({
     el: '#app',
+    components:{
+       
+    },
 
 
     data() {

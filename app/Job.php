@@ -20,7 +20,8 @@ class Job extends Model
         'callfirst',
         'message',
         'time',
-        'done'
+        'done',
+        'visit'
 
 
     ];

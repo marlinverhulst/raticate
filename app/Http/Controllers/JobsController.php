@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Job;
 use App\Client;
+use Carbon\Carbon;
 
 class JobsController extends Controller
 {
@@ -63,7 +64,12 @@ class JobsController extends Controller
             'city' =>'required',
             ]);
 
+            
+            
+            
 
+            
+             
             $job = Job::create([
                 'address' => $request->address,
                 'zip' => $request->zip,
@@ -80,7 +86,14 @@ class JobsController extends Controller
                 'done' => $request->done,
                 
                 
+                
             ]);
+            if($request->noVisit == 0 ){
+
+                $job->visit = Carbon::parse($request->visitDate)->toDateTimeString();
+                $job->save();
+                 
+            }
     
             return response()->json([
                 'job' => $job,

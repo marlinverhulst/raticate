@@ -123,7 +123,9 @@ class ClientsController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        // Code for deleting pricetags/jobs on client 
+        // $client->jobs()->delete();
+        // $client->priceTags()->delete();
         $client->delete();
         return response()->json([
             'client' => $client,
