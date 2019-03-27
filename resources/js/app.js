@@ -24,6 +24,7 @@ Vue.component('client-component', require('./components/ClientComponent.vue').de
 Vue.component('search-component', require('./components/searchComponent.vue').default);
 Vue.component('user-component', require('./components/UserComponent.vue').default);
 Vue.component('job-component', require('./components/JobComponent.vue').default);
+Vue.component('report-component', require('./components/ReportComponent.vue').default);
 
 
 
@@ -36,13 +37,14 @@ Vue.component('job-component', require('./components/JobComponent.vue').default)
 
 const app = new Vue({
     el: '#app',
-    components:{
-       
+    components: {
+
     },
 
 
     data() {
         return {
+
 
             clients: [],
             users: [],
