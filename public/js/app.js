@@ -2361,6 +2361,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getFormattedDate: function getFormattedDate(date) {
+      var year = date.toString().substring(0, 4);
+      var month = date.toString().substring(5, 7);
+      var day = date.toString().substring(8, 10);
+      return day + " - " + month + " - " + year;
+    },
     setSearchName: function setSearchName(name) {
       this.searchName = name;
     },
@@ -38930,7 +38936,11 @@ var render = function() {
                                 : _c("td", [_vm._v("0")]),
                               _vm._v(" "),
                               job.visit != undefined
-                                ? _c("td", [_vm._v(_vm._s(job.visit))])
+                                ? _c("td", [
+                                    _vm._v(
+                                      _vm._s(_vm.getFormattedDate(job.visit))
+                                    )
+                                  ])
                                 : _c("td", [_vm._v("Not Planned")]),
                               _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(job.user.name))])

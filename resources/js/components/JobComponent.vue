@@ -66,7 +66,7 @@
                         <td>{{representStatus(job.done)}}</td>
                         <td v-if="job.visits != undefined">{{jobs.visits.count()}}</td>
                         <td v-else >0</td>
-                        <td v-if="job.visit != undefined">{{job.visit}}</td><td v-else>Not Planned</td>
+                        <td v-if="job.visit != undefined">{{getFormattedDate(job.visit)}}</td><td v-else>Not Planned</td>
                         <td>{{job.user.name}}</td>
                       </tr>
                     </tbody>
@@ -289,9 +289,19 @@ export default {
       });
     },
     
+    
   },
 
   methods: {
+
+    getFormattedDate:  function(date){
+
+      let year  = date.toString().substring(0,4);
+      let month = date.toString().substring(5,7);
+      let day   = date.toString().substring(8,10);
+
+      return day + " - " + month + " - " + year;
+    },
     
     
     setSearchName(name){
