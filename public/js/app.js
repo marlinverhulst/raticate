@@ -2312,6 +2312,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2332,7 +2348,8 @@ __webpack_require__.r(__webpack_exports__);
         callfirst: false,
         time: "",
         done: false,
-        noVisit: false
+        noVisit: false,
+        cause: ""
       },
       uri: "/jobs/",
       selectedTab: 0,
@@ -39275,22 +39292,37 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-row" }, [
+                  _c("div", { staticClass: "form-group col-6" }, [
+                    _c("label", { attrs: { for: "datepicker" } }, [
+                      _vm._v("Visit date: ")
+                    ]),
+                    _vm._v(" "),
+                    _vm.job.noVisit == 0 && _vm.job.done == 0
+                      ? _c(
+                          "div",
+                          [
+                            _c("vuejs-datepicker", {
+                              attrs: { name: "datepicker" },
+                              model: {
+                                value: _vm.job.visitDate,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.job, "visitDate", $$v)
+                                },
+                                expression: "job.visitDate"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "form-group" },
+                    { staticClass: "form-group", attrs: { "col-6": "" } },
                     [
-                      _c("vuejs-datepicker", {
-                        model: {
-                          value: _vm.job.visitDate,
-                          callback: function($$v) {
-                            _vm.$set(_vm.job, "visitDate", $$v)
-                          },
-                          expression: "job.visitDate"
-                        }
-                      }),
-                      _vm._v(" "),
                       _c("label", { attrs: { for: "novisit" } }, [
-                        _vm._v("No Visit:")
+                        _vm._v(" Do not visit ? ")
                       ]),
                       _vm._v(" "),
                       _c("input", {
@@ -39341,9 +39373,55 @@ var render = function() {
                           }
                         }
                       })
-                    ],
-                    1
+                    ]
                   )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "done" } }, [
+                    _vm._v("Job closed ? ")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.job.done,
+                        expression: "job.done"
+                      }
+                    ],
+                    attrs: { type: "checkbox", name: "done", id: "done" },
+                    domProps: {
+                      checked: Array.isArray(_vm.job.done)
+                        ? _vm._i(_vm.job.done, null) > -1
+                        : _vm.job.done
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.job.done,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(_vm.job, "done", $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.job,
+                                "done",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.job, "done", $$c)
+                        }
+                      }
+                    }
+                  })
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-row" }, [
@@ -39363,7 +39441,7 @@ var render = function() {
                       ],
                       attrs: {
                         type: "checkbox",
-                        name: "callfirst",
+                        name: "callbefore",
                         id: "callbefore"
                       },
                       domProps: {

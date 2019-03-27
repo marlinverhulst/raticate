@@ -30,6 +30,7 @@ class CreateJobsTable extends Migration
             $table->boolean('message')->nullable();
             $table->string('time')->nullable();
             $table->boolean('done');
+            $table->string('cause')->nullable();
 
 
 

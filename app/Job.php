@@ -21,7 +21,8 @@ class Job extends Model
         'message',
         'time',
         'done',
-        'visit'
+        'visit',
+        'cause'
 
 
     ];

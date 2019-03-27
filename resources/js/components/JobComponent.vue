@@ -5,7 +5,12 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <i @click="$root.setJobStatus(1)" v-if="$root.jobstatus == 0" class="fas fa-folder-open fa-3x"></i><i @click="$root.setJobStatus(0)" v-else class="fas fa-folder fa-3x" ></i>
+          <i
+            @click="$root.setJobStatus(1)"
+            v-if="$root.jobstatus == 0"
+            class="fas fa-folder-open fa-3x"
+          ></i>
+          <i @click="$root.setJobStatus(0)" v-else class="fas fa-folder fa-3x"></i>
           <h6 class="m-0 font-weight-bold text-primary">Jobs</h6>
           <i class="fas fa-plus-circle fa-2x" @click="openCreateJobsModal"></i>
         </div>
@@ -65,8 +70,9 @@
                         <td>{{job.city}}</td>
                         <td>{{representStatus(job.done)}}</td>
                         <td v-if="job.visits != undefined">{{jobs.visits.count()}}</td>
-                        <td v-else >0</td>
-                        <td v-if="job.visit != undefined">{{getFormattedDate(job.visit)}}</td><td v-else>Not Planned</td>
+                        <td v-else>0</td>
+                        <td v-if="job.visit != undefined">{{getFormattedDate(job.visit)}}</td>
+                        <td v-else>Not Planned</td>
                         <td>{{job.user.name}}</td>
                       </tr>
                     </tbody>
@@ -111,7 +117,7 @@
               </div>
               <div class="form-group col-6">
                 <label for="priceTagSelect">&#160;</label>
-                
+
                 <select
                   v-model="job.pricetag_id"
                   v-if="selectedClient.pricetags"
@@ -184,16 +190,26 @@
               ></textarea>
             </div>
             <div class="form-row">
-              <div class="form-group">
-             <vuejs-datepicker v-model="job.visitDate" ></vuejs-datepicker>
-              <label for="novisit">No Visit:</label>
+              <div class="form-group col-6">
+                <label for="datepicker">Visit date:&nbsp;</label>
+                <div v-if="job.noVisit == 0 && job.done == 0 ">
+                <vuejs-datepicker name="datepicker" v-model="job.visitDate"></vuejs-datepicker>
+                </div>
+              </div>
+              <div class="form-group" col-6>
+                <label for="novisit">&nbsp;Do not visit ?&nbsp;</label>
                 <input type="checkbox" name="novisit" v-model="job.noVisit" id="novisit">
               </div>
             </div>
+            <div class="form-group">
+              <label for="done">Job closed ?&nbsp;</label>
+              <input type="checkbox" name="done" v-model="job.done" id="done">
+            </div>
+
             <div class="form-row">
               <div class="form-group col-4">
                 <label for="callbefore">Call before visit ?:</label>
-                <input type="checkbox" name="callfirst" v-model="job.callfirst" id="callbefore">
+                <input type="checkbox" name="callbefore" v-model="job.callfirst" id="callbefore">
               </div>
             </div>
             <div class="form-row">
@@ -240,16 +256,15 @@
 </template>
 
 <script>
-import vuejsDatepicker from 'vuejs-datepicker';
+import vuejsDatepicker from "vuejs-datepicker";
 
 export default {
-  components:{
-     vuejsDatepicker
+  components: {
+    vuejsDatepicker
   },
   data() {
     return {
       job: {
-        
         address: "",
         zip: "",
         tel: "",
@@ -263,12 +278,13 @@ export default {
         time: "",
         done: false,
         noVisit: false,
+        cause: ""
       },
       uri: "/jobs/",
       selectedTab: 0,
       selectedIndex: 0,
       selectedClient: [],
-      searchName: "",
+      searchName: ""
     };
   },
   props: {
@@ -287,30 +303,22 @@ export default {
       return this.jobs.filter(job => {
         return job.client.name.match(this.searchName);
       });
-    },
-    
-    
+    }
   },
 
   methods: {
-
-    getFormattedDate:  function(date){
-
-      let year  = date.toString().substring(0,4);
-      let month = date.toString().substring(5,7);
-      let day   = date.toString().substring(8,10);
+    getFormattedDate: function(date) {
+      let year = date.toString().substring(0, 4);
+      let month = date.toString().substring(5, 7);
+      let day = date.toString().substring(8, 10);
 
       return day + " - " + month + " - " + year;
     },
-    
-    
-    setSearchName(name){
 
+    setSearchName(name) {
       this.searchName = name;
-
     },
     createJob() {
-     
       axios
         .post(this.uri, {
           address: this.job.address,
@@ -354,7 +362,6 @@ export default {
     },
 
     openCreateJobsModal() {
-      
       if (this.clients.length > 0) {
         this.selectedClient = this.clients[this.selectedIndex];
         this.job.client_id = this.clients[0].id;
