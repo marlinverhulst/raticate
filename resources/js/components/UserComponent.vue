@@ -12,7 +12,7 @@
         <!-- Card Body -->
         <div class="card-body">
           <div class="costumheight">
-            <table class="table" v-if="users.length > 0">
+            <table id="userTable" class="table" v-if="users.length > 0">
               <thead>
                 <tr>
                   <!-- <th scope="col">Id</th> -->

@@ -2541,6 +2541,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2553,12 +2577,51 @@ __webpack_require__.r(__webpack_exports__);
     clients: Array
   },
   methods: {
+    download_csv: function download_csv(csv, filename) {
+      var csvFile;
+      var downloadLink; // CSV FILE
+
+      csvFile = new Blob([csv], {
+        type: "text/csv"
+      }); // Download link
+
+      downloadLink = document.createElement("a"); // File name
+
+      downloadLink.download = filename; // We have to create a link to the file
+
+      downloadLink.href = window.URL.createObjectURL(csvFile); // Make sure that the link is not displayed
+
+      downloadLink.style.display = "none"; // Add the link to your DOM
+
+      document.body.appendChild(downloadLink); // Lanzamos
+
+      downloadLink.click();
+    },
+    export_table_to_csv: function export_table_to_csv(htmlTable, filename) {
+      var csv = [];
+      var container = document.querySelector(htmlTable);
+      var rows = container.querySelectorAll("table tr");
+
+      for (var i = 0; i < rows.length; i++) {
+        var row = [],
+            cols = rows[i].querySelectorAll("td, th");
+
+        for (var j = 0; j < cols.length; j++) {
+          row.push(cols[j].innerText);
+        }
+
+        csv.push(row.join(","));
+      } // Download CSV
+
+
+      this.download_csv(csv.join("\n"), filename);
+    },
     openReportModal: function openReportModal() {
       $("#ReportModal").modal("show");
     },
-    generateData: function generateData() {
-      console.log(this.selectedClientId);
-      console.log(this.selectedStatus);
+    save: function save(htmlTable) {
+      // var html = document.getElementById("test").outerHTML;
+      this.export_table_to_csv(htmlTable, "table.csv");
     }
   },
   computed: {},
@@ -39914,23 +39977,28 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-3" }, [
+                    _vm._m(1),
+                    _vm._v(" "),
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-primary",
                         on: {
                           click: function($event) {
-                            return _vm.generateData()
+                            return _vm.save("#userTable")
                           }
                         }
                       },
-                      [_vm._v("Generate")]
-                    )
+                      [_vm._v("Export HTML table to CSV file")]
+                    ),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("br")
                   ])
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(1)
+              _vm._m(2)
             ])
           ]
         )
@@ -39962,6 +40030,44 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("table", { staticClass: "table", attrs: { id: "test" } }, [
+      _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Age")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Country")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("td", [_vm._v("Geronimo")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("26")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("France")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("td", [_vm._v("Natalia")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("19")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Spain")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("td", [_vm._v("Silvia")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("32")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Russia")])
+      ])
     ])
   },
   function() {
@@ -40033,45 +40139,49 @@ var render = function() {
         _c("div", { staticClass: "card-body" }, [
           _c("div", { staticClass: "costumheight" }, [
             _vm.users.length > 0
-              ? _c("table", { staticClass: "table" }, [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c(
-                    "tbody",
-                    _vm._l(_vm.users, function(user, index) {
-                      return _c("tr", [
-                        _c("td", [_vm._v(_vm._s(user.name))]),
-                        _vm._v(" "),
-                        user.role_id == 1
-                          ? _c("td", [_vm._v("Admin")])
-                          : _c("td", [_vm._v("Technician")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("i", {
-                            staticClass: "fas fa-tools fa-1x",
-                            on: {
-                              click: function($event) {
-                                return _vm.openEditUserModal(index)
+              ? _c(
+                  "table",
+                  { staticClass: "table", attrs: { id: "userTable" } },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.users, function(user, index) {
+                        return _c("tr", [
+                          _c("td", [_vm._v(_vm._s(user.name))]),
+                          _vm._v(" "),
+                          user.role_id == 1
+                            ? _c("td", [_vm._v("Admin")])
+                            : _c("td", [_vm._v("Technician")]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("i", {
+                              staticClass: "fas fa-tools fa-1x",
+                              on: {
+                                click: function($event) {
+                                  return _vm.openEditUserModal(index)
+                                }
                               }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("i", {
-                            staticClass: "fas fa-minus-circle fa-1x",
-                            on: {
-                              click: function($event) {
-                                return _vm.deleteUser(index)
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("i", {
+                              staticClass: "fas fa-minus-circle fa-1x",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteUser(index)
+                                }
                               }
-                            }
-                          })
+                            })
+                          ])
                         ])
-                      ])
-                    }),
-                    0
-                  )
-                ])
+                      }),
+                      0
+                    )
+                  ]
+                )
               : _vm._e()
           ])
         ])
