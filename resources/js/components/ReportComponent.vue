@@ -54,6 +54,10 @@
                   <option :value="0">Open</option>
                   <option :value="1">Closed</option>
                 </select>
+                <vuejs-datepicker name="from" v-model="fromDate"></vuejs-datepicker>
+                <vuejs-datepicker name="til" v-model="tillDate"></vuejs-datepicker>
+
+                
               </div>
               <div class="col-3">
                 <table class="table" id="test">
@@ -98,12 +102,18 @@
 </template>
 
 <script>
+import vuejsDatepicker from "vuejs-datepicker";
 export default {
+  components:{
+    vuejsDatepicker
+  },
   data() {
     return {
       selectedClientId: "",
       selectedStatus: "",
-      URI: "/generate/"
+      URI: "/generate/",
+      fromDate: new Date(),
+      tillDate: new Date(),
     };
   },
   props: {
