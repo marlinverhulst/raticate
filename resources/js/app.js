@@ -92,6 +92,7 @@ const app = new Vue({
         this.getClients();
         this.getUsers();
         this.getJobs();
+       
         console.log("root mounted");
     },
 

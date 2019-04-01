@@ -2466,6 +2466,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 //
 //
 //
@@ -2565,18 +2566,102 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    vuejsDatepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       selectedClientId: "",
       selectedStatus: "",
-      URI: "/generate/"
+      URI: "/generate/",
+      fromDate: new Date(),
+      tillDate: new Date(),
+      visitDate: new Date(),
+      openOptionDiv: "none",
+      optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv", "hiddenTable"]
     };
   },
   props: {
     clients: Array
   },
   methods: {
+    init: function init() {
+      this.optionsdDivArray.forEach(function (name) {
+        var div = document.getElementById(name);
+        div.style.display = 'none';
+      });
+    },
+    openOption: function openOption(divName) {
+      if (this.openOptionDiv != divName) {
+        if (this.openOptionDiv != "none") {
+          var oldDiv = document.getElementById(this.openOptionDiv);
+          oldDiv.style.display = "none";
+        }
+
+        var newDiv = document.getElementById(divName);
+        newDiv.style.display = "block";
+        this.openOptionDiv = divName;
+      } else {
+        var _newDiv = document.getElementById(divName);
+
+        _newDiv.style.display = "none";
+        this.openOptionDiv = "none";
+      }
+    },
     download_csv: function download_csv(csv, filename) {
       var csvFile;
       var downloadLink; // CSV FILE
@@ -2626,6 +2711,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {},
   mounted: function mounted() {
+    this.init();
     console.log("RaportComponent mounted.");
   }
 });
@@ -39875,127 +39961,262 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "form-row" }, [
-                  _c("div", { staticClass: "col-3" }, [
+                  _c("div", { staticClass: "form-group" }, [
                     _c(
-                      "select",
+                      "button",
                       {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.selectedClientId,
-                            expression: "selectedClientId"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { name: "selectClient", id: "selectClient" },
+                        staticClass: "btn btn-secondary btn-sm dropdown-toggle",
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.selectedClientId = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
+                          click: function($event) {
+                            return _vm.openOption("clientOptionDiv")
                           }
                         }
                       },
-                      [
-                        _c("option", { attrs: { disabled: "", value: "" } }, [
-                          _vm._v("Select Client")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { domProps: { value: 0 } }, [
-                          _vm._v("All")
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(_vm.clients, function(client) {
-                          return _c(
-                            "option",
-                            { domProps: { value: client.id } },
-                            [_vm._v(_vm._s(client.name))]
-                          )
-                        })
-                      ],
-                      2
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-3" }, [
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.selectedStatus,
-                            expression: "selectedStatus"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { name: "selectClient", id: "selectClient" },
-                        on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.selectedStatus = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
-                        }
-                      },
-                      [
-                        _c("option", { attrs: { disabled: "", value: "" } }, [
-                          _vm._v("Select Status")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { domProps: { value: 3 } }, [
-                          _vm._v("All")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { domProps: { value: 0 } }, [
-                          _vm._v("Open")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { domProps: { value: 1 } }, [
-                          _vm._v("Closed")
-                        ])
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-3" }, [
-                    _vm._m(1),
+                      [_vm._v("By Client")]
+                    ),
                     _vm._v(" "),
                     _c(
                       "button",
                       {
+                        staticClass: "btn btn-secondary btn-sm dropdown-toggle",
                         on: {
                           click: function($event) {
-                            return _vm.save("#userTable")
+                            return _vm.openOption("VisitOptionDiv")
                           }
                         }
                       },
-                      [_vm._v("Export HTML table to CSV file")]
-                    ),
-                    _vm._v(" "),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c("br")
+                      [_vm._v("By Visit-date")]
+                    )
                   ])
-                ])
+                ]),
+                _vm._v(" "),
+                _c("div", { attrs: { id: "clientOptionDiv" } }, [
+                  _c("div", { staticClass: "form-row mt-3" }, [
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selectedClientId,
+                              expression: "selectedClientId"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { name: "selectClient", id: "selectClient" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedClientId = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { disabled: "", value: "" } }, [
+                            _vm._v("Select Client")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 0 } }, [
+                            _vm._v("All")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.clients, function(client) {
+                            return _c(
+                              "option",
+                              { domProps: { value: client.id } },
+                              [_vm._v(_vm._s(client.name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row mt-2" }, [
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selectedStatus,
+                              expression: "selectedStatus"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { name: "selectClient", id: "selectClient" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedStatus = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { disabled: "", value: "" } }, [
+                            _vm._v("Select Status")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 3 } }, [
+                            _vm._v("All")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 0 } }, [
+                            _vm._v("Open")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 1 } }, [
+                            _vm._v("Closed")
+                          ])
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c(
+                      "div",
+                      { staticClass: "col-2" },
+                      [
+                        _c("label", { attrs: { for: "from" } }, [
+                          _vm._v("From date:")
+                        ]),
+                        _vm._v(" "),
+                        _c("vuejs-datepicker", {
+                          attrs: { name: "from" },
+                          model: {
+                            value: _vm.fromDate,
+                            callback: function($$v) {
+                              _vm.fromDate = $$v
+                            },
+                            expression: "fromDate"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "till" } }, [
+                          _vm._v("Till date:")
+                        ]),
+                        _vm._v(" "),
+                        _c("vuejs-datepicker", {
+                          attrs: { name: "till" },
+                          model: {
+                            value: _vm.tillDate,
+                            callback: function($$v) {
+                              _vm.tillDate = $$v
+                            },
+                            expression: "tillDate"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row mt-2" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "#" }
+                        },
+                        [_vm._v("Generate")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              return _vm.save("#test")
+                            }
+                          }
+                        },
+                        [_vm._v("Save file")]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { attrs: { id: "VisitOptionDiv" } }, [
+                  _c("div", { staticClass: "form-row" }, [
+                    _c(
+                      "div",
+                      { staticClass: "col-2" },
+                      [
+                        _c("label", { attrs: { for: "visitDate" } }, [
+                          _vm._v("Visit date:")
+                        ]),
+                        _vm._v(" "),
+                        _c("vuejs-datepicker", {
+                          attrs: { name: "visitDate" },
+                          model: {
+                            value: _vm.visitDate,
+                            callback: function($$v) {
+                              _vm.visitDate = $$v
+                            },
+                            expression: "visitDate"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row mt-2" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "#" }
+                        },
+                        [_vm._v("Generate")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              return _vm.save("#test")
+                            }
+                          }
+                        },
+                        [_vm._v("Save file")]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(1)
               ]),
               _vm._v(" "),
               _vm._m(2)
@@ -40036,39 +40257,49 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("table", { staticClass: "table", attrs: { id: "test" } }, [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
+    return _c(
+      "div",
+      { staticClass: "form-row mt-5", attrs: { id: "hiddenTable" } },
+      [
+        _c("table", { staticClass: "table", attrs: { id: "test" } }, [
+          _c("tr", [
+            _c("th", [_vm._v("Name")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("Age")]),
+            _vm._v(" "),
+            _c("th", [_vm._v("Country")])
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _c("td", [_vm._v("Geronimo")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("26")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("France")])
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _c("td", [_vm._v("Natalia")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("19")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("Spain")])
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _c("td", [_vm._v("Silvia")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("32")]),
+            _vm._v(" "),
+            _c("td", [_vm._v("Russia")])
+          ])
+        ]),
         _vm._v(" "),
-        _c("th", [_vm._v("Age")]),
+        _c("br"),
         _vm._v(" "),
-        _c("th", [_vm._v("Country")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("Geronimo")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("26")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("France")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("Natalia")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("19")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Spain")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("Silvia")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("32")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Russia")])
-      ])
-    ])
+        _c("br")
+      ]
+    )
   },
   function() {
     var _vm = this

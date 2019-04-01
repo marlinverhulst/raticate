@@ -30,63 +30,111 @@
           </div>
           <div class="modal-body">
             <div class="form-row">
-              <div class="col-3">
-                <select
-                  name="selectClient"
-                  id="selectClient"
-                  v-model="selectedClientId"
-                  class="form-control"
-                >
-                  <option disabled value>Select Client</option>
-                  <option :value="0">All</option>
-                  <option v-for="client in clients" :value="client.id">{{client.name}}</option>
-                </select>
-              </div>
-              <div class="col-3">
-                <select
-                  name="selectClient"
-                  id="selectClient"
-                  v-model="selectedStatus"
-                  class="form-control"
-                >
-                  <option disabled value>Select Status</option>
-                  <option :value="3">All</option>
-                  <option :value="0">Open</option>
-                  <option :value="1">Closed</option>
-                </select>
-                <vuejs-datepicker name="from" v-model="fromDate"></vuejs-datepicker>
-                <vuejs-datepicker name="til" v-model="tillDate"></vuejs-datepicker>
-
-                
-              </div>
-              <div class="col-3">
-                <table class="table" id="test">
-                  <tr>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Country</th>
-                  </tr>
-                  <tr>
-                    <td>Geronimo</td>
-                    <td>26</td>
-                    <td>France</td>
-                  </tr>
-                  <tr>
-                    <td>Natalia</td>
-                    <td>19</td>
-                    <td>Spain</td>
-                  </tr>
-                  <tr>
-                    <td>Silvia</td>
-                    <td>32</td>
-                    <td>Russia</td>
-                  </tr>
-                </table>
-                <button @click="save('#userTable')">Export HTML table to CSV file</button>
-                <br>
-                <br>
+              <div class="form-group">
+              <button
+                @click="openOption('clientOptionDiv')"
+                class="btn btn-secondary btn-sm dropdown-toggle"
+              >By Client</button>
+              <button
+                @click="openOption('VisitOptionDiv')"
+                class="btn btn-secondary btn-sm dropdown-toggle"
+              >By Visit-date</button>
               </div>
             </div>
+            <div id="clientOptionDiv">
+              <div class="form-row mt-3">
+                <div class="col-2">
+                  <select
+                    name="selectClient"
+                    id="selectClient"
+                    v-model="selectedClientId"
+                    class="form-control"
+                  >
+                    <option disabled value>Select Client</option>
+                    <option :value="0">All</option>
+                    <option v-for="client in clients" :value="client.id">{{client.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                <div class="col-2">
+                  <select
+                    name="selectClient"
+                    id="selectClient"
+                    v-model="selectedStatus"
+                    class="form-control"
+                  >
+                    <option disabled value>Select Status</option>
+                    <option :value="3">All</option>
+                    <option :value="0">Open</option>
+                    <option :value="1">Closed</option>
+                  </select>
+                </div>
+              </div>
+
+              <div  class="form-row">
+                <div class="col-2">
+                  <label for="from">From date:</label>
+                  <vuejs-datepicker name="from" v-model="fromDate"></vuejs-datepicker>
+                  <label for="till">Till date:</label>
+                  <vuejs-datepicker name="till" v-model="tillDate"></vuejs-datepicker>
+                  
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                 <div class="form-group">
+                    <a class="btn btn-primary" href="#">Generate</a>
+                    <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                </div>
+              </div>
+            </div>
+            <!-- end of Client Option div -->
+            <div id="VisitOptionDiv">
+              <div class="form-row">
+                <div class="col-2">
+                  <label for="visitDate">Visit date:</label>
+                  <vuejs-datepicker name="visitDate" v-model="visitDate"></vuejs-datepicker>
+                  
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                
+                  <div class="form-group">
+                    <a class="btn btn-primary" href="#">Generate</a>
+                    <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                </div>
+                
+                
+              </div>
+            </div>
+            <div id ="hiddenTable" class="form-row mt-5">
+              <table class="table" id="test">
+                <tr>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Country</th>
+                </tr>
+                <tr>
+                  <td>Geronimo</td>
+                  <td>26</td>
+                  <td>France</td>
+                </tr>
+                <tr>
+                  <td>Natalia</td>
+                  <td>19</td>
+                  <td>Spain</td>
+                </tr>
+                <tr>
+                  <td>Silvia</td>
+                  <td>32</td>
+                  <td>Russia</td>
+                </tr>
+              </table>
+             
+              <br>
+              <br>
+            </div>
+             
           </div>
           <!--end of modal body -->
           <div class="modal-footer">
@@ -104,7 +152,7 @@
 <script>
 import vuejsDatepicker from "vuejs-datepicker";
 export default {
-  components:{
+  components: {
     vuejsDatepicker
   },
   data() {
@@ -114,6 +162,9 @@ export default {
       URI: "/generate/",
       fromDate: new Date(),
       tillDate: new Date(),
+      visitDate: new Date(),
+      openOptionDiv: "none",
+      optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv","hiddenTable"]
     };
   },
   props: {
@@ -121,6 +172,28 @@ export default {
   },
 
   methods: {
+    init() {
+      this.optionsdDivArray.forEach(name => {
+        let div = document.getElementById(name);
+        div.style.display = 'none';
+      });
+    },
+    openOption(divName) {
+      if (this.openOptionDiv != divName) {
+        if (this.openOptionDiv != "none") {
+          let oldDiv = document.getElementById(this.openOptionDiv);
+          oldDiv.style.display = "none";
+        }
+        let newDiv = document.getElementById(divName);
+
+        newDiv.style.display = "block";
+        this.openOptionDiv = divName;
+      } else {
+        let newDiv = document.getElementById(divName);
+        newDiv.style.display = "none";
+        this.openOptionDiv = "none";
+      }
+    },
     download_csv(csv, filename) {
       var csvFile;
       var downloadLink;
@@ -175,6 +248,7 @@ export default {
   },
   computed: {},
   mounted() {
+    this.init();
     console.log("RaportComponent mounted.");
   }
 };
