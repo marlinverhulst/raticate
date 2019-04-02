@@ -90,10 +90,39 @@
             </div>
             <!-- end of Client Option div -->
             <div id="VisitOptionDiv">
+              <div class="form-row mt-3">
+                <div class="col-2">
+                  <select
+                    name="selectClient"
+                    id="selectClient"
+                    v-model="selectedClientId"
+                    class="form-control"
+                  >
+                    <option disabled value>Select Client</option>
+                    <option :value="0">All</option>
+                    <option v-for="client in clients" :value="client.id">{{client.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                <div class="col-2">
+                  <select
+                    name="selectClient"
+                    id="selectClient"
+                    v-model="selectedStatus"
+                    class="form-control"
+                  >
+                    <option disabled value>Select Status</option>
+                    <option :value="3">All</option>
+                    <option :value="0">Open</option>
+                    <option :value="1">Closed</option>
+                  </select>
+                </div>
+              </div>
               <div class="form-row">
                 <div class="col-2">
-                  <label for="visitDate">Visit date:</label>
-                  <vuejs-datepicker name="visitDate" v-model="visitDate"></vuejs-datepicker>
+                  <label for="visitDate">Inspection date:</label>
+                  <vuejs-datepicker name="visitDate" v-model="inspectionDate"></vuejs-datepicker>
                   
                 </div>
               </div>
@@ -162,7 +191,7 @@ export default {
       URI: "/generate/",
       fromDate: new Date(),
       tillDate: new Date(),
-      visitDate: new Date(),
+      inspectionDate: new Date(),
       openOptionDiv: "none",
       optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv","hiddenTable"]
     };

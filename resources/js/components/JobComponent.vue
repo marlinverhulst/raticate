@@ -69,9 +69,9 @@
                         <td>{{job.zip}}</td>
                         <td>{{job.city}}</td>
                         <td>{{representStatus(job.done)}}</td>
-                        <td v-if="job.visits != undefined">{{jobs.visits.count()}}</td>
+                        <td v-if="job.inspections != undefined">{{job.inspections.length}}</td>
                         <td v-else>0</td>
-                        <td v-if="job.visit != undefined">{{getFormattedDate(job.visit)}}</td>
+                        <td v-if="job.visitdate != undefined">{{getFormattedDate(job.visitdate.date)}}</td>
                         <td v-else>Not Planned</td>
                         <td>{{job.user.name}}</td>
                       </tr>

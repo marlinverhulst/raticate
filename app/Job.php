@@ -37,6 +37,14 @@ class Job extends Model
     public function user(){
         return $this->belongsTo('App\User');
     }
+
+    public function visitdate(){
+        return $this->hasOne('App\VisitDate'); 
+    }
+
+    public function inspections(){
+        return $this->hasMany('App\Inspection');
+    }
     
 
     

@@ -2618,6 +2618,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2630,7 +2659,7 @@ __webpack_require__.r(__webpack_exports__);
       URI: "/generate/",
       fromDate: new Date(),
       tillDate: new Date(),
-      visitDate: new Date(),
+      inspectionDate: new Date(),
       openOptionDiv: "none",
       optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv", "hiddenTable"]
     };
@@ -39207,16 +39236,18 @@ var render = function() {
                                 _vm._v(_vm._s(_vm.representStatus(job.done)))
                               ]),
                               _vm._v(" "),
-                              job.visits != undefined
+                              job.inspections != undefined
                                 ? _c("td", [
-                                    _vm._v(_vm._s(_vm.jobs.visits.count()))
+                                    _vm._v(_vm._s(job.inspections.length))
                                   ])
                                 : _c("td", [_vm._v("0")]),
                               _vm._v(" "),
-                              job.visit != undefined
+                              job.visitdate != undefined
                                 ? _c("td", [
                                     _vm._v(
-                                      _vm._s(_vm.getFormattedDate(job.visit))
+                                      _vm._s(
+                                        _vm.getFormattedDate(job.visitdate.date)
+                                      )
                                     )
                                   ])
                                 : _c("td", [_vm._v("Not Planned")]),
@@ -40164,23 +40195,128 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { attrs: { id: "VisitOptionDiv" } }, [
+                  _c("div", { staticClass: "form-row mt-3" }, [
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selectedClientId,
+                              expression: "selectedClientId"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { name: "selectClient", id: "selectClient" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedClientId = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { disabled: "", value: "" } }, [
+                            _vm._v("Select Client")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 0 } }, [
+                            _vm._v("All")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.clients, function(client) {
+                            return _c(
+                              "option",
+                              { domProps: { value: client.id } },
+                              [_vm._v(_vm._s(client.name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row mt-2" }, [
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selectedStatus,
+                              expression: "selectedStatus"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { name: "selectClient", id: "selectClient" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedStatus = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { disabled: "", value: "" } }, [
+                            _vm._v("Select Status")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 3 } }, [
+                            _vm._v("All")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 0 } }, [
+                            _vm._v("Open")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 1 } }, [
+                            _vm._v("Closed")
+                          ])
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _c("div", { staticClass: "form-row" }, [
                     _c(
                       "div",
                       { staticClass: "col-2" },
                       [
                         _c("label", { attrs: { for: "visitDate" } }, [
-                          _vm._v("Visit date:")
+                          _vm._v("Inspection date:")
                         ]),
                         _vm._v(" "),
                         _c("vuejs-datepicker", {
                           attrs: { name: "visitDate" },
                           model: {
-                            value: _vm.visitDate,
+                            value: _vm.inspectionDate,
                             callback: function($$v) {
-                              _vm.visitDate = $$v
+                              _vm.inspectionDate = $$v
                             },
-                            expression: "visitDate"
+                            expression: "inspectionDate"
                           }
                         })
                       ],

@@ -29,7 +29,7 @@ class JobsController extends Controller
     {
         //
         $status = $request->status;
-        $jobs = Job::with(['client', 'pricetag', 'user'])->where('done',$status)->get();
+        $jobs = Job::with(['client', 'pricetag', 'user', 'visitdate','inspections'])->where('done',$status)->get();
         
         
         return response()->json([
@@ -87,11 +87,18 @@ class JobsController extends Controller
                 
                 
                 
+                
             ]);
-            if($request->noVisit == 0 ){
+            
+            if($request->noVisit == 0 && $request->done == 0  ){
 
-                $job->visit = Carbon::parse($request->visitDate)->toDateTimeString();
-                $job->save();
+                $visitDate = Carbon::parse($request->visitDate)->toDateTimeString();
+                
+                $job->visitdate()->create([
+                    'job_id' => $job->id,
+                    'date' => $visitDate
+                    
+                ]);
                  
             }
     
