@@ -31,14 +31,14 @@
           <div class="modal-body">
             <div class="form-row">
               <div class="form-group">
-              <button
-                @click="openOption('clientOptionDiv')"
-                class="btn btn-secondary btn-sm dropdown-toggle"
-              >By Client</button>
-              <button
-                @click="openOption('VisitOptionDiv')"
-                class="btn btn-secondary btn-sm dropdown-toggle"
-              >By Visit-date</button>
+                <button
+                  @click="openOption('clientOptionDiv')"
+                  class="btn btn-secondary btn-sm dropdown-toggle"
+                >By Client</button>
+                <button
+                  @click="openOption('VisitOptionDiv')"
+                  class="btn btn-secondary btn-sm dropdown-toggle"
+                >By Visit-date</button>
               </div>
             </div>
             <div id="clientOptionDiv">
@@ -65,26 +65,25 @@
                     class="form-control"
                   >
                     <option disabled value>Select Status</option>
-                    <option :value="3">All</option>
+                    <option :value="2">All</option>
                     <option :value="0">Open</option>
                     <option :value="1">Closed</option>
                   </select>
                 </div>
               </div>
 
-              <div  class="form-row">
+              <div class="form-row">
                 <div class="col-2">
                   <label for="from">From date:</label>
-                  <vuejs-datepicker name="from" v-model="fromDate"></vuejs-datepicker>
+                  <vuejs-datepicker name="from" v-model="startDate"></vuejs-datepicker>
                   <label for="till">Till date:</label>
-                  <vuejs-datepicker name="till" v-model="tillDate"></vuejs-datepicker>
-                  
+                  <vuejs-datepicker name="till" v-model="endDate"></vuejs-datepicker>
                 </div>
               </div>
               <div class="form-row mt-2">
-                 <div class="form-group">
-                    <a class="btn btn-primary" href="#">Generate</a>
-                    <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                <div class="form-group">
+                  <a class="btn btn-primary" @click="getReportbyClients()" href="#">Generate</a>
+                  <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
                 </div>
               </div>
             </div>
@@ -113,7 +112,7 @@
                     class="form-control"
                   >
                     <option disabled value>Select Status</option>
-                    <option :value="3">All</option>
+                    <option :value="2">All</option>
                     <option :value="0">Open</option>
                     <option :value="1">Closed</option>
                   </select>
@@ -123,47 +122,52 @@
                 <div class="col-2">
                   <label for="visitDate">Inspection date:</label>
                   <vuejs-datepicker name="visitDate" v-model="inspectionDate"></vuejs-datepicker>
-                  
                 </div>
               </div>
               <div class="form-row mt-2">
-                
-                  <div class="form-group">
-                    <a class="btn btn-primary" href="#">Generate</a>
-                    <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                <div class="form-group">
+                  <a class="btn btn-primary" href="#">Generate</a>
+                  <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
                 </div>
-                
-                
               </div>
             </div>
-            <div id ="hiddenTable" class="form-row mt-5">
+
+            <div id="hiddenTable" class="form-row mt-5">
               <table class="table" id="test">
+                <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Age</th>
-                  <th>Country</th>
+                  <th>Class</th>
+                  <th>Date</th>
+                  <th>Address</th>
+                  <th>City</th>
+                  <th>Status<th>
+                  <th>Cause</th>
+                  <th>Inspection Dates</th>
+                  <th>Total</th>
                 </tr>
-                <tr>
-                  <td>Geronimo</td>
-                  <td>26</td>
-                  <td>France</td>
+                </thead>
+                <tbody>
+                <tr v-for="(job, index) in reportData">
+                  <td>Class</td>
+                  <td>Date</td>
+                  <td>Address</td>
+                  <td>City</td>
+                  <td>Status<td>
+                  <td>Cause</td>
+                  <td>Inspection Dates</td>
+                  <td>Total</td>
+                  
+                  
+                  
+                  
                 </tr>
-                <tr>
-                  <td>Natalia</td>
-                  <td>19</td>
-                  <td>Spain</td>
-                </tr>
-                <tr>
-                  <td>Silvia</td>
-                  <td>32</td>
-                  <td>Russia</td>
-                </tr>
+                </tbody>
+                
               </table>
-             
+
               <br>
               <br>
             </div>
-             
           </div>
           <!--end of modal body -->
           <div class="modal-footer">
@@ -186,14 +190,16 @@ export default {
   },
   data() {
     return {
+      reportData: [],
       selectedClientId: "",
       selectedStatus: "",
       URI: "/generate/",
-      fromDate: new Date(),
-      tillDate: new Date(),
+      startDate: new Date(),
+      endDate: new Date(),
       inspectionDate: new Date(),
       openOptionDiv: "none",
-      optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv","hiddenTable"]
+      optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv"],
+      reportByClientUri: "/reportclient/"
     };
   },
   props: {
@@ -204,7 +210,7 @@ export default {
     init() {
       this.optionsdDivArray.forEach(name => {
         let div = document.getElementById(name);
-        div.style.display = 'none';
+        div.style.display = "none";
       });
     },
     openOption(divName) {
@@ -222,6 +228,20 @@ export default {
         newDiv.style.display = "none";
         this.openOptionDiv = "none";
       }
+    },
+    getReportbyClients() {
+      axios
+        .get(this.reportByClientUri, {
+          params: {
+            client_id: this.selectedClientId,
+            startDate: this.startDate,
+            endDate: this.endDate,
+            status: this.selectedStatus
+          }
+        })
+        .then(response => {
+          this.reportData = response.data.jobs;
+        });
     },
     download_csv(csv, filename) {
       var csvFile;

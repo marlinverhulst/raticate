@@ -2647,6 +2647,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2654,14 +2658,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      reportData: [],
       selectedClientId: "",
       selectedStatus: "",
       URI: "/generate/",
-      fromDate: new Date(),
-      tillDate: new Date(),
+      startDate: new Date(),
+      endDate: new Date(),
       inspectionDate: new Date(),
       openOptionDiv: "none",
-      optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv", "hiddenTable"]
+      optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv"],
+      reportByClientUri: "/reportclient/"
     };
   },
   props: {
@@ -2671,7 +2677,7 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       this.optionsdDivArray.forEach(function (name) {
         var div = document.getElementById(name);
-        div.style.display = 'none';
+        div.style.display = "none";
       });
     },
     openOption: function openOption(divName) {
@@ -2690,6 +2696,20 @@ __webpack_require__.r(__webpack_exports__);
         _newDiv.style.display = "none";
         this.openOptionDiv = "none";
       }
+    },
+    getReportbyClients: function getReportbyClients() {
+      var _this = this;
+
+      axios.get(this.reportByClientUri, {
+        params: {
+          client_id: this.selectedClientId,
+          startDate: this.startDate,
+          endDate: this.endDate,
+          status: this.selectedStatus
+        }
+      }).then(function (response) {
+        _this.reportData = response.data.jobs;
+      });
     },
     download_csv: function download_csv(csv, filename) {
       var csvFile;
@@ -40111,7 +40131,7 @@ var render = function() {
                             _vm._v("Select Status")
                           ]),
                           _vm._v(" "),
-                          _c("option", { domProps: { value: 3 } }, [
+                          _c("option", { domProps: { value: 2 } }, [
                             _vm._v("All")
                           ]),
                           _vm._v(" "),
@@ -40139,11 +40159,11 @@ var render = function() {
                         _c("vuejs-datepicker", {
                           attrs: { name: "from" },
                           model: {
-                            value: _vm.fromDate,
+                            value: _vm.startDate,
                             callback: function($$v) {
-                              _vm.fromDate = $$v
+                              _vm.startDate = $$v
                             },
-                            expression: "fromDate"
+                            expression: "startDate"
                           }
                         }),
                         _vm._v(" "),
@@ -40154,11 +40174,11 @@ var render = function() {
                         _c("vuejs-datepicker", {
                           attrs: { name: "till" },
                           model: {
-                            value: _vm.tillDate,
+                            value: _vm.endDate,
                             callback: function($$v) {
-                              _vm.tillDate = $$v
+                              _vm.endDate = $$v
                             },
-                            expression: "tillDate"
+                            expression: "endDate"
                           }
                         })
                       ],
@@ -40172,7 +40192,12 @@ var render = function() {
                         "a",
                         {
                           staticClass: "btn btn-primary",
-                          attrs: { href: "#" }
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              return _vm.getReportbyClients()
+                            }
+                          }
                         },
                         [_vm._v("Generate")]
                       ),
@@ -40284,7 +40309,7 @@ var render = function() {
                             _vm._v("Select Status")
                           ]),
                           _vm._v(" "),
-                          _c("option", { domProps: { value: 3 } }, [
+                          _c("option", { domProps: { value: 2 } }, [
                             _vm._v("All")
                           ]),
                           _vm._v(" "),
@@ -40352,7 +40377,50 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(1)
+                _c(
+                  "div",
+                  {
+                    staticClass: "form-row mt-5",
+                    attrs: { id: "hiddenTable" }
+                  },
+                  [
+                    _c(
+                      "table",
+                      { staticClass: "table", attrs: { id: "test" } },
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.reportData, function(job, index) {
+                            return _c("tr", [
+                              _c("td", [_vm._v("Class")]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Date")]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Address")]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("City")]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Status")]),
+                              _c("td"),
+                              _c("td", [_vm._v("Cause")]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Inspection Dates")]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Total")])
+                            ])
+                          }),
+                          0
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("br")
+                  ]
+                )
               ]),
               _vm._v(" "),
               _vm._m(2)
@@ -40393,49 +40461,25 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "form-row mt-5", attrs: { id: "hiddenTable" } },
-      [
-        _c("table", { staticClass: "table", attrs: { id: "test" } }, [
-          _c("tr", [
-            _c("th", [_vm._v("Name")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Age")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Country")])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("td", [_vm._v("Geronimo")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("26")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("France")])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("td", [_vm._v("Natalia")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("19")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Spain")])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("td", [_vm._v("Silvia")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("32")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Russia")])
-          ])
-        ]),
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Class")]),
         _vm._v(" "),
-        _c("br"),
+        _c("th", [_vm._v("Date")]),
         _vm._v(" "),
-        _c("br")
-      ]
-    )
+        _c("th", [_vm._v("Address")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("City")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
+        _c("th"),
+        _c("th", [_vm._v("Cause")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Inspection Dates")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total")])
+      ])
+    ])
   },
   function() {
     var _vm = this

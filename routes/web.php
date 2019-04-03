@@ -24,3 +24,5 @@ Route::resource('/clients','ClientsController');
 Route::resource('/pricetags','PriceTagController');
 Route::resource('/jobs','JobsController');
 
+route::get('reportclient', 'ReportController@generateByClient');
+
