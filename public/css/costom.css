@@ -8,3 +8,11 @@
     height: 300px;
 
 }
+
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 700px;
+    overflow-y: auto;
+}

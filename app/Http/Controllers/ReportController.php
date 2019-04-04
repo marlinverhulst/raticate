@@ -52,6 +52,14 @@ class ReportController extends Controller
                 'jobs' => $jobs
             ], 200);
         }
+
+        if($client_id != 0 && $status == 2){
+
+            $jobs = Job::where([['client_id','=' ,$client_id]])->whereBetween('created_at', array($startDate, $endDate))->with(['client', 'pricetag', 'inspections'])->get();
+            return response()->json([
+                'jobs' => $jobs
+            ], 200);
+        }
         
 
        

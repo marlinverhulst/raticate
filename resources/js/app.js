@@ -65,6 +65,18 @@ const app = new Vue({
         }
     },
     methods: {
+        getFormattedDate: function (date) {
+            let year = date.toString().substring(0, 4);
+            let month = date.toString().substring(5, 7);
+            let day = date.toString().substring(8, 10);
+
+            return day + " - " + month + " - " + year;
+        },
+        representStatus(done) {
+            if (done === 0) {
+                return "Open";
+            } else return "Closed";
+        },
         getClients() {
             axios.get(this.clientUri).then(response => {
                 this.clients = response.data.clients;
@@ -92,7 +104,7 @@ const app = new Vue({
         this.getClients();
         this.getUsers();
         this.getJobs();
-       
+
         console.log("root mounted");
     },
 

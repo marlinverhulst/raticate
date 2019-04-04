@@ -2378,12 +2378,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    getFormattedDate: function getFormattedDate(date) {
-      var year = date.toString().substring(0, 4);
-      var month = date.toString().substring(5, 7);
-      var day = date.toString().substring(8, 10);
-      return day + " - " + month + " - " + year;
-    },
     setSearchName: function setSearchName(name) {
       this.searchName = name;
     },
@@ -2443,11 +2437,6 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.selectedClient.id);
       console.log(this.job.client_id);
       this.check();
-    },
-    representStatus: function representStatus(done) {
-      if (done === 0) {
-        return "Open";
-      } else return "Closed";
     }
   },
   mounted: function mounted() {
@@ -2467,6 +2456,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2674,6 +2676,16 @@ __webpack_require__.r(__webpack_exports__);
     clients: Array
   },
   methods: {
+    getAddedInspectionDates: function getAddedInspectionDates(inspections) {
+      var dates = "";
+      inspections.forEach(function (i) {
+        var year = i.created_at.toString().substring(0, 4);
+        var month = i.created_at.toString().substring(5, 7);
+        var day = i.created_at.toString().substring(8, 10);
+        dates = dates + day + " - " + month + " - " + year + " || ";
+      });
+      return dates;
+    },
     init: function init() {
       this.optionsdDivArray.forEach(function (name) {
         var div = document.getElementById(name);
@@ -39253,7 +39265,9 @@ var render = function() {
                               _c("td", [_vm._v(_vm._s(job.city))]),
                               _vm._v(" "),
                               _c("td", [
-                                _vm._v(_vm._s(_vm.representStatus(job.done)))
+                                _vm._v(
+                                  _vm._s(_vm.$root.representStatus(job.done))
+                                )
                               ]),
                               _vm._v(" "),
                               job.inspections != undefined
@@ -39266,7 +39280,9 @@ var render = function() {
                                 ? _c("td", [
                                     _vm._v(
                                       _vm._s(
-                                        _vm.getFormattedDate(job.visitdate.date)
+                                        _vm.$root.getFormattedDate(
+                                          job.visitdate.date
+                                        )
                                       )
                                     )
                                   ])
@@ -40386,32 +40402,88 @@ var render = function() {
                   [
                     _c(
                       "table",
-                      { staticClass: "table", attrs: { id: "test" } },
+                      {
+                        staticClass: "table",
+                        staticStyle: { "overflow-y": "scroll" },
+                        attrs: { id: "test" }
+                      },
                       [
                         _vm._m(1),
                         _vm._v(" "),
                         _c(
                           "tbody",
-                          _vm._l(_vm.reportData, function(job, index) {
-                            return _c("tr", [
-                              _c("td", [_vm._v("Class")]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("Date")]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("Address")]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("City")]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("Status")]),
+                          [
+                            _vm._l(_vm.reportData, function(job, index) {
+                              return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(job.client.name))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(job.pricetag.name))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.$root.getFormattedDate(job.created_at)
+                                    )
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(job.address))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(job.city))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(_vm.$root.representStatus(job.done))
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                job.cause != null
+                                  ? _c("td", [_vm._v(_vm._s(job.cause))])
+                                  : _c("td", [_vm._v("Undefined")]),
+                                _vm._v(" "),
+                                job.inspections.length > 0
+                                  ? _c("td", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.getAddedInspectionDates(
+                                            job.inspections
+                                          )
+                                        )
+                                      )
+                                    ])
+                                  : _c("td", [_vm._v("No inspections")]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(job.pricetag.cost))])
+                              ])
+                            }),
+                            _vm._v(" "),
+                            _c("tr", [
                               _c("td"),
-                              _c("td", [_vm._v("Cause")]),
                               _vm._v(" "),
-                              _c("td", [_vm._v("Inspection Dates")]),
+                              _c("td"),
                               _vm._v(" "),
-                              _c("td", [_vm._v("Total")])
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Total in €")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  "=sum(I2:I" +
+                                    _vm._s(_vm.reportData.length + 1) +
+                                    ")"
+                                )
+                              ])
                             ])
-                          }),
-                          0
+                          ],
+                          2
                         )
                       ]
                     ),
@@ -40463,6 +40535,8 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
+        _c("th", [_vm._v("Client")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Class")]),
         _vm._v(" "),
         _c("th", [_vm._v("Date")]),
@@ -40472,7 +40546,7 @@ var staticRenderFns = [
         _c("th", [_vm._v("City")]),
         _vm._v(" "),
         _c("th", [_vm._v("Status")]),
-        _c("th"),
+        _vm._v(" "),
         _c("th", [_vm._v("Cause")]),
         _vm._v(" "),
         _c("th", [_vm._v("Inspection Dates")]),
@@ -54771,6 +54845,17 @@ var app = new Vue({
     }
   },
   methods: {
+    getFormattedDate: function getFormattedDate(date) {
+      var year = date.toString().substring(0, 4);
+      var month = date.toString().substring(5, 7);
+      var day = date.toString().substring(8, 10);
+      return day + " - " + month + " - " + year;
+    },
+    representStatus: function representStatus(done) {
+      if (done === 0) {
+        return "Open";
+      } else return "Closed";
+    },
     getClients: function getClients() {
       var _this2 = this;
 

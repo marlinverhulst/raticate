@@ -68,10 +68,10 @@
                         <td>{{job.address}}</td>
                         <td>{{job.zip}}</td>
                         <td>{{job.city}}</td>
-                        <td>{{representStatus(job.done)}}</td>
+                        <td>{{$root.representStatus(job.done)}}</td>
                         <td v-if="job.inspections != undefined">{{job.inspections.length}}</td>
                         <td v-else>0</td>
-                        <td v-if="job.visitdate != undefined">{{getFormattedDate(job.visitdate.date)}}</td>
+                        <td v-if="job.visitdate != undefined">{{$root.getFormattedDate(job.visitdate.date)}}</td>
                         <td v-else>Not Planned</td>
                         <td>{{job.user.name}}</td>
                       </tr>
@@ -307,13 +307,7 @@ export default {
   },
 
   methods: {
-    getFormattedDate: function(date) {
-      let year = date.toString().substring(0, 4);
-      let month = date.toString().substring(5, 7);
-      let day = date.toString().substring(8, 10);
-
-      return day + " - " + month + " - " + year;
-    },
+    
 
     setSearchName(name) {
       this.searchName = name;
@@ -377,11 +371,7 @@ export default {
       console.log(this.job.client_id);
       this.check();
     },
-    representStatus(done) {
-      if (done === 0) {
-        return "Open";
-      } else return "Closed";
-    }
+    
   },
 
   mounted() {

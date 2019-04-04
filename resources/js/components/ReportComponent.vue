@@ -133,36 +133,49 @@
             </div>
 
             <div id="hiddenTable" class="form-row mt-5">
-              <table class="table" id="test">
+              <table class="table" id="test" style="overflow-y : scroll">
                 <thead>
-                <tr>
-                  <th>Class</th>
-                  <th>Date</th>
-                  <th>Address</th>
-                  <th>City</th>
-                  <th>Status<th>
-                  <th>Cause</th>
-                  <th>Inspection Dates</th>
-                  <th>Total</th>
-                </tr>
+                  <tr>
+                    <th>Client</th>
+                    <th>Class</th>
+                    <th>Date</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Status</th>
+                    <th>Cause</th>
+                    <th>Inspection Dates</th>
+                    <th>Total</th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(job, index) in reportData">
-                  <td>Class</td>
-                  <td>Date</td>
-                  <td>Address</td>
-                  <td>City</td>
-                  <td>Status<td>
-                  <td>Cause</td>
-                  <td>Inspection Dates</td>
-                  <td>Total</td>
-                  
-                  
-                  
-                  
-                </tr>
+                  <tr v-for="(job, index) in reportData">
+                    <td>{{job.client.name}}</td>
+                    <td>{{job.pricetag.name}}</td>
+                    <td>{{$root.getFormattedDate(job.created_at)}}</td>
+                    <td>{{job.address}}</td>
+                    <td>{{job.city}}</td>
+                    <td>{{$root.representStatus(job.done)}}</td>
+
+                    <td v-if="job.cause != null">{{job.cause}}</td>
+                    <td v-else>Undefined</td>
+                    <td
+                      v-if="job.inspections.length > 0 "
+                    >{{getAddedInspectionDates(job.inspections)}}</td>
+                    <td v-else>No inspections</td>
+                    <td>{{job.pricetag.cost}}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total in €</td>
+                    <td>=sum(I2:I{{reportData.length + 1}})</td>
+                  </tr>
                 </tbody>
-                
               </table>
 
               <br>
@@ -207,12 +220,26 @@ export default {
   },
 
   methods: {
+    getAddedInspectionDates(inspections) {
+      let dates = "";
+
+      inspections.forEach(function(i) {
+        let year = i.created_at.toString().substring(0, 4);
+        let month = i.created_at.toString().substring(5, 7);
+        let day = i.created_at.toString().substring(8, 10);
+
+        dates = dates + day + " - " + month + " - " + year + " || ";
+      });
+
+      return dates;
+    },
     init() {
       this.optionsdDivArray.forEach(name => {
         let div = document.getElementById(name);
         div.style.display = "none";
       });
     },
+
     openOption(divName) {
       if (this.openOptionDiv != divName) {
         if (this.openOptionDiv != "none") {
