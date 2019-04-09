@@ -129,7 +129,7 @@
                   <option
                     v-for="priceTag in selectedClient.pricetags"
                     :value="priceTag.id"
-                  >{{priceTag.name}}: &#160;&#160;&#160;&#160;&#160;€&#160; {{priceTag.cost}}</option>
+                  >{{priceTag.kind}}&#160;&#160;{{priceTag.name}}: &#160;&#160;&#160;&#160;&#160;€&#160; {{priceTag.cost}}</option>
                 </select>
               </div>
             </div>

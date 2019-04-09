@@ -51,6 +51,7 @@ class PriceTagController extends Controller
             'client_id'=> 'required'
         ]);
         $pricetag = PriceTag::create([
+            'kind' => $request->kind,
             'name' => $request->name,
             'cost' => $request->cost,
             'client_id'=>$request->client_id

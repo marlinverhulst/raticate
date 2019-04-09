@@ -80,7 +80,7 @@
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Edit Client</h5>
@@ -99,11 +99,15 @@
               >
 
               <div class="form-group row">
-                <div class="col-5 mt-2">
+                <div class="col-4 mt-2">
+                  <label for="pricetagkind">Kind:</label>
+                  <input v-model="pricetag.kind" type="text" id="pricetagkind" class="form-control">
+                </div>
+                <div class="col-4 mt-2">
                   <label for="pricetagname">Pricetags:</label>
                   <input v-model="pricetag.name" type="text" id="pricetagname" class="form-control">
                 </div>
-                <div class="col-4 mt-2">
+                <div class="col-3 mt-2">
                   <label for="pricetagcost">cost:</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
@@ -118,7 +122,7 @@
                     >
                   </div>
                 </div>
-                <div class="col-3 mt-2">
+                <div class="col-1 mt-2">
                   <label for="pricetagcost">Save:</label>
                   <div>
                     <i @click="createPriceTag()" class="far fa-check-circle fa-2x"></i>
@@ -134,11 +138,13 @@
                 <table class="table" v-if="new_update_client.pricetags">
                   <thead>
                     <th style="width: 50%">available tags</th>
+                    <th style="width: 25%"></th>
                     <th style="width: 25%">Cost in €</th>
                     <th style="width: 25%"></th>
                   </thead>
                   <tbody>
                     <tr v-for="(pricetag, index) in new_update_client.pricetags">
+                      <td>{{pricetag.kind}}</td>
                       <td>{{pricetag.name}}</td>
                       <td>{{pricetag.cost}}</td>
                       <td>
@@ -170,6 +176,7 @@ export default {
       },
       pricetag: {
         name: "",
+        kind: "",
         cost: "",
         client_id: ""
       },
@@ -188,16 +195,11 @@ export default {
 
       uri: "/clients/"
     };
-
-    
   },
   props: {
-
-    clients: Array,
+    clients: Array
   },
   methods: {
-    
-    
     resetData() {
       this.client.name = "";
     },
@@ -236,6 +238,7 @@ export default {
     createPriceTag() {
       axios
         .post("/pricetags", {
+          kind: this.pricetag.kind,
           name: this.pricetag.name,
           cost: this.pricetag.cost,
           client_id: this.new_update_client.id
@@ -250,8 +253,8 @@ export default {
           console.log(error);
         });
     },
-    
-    init(){
+
+    init() {
       this.clients = this.$root.$data;
     },
 
@@ -308,12 +311,7 @@ export default {
   },
 
   mounted() {
-    
     console.log("Client Component mounted.");
-    
-    
-
-    
   }
 };
 </script>

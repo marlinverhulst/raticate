@@ -60,7 +60,7 @@ class ClientsController extends Controller
             'name' => $request->name
         ]);
         $client->pricetags()->create([
-            
+                'kind' => 'public',
                 'name' => 'Normal',
                 'cost' => '0.00',
                 'client_id'=>$client->id

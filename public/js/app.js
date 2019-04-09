@@ -1926,6 +1926,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1934,6 +1940,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       pricetag: {
         name: "",
+        kind: "",
         cost: "",
         client_id: ""
       },
@@ -1995,6 +2002,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.post("/pricetags", {
+        kind: this.pricetag.kind,
         name: this.pricetag.name,
         cost: this.pricetag.cost,
         client_id: this.new_update_client.id
@@ -2456,6 +2464,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+//
+//
 //
 //
 //
@@ -38825,7 +38835,7 @@ var render = function() {
       [
         _c(
           "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
               _c("div", { staticClass: "modal-header" }, [
@@ -38886,7 +38896,35 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group row" }, [
-                    _c("div", { staticClass: "col-5 mt-2" }, [
+                    _c("div", { staticClass: "col-4 mt-2" }, [
+                      _c("label", { attrs: { for: "pricetagkind" } }, [
+                        _vm._v("Kind:")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.pricetag.kind,
+                            expression: "pricetag.kind"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", id: "pricetagkind" },
+                        domProps: { value: _vm.pricetag.kind },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.pricetag, "kind", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-4 mt-2" }, [
                       _c("label", { attrs: { for: "pricetagname" } }, [
                         _vm._v("Pricetags:")
                       ]),
@@ -38914,7 +38952,7 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-4 mt-2" }, [
+                    _c("div", { staticClass: "col-3 mt-2" }, [
                       _c("label", { attrs: { for: "pricetagcost" } }, [
                         _vm._v("cost:")
                       ]),
@@ -38954,7 +38992,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-3 mt-2" }, [
+                    _c("div", { staticClass: "col-1 mt-2" }, [
                       _c("label", { attrs: { for: "pricetagcost" } }, [
                         _vm._v("Save:")
                       ]),
@@ -38988,6 +39026,8 @@ var render = function() {
                               index
                             ) {
                               return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(pricetag.kind))]),
+                                _vm._v(" "),
                                 _c("td", [_vm._v(_vm._s(pricetag.name))]),
                                 _vm._v(" "),
                                 _c("td", [_vm._v(_vm._s(pricetag.cost))]),
@@ -39106,6 +39146,8 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("th", { staticStyle: { width: "50%" } }, [_vm._v("available tags")]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { width: "25%" } }),
       _vm._v(" "),
       _c("th", { staticStyle: { width: "25%" } }, [_vm._v("Cost in €")]),
       _vm._v(" "),
@@ -39457,7 +39499,9 @@ var render = function() {
                                 { domProps: { value: priceTag.id } },
                                 [
                                   _vm._v(
-                                    _vm._s(priceTag.name) +
+                                    _vm._s(priceTag.kind) +
+                                      "  " +
+                                      _vm._s(priceTag.name) +
                                       ":      €  " +
                                       _vm._s(priceTag.cost)
                                   )
@@ -40058,339 +40102,329 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { attrs: { id: "clientOptionDiv" } }, [
-                  _c("div", { staticClass: "form-row mt-3" }, [
-                    _c("div", { staticClass: "col-2" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.selectedClientId,
-                              expression: "selectedClientId"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { name: "selectClient", id: "selectClient" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card  bg-dark mb-3 shadow-sm",
+                      staticStyle: { "max-width": "18rem" }
+                    },
+                    [
+                      _c("div", { staticClass: "card-body" }, [
+                        _c("div", { staticClass: "form-row mt-3" }, [
+                          _c("div", { staticClass: "col-12" }, [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.selectedClientId,
+                                    expression: "selectedClientId"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  name: "selectClient",
+                                  id: "selectClient"
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.selectedClientId = $event.target
+                                      .multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { disabled: "", value: "" } },
+                                  [_vm._v("Select Client")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { domProps: { value: 0 } }, [
+                                  _vm._v("All")
+                                ]),
+                                _vm._v(" "),
+                                _vm._l(_vm.clients, function(client) {
+                                  return _c(
+                                    "option",
+                                    { domProps: { value: client.id } },
+                                    [_vm._v(_vm._s(client.name))]
+                                  )
                                 })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.selectedClientId = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { disabled: "", value: "" } }, [
-                            _vm._v("Select Client")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { domProps: { value: 0 } }, [
-                            _vm._v("All")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.clients, function(client) {
-                            return _c(
-                              "option",
-                              { domProps: { value: client.id } },
-                              [_vm._v(_vm._s(client.name))]
+                              ],
+                              2
                             )
-                          })
-                        ],
-                        2
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row mt-2" }, [
-                    _c("div", { staticClass: "col-2" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.selectedStatus,
-                              expression: "selectedStatus"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { name: "selectClient", id: "selectClient" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.selectedStatus = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { disabled: "", value: "" } }, [
-                            _vm._v("Select Status")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { domProps: { value: 2 } }, [
-                            _vm._v("All")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { domProps: { value: 0 } }, [
-                            _vm._v("Open")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { domProps: { value: 1 } }, [
-                            _vm._v("Closed")
                           ])
-                        ]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row" }, [
-                    _c(
-                      "div",
-                      { staticClass: "col-2" },
-                      [
-                        _c("label", { attrs: { for: "from" } }, [
-                          _vm._v("From date:")
                         ]),
                         _vm._v(" "),
-                        _c("vuejs-datepicker", {
-                          attrs: { name: "from" },
-                          model: {
-                            value: _vm.startDate,
-                            callback: function($$v) {
-                              _vm.startDate = $$v
-                            },
-                            expression: "startDate"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "till" } }, [
-                          _vm._v("Till date:")
+                        _c("div", { staticClass: "form-row mt-2" }, [
+                          _c("div", { staticClass: "col-12" }, [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.selectedStatus,
+                                    expression: "selectedStatus"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  name: "selectClient",
+                                  id: "selectClient"
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.selectedStatus = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { disabled: "", value: "" } },
+                                  [_vm._v("Select Status")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { domProps: { value: 2 } }, [
+                                  _vm._v("All")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { domProps: { value: 0 } }, [
+                                  _vm._v("Open")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { domProps: { value: 1 } }, [
+                                  _vm._v("Closed")
+                                ])
+                              ]
+                            )
+                          ])
                         ]),
                         _vm._v(" "),
-                        _c("vuejs-datepicker", {
-                          attrs: { name: "till" },
-                          model: {
-                            value: _vm.endDate,
-                            callback: function($$v) {
-                              _vm.endDate = $$v
-                            },
-                            expression: "endDate"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row mt-2" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              return _vm.getReportbyClients()
-                            }
-                          }
-                        },
-                        [_vm._v("Generate")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              return _vm.save("#test")
-                            }
-                          }
-                        },
-                        [_vm._v("Save file")]
-                      )
-                    ])
-                  ])
+                        _c("div", { staticClass: "form-row" }, [
+                          _c(
+                            "div",
+                            { staticClass: "col-2" },
+                            [
+                              _c("label", { attrs: { for: "from" } }, [
+                                _vm._v("From:")
+                              ]),
+                              _vm._v(" "),
+                              _c("vuejs-datepicker", {
+                                attrs: { name: "from" },
+                                model: {
+                                  value: _vm.startDate,
+                                  callback: function($$v) {
+                                    _vm.startDate = $$v
+                                  },
+                                  expression: "startDate"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("label", { attrs: { for: "till" } }, [
+                                _vm._v("Till:")
+                              ]),
+                              _vm._v(" "),
+                              _c("vuejs-datepicker", {
+                                attrs: { name: "till" },
+                                model: {
+                                  value: _vm.endDate,
+                                  callback: function($$v) {
+                                    _vm.endDate = $$v
+                                  },
+                                  expression: "endDate"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-row mt-2" }, [
+                          _c("div", { staticClass: "form-group" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.getReportbyClients()
+                                  }
+                                }
+                              },
+                              [_vm._v("Generate")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.save("#test")
+                                  }
+                                }
+                              },
+                              [_vm._v("Save file")]
+                            )
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
                 ]),
                 _vm._v(" "),
                 _c("div", { attrs: { id: "VisitOptionDiv" } }, [
-                  _c("div", { staticClass: "form-row mt-3" }, [
-                    _c("div", { staticClass: "col-2" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.selectedClientId,
-                              expression: "selectedClientId"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { name: "selectClient", id: "selectClient" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card  bg-dark mb-3",
+                      staticStyle: { "max-width": "18rem" }
+                    },
+                    [
+                      _c("div", { staticClass: "card-body" }, [
+                        _c("div", { staticClass: "form-row mt-3" }, [
+                          _c("div", { staticClass: "col-12" }, [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.selectedClientId,
+                                    expression: "selectedClientId"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  name: "selectClient",
+                                  id: "selectClient"
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.selectedClientId = $event.target
+                                      .multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { disabled: "", value: "" } },
+                                  [_vm._v("Select Client")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { domProps: { value: 0 } }, [
+                                  _vm._v("All")
+                                ]),
+                                _vm._v(" "),
+                                _vm._l(_vm.clients, function(client) {
+                                  return _c(
+                                    "option",
+                                    { domProps: { value: client.id } },
+                                    [_vm._v(_vm._s(client.name))]
+                                  )
                                 })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.selectedClientId = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { disabled: "", value: "" } }, [
-                            _vm._v("Select Client")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { domProps: { value: 0 } }, [
-                            _vm._v("All")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.clients, function(client) {
-                            return _c(
-                              "option",
-                              { domProps: { value: client.id } },
-                              [_vm._v(_vm._s(client.name))]
+                              ],
+                              2
                             )
-                          })
-                        ],
-                        2
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row mt-2" }, [
-                    _c("div", { staticClass: "col-2" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.selectedStatus,
-                              expression: "selectedStatus"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { name: "selectClient", id: "selectClient" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.selectedStatus = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { disabled: "", value: "" } }, [
-                            _vm._v("Select Status")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { domProps: { value: 2 } }, [
-                            _vm._v("All")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { domProps: { value: 0 } }, [
-                            _vm._v("Open")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { domProps: { value: 1 } }, [
-                            _vm._v("Closed")
                           ])
-                        ]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row" }, [
-                    _c(
-                      "div",
-                      { staticClass: "col-2" },
-                      [
-                        _c("label", { attrs: { for: "visitDate" } }, [
-                          _vm._v("Inspection date:")
                         ]),
                         _vm._v(" "),
-                        _c("vuejs-datepicker", {
-                          attrs: { name: "visitDate" },
-                          model: {
-                            value: _vm.inspectionDate,
-                            callback: function($$v) {
-                              _vm.inspectionDate = $$v
-                            },
-                            expression: "inspectionDate"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row mt-2" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" }
-                        },
-                        [_vm._v("Generate")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              return _vm.save("#test")
-                            }
-                          }
-                        },
-                        [_vm._v("Save file")]
-                      )
-                    ])
-                  ])
+                        _c("div", { staticClass: "form-row" }, [
+                          _c(
+                            "div",
+                            { staticClass: "col-12" },
+                            [
+                              _c("label", { attrs: { for: "visitDate" } }, [
+                                _vm._v("Inspection date:")
+                              ]),
+                              _vm._v(" "),
+                              _c("vuejs-datepicker", {
+                                attrs: { name: "visitDate" },
+                                model: {
+                                  value: _vm.inspectionDate,
+                                  callback: function($$v) {
+                                    _vm.inspectionDate = $$v
+                                  },
+                                  expression: "inspectionDate"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-row mt-2" }, [
+                          _c("div", { staticClass: "form-group" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: { href: "#" }
+                              },
+                              [_vm._v("Generate")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.save("#test")
+                                  }
+                                }
+                              },
+                              [_vm._v("Save file")]
+                            )
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
                 ]),
                 _vm._v(" "),
                 _c(
@@ -40416,6 +40450,12 @@ var render = function() {
                             _vm._l(_vm.reportData, function(job, index) {
                               return _c("tr", [
                                 _c("td", [_vm._v(_vm._s(job.client.name))]),
+                                _vm._v(" "),
+                                job.pricetag.kind != null
+                                  ? _c("td", [
+                                      _vm._v(_vm._s(job.pricetag.kind))
+                                    ])
+                                  : _c("td"),
                                 _vm._v(" "),
                                 _c("td", [_vm._v(_vm._s(job.pricetag.name))]),
                                 _vm._v(" "),
@@ -40472,11 +40512,13 @@ var render = function() {
                               _vm._v(" "),
                               _c("td"),
                               _vm._v(" "),
+                              _c("td"),
+                              _vm._v(" "),
                               _c("td", [_vm._v("Total in €")]),
                               _vm._v(" "),
                               _c("td", [
                                 _vm._v(
-                                  "=sum(I2:I" +
+                                  "=sum(J2:J" +
                                     _vm._s(_vm.reportData.length + 1) +
                                     ")"
                                 )
@@ -40536,6 +40578,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Client")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Kind")]),
         _vm._v(" "),
         _c("th", [_vm._v("Class")]),
         _vm._v(" "),

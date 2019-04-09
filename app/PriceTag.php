@@ -9,6 +9,7 @@ class PriceTag extends Model
     //
     protected $fillable = [
         'name',
+        'kind',
         'cost',
          'client_id'
     ];
