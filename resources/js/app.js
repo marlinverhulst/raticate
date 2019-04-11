@@ -21,10 +21,11 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('client-component', require('./components/ClientComponent.vue').default);
-Vue.component('search-component', require('./components/searchComponent.vue').default);
+Vue.component('search-component', require('./components/SearchComponent.vue').default);
 Vue.component('user-component', require('./components/UserComponent.vue').default);
 Vue.component('job-component', require('./components/JobComponent.vue').default);
 Vue.component('report-component', require('./components/ReportComponent.vue').default);
+Vue.component('visit-component', require('./components/VisitDateComponent.vue').default);
 
 
 

@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use App\VisitDate;
 
 class Job extends Model
 {
@@ -21,7 +23,7 @@ class Job extends Model
         'message',
         'time',
         'done',
-        'visit',
+        'visitdate',
         'cause'
 
 
@@ -38,14 +40,22 @@ class Job extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function visitdate(){
-        return $this->hasOne('App\VisitDate'); 
-    }
+    
+    
 
     public function inspections(){
         return $this->hasMany('App\Inspection');
     }
     
+    public static function getVisitdates(){
+        $userId = Auth::user();
+
+      
+
+        $dates = $userId->jobs()->where([['done','=', 0],['visitdate', '!=', 0]])->select('visitdate')->distinct()->get();
+        
+        return $dates;
+    }
 
     
 }

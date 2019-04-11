@@ -71,7 +71,7 @@
                         <td>{{$root.representStatus(job.done)}}</td>
                         <td v-if="job.inspections != undefined">{{job.inspections.length}}</td>
                         <td v-else>0</td>
-                        <td v-if="job.visitdate != undefined">{{$root.getFormattedDate(job.visitdate.date)}}</td>
+                        <td v-if="job.visitdate != undefined">{{$root.getFormattedDate(job.visitdate)}}</td>
                         <td v-else>Not Planned</td>
                         <td>{{job.user.name}}</td>
                       </tr>
@@ -94,7 +94,7 @@
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Create Job</h5>
@@ -105,7 +105,7 @@
           <div class="modal-body">
             <div class="form-row">
               <div class="form-group col-6">
-                <label for="clientSelect">Client:</label>
+                <!-- <label for="clientSelect">Client:</label> -->
                 <select
                   v-model="selectedIndex"
                   class="form-control"
@@ -116,7 +116,7 @@
                 </select>
               </div>
               <div class="form-group col-6">
-                <label for="priceTagSelect">&#160;</label>
+                <!-- <label for="priceTagSelect">&#160;</label> -->
 
                 <select
                   v-model="job.pricetag_id"
@@ -199,11 +199,12 @@
               <div class="form-group" col-6>
                 <label for="novisit">&nbsp;Do not visit ?&nbsp;</label>
                 <input type="checkbox" name="novisit" v-model="job.noVisit" id="novisit">
+                <label for="done">Job closed ?&nbsp;</label>
+              <input type="checkbox" name="done" v-model="job.done" id="done">
               </div>
             </div>
             <div class="form-group">
-              <label for="done">Job closed ?&nbsp;</label>
-              <input type="checkbox" name="done" v-model="job.done" id="done">
+              
             </div>
 
             <div class="form-row">
@@ -223,9 +224,7 @@
                 >
               </div>
             </div>
-            <div>
-              <hr>
-            </div>
+            
             <div class="form-row">
               <div class="form-group col-8">
                 <label for="clientSelect">Assign to:</label>

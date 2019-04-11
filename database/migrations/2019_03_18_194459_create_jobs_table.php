@@ -24,6 +24,7 @@ class CreateJobsTable extends Migration
             $table->integer('pricetag_id')->index()->unsigned()->nullable();
             $table->integer('user_id')->index()->unsigned()->nullable();
             $table->text('description')->nullable();
+            $table->date('visitdate')->nullable();
            
             $table->text('comments')->nullable();
             $table->boolean('callfirst');

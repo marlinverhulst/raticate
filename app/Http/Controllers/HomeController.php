@@ -28,6 +28,10 @@ class HomeController extends Controller
         if(Auth::user()->isAdmin()){
             return view('admin.index', compact('user'));
         }
+        if(Auth::user()->isTechnician()){
+            return view('tech.index', compact('user'));
+
+        }
 
         else return view('home');
     }

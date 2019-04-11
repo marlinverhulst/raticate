@@ -42,4 +42,11 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function isTechnician(){
+        if($this->role->name == 'technician'){
+            return true;
+        }
+        return false;
+    }
 }
