@@ -52,9 +52,25 @@ class Job extends Model
 
       
 
-        $dates = $userId->jobs()->where([['done','=', 0],['visitdate', '!=', 0]])->select('visitdate')->distinct()->get();
+        $dates = $userId->jobs()->where([['done','=', 0],['visitdate', '!=', null]])->select('visitdate')->distinct()->get();
         
         return $dates;
+    }
+
+    public static function getVisitJobs($date){
+
+        $userId = Auth::user();
+        
+
+        $jobs = $userId->jobs()->where([['done','=', 0],['visitdate', '=', $date]])->get();
+        
+        return response()->json([
+            'jobs' => $jobs,
+            
+        ], 200);
+
+
+
     }
 
     

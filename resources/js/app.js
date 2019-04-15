@@ -28,7 +28,12 @@ Vue.component('report-component', require('./components/ReportComponent.vue').de
 Vue.component('visit-component', require('./components/VisitDateComponent.vue').default);
 
 
+// register the plugin on vue
+import Toasted from 'vue-toasted';
 
+let options = {position: 'top-center', duration: 1000, fullWidth: true, theme: 'outline'};
+ 
+Vue.use(Toasted, options)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -100,11 +105,14 @@ const app = new Vue({
             this.getJobs();
         }
 
+       
+
     },
     mounted() {
         this.getClients();
         this.getUsers();
         this.getJobs();
+        
 
         console.log("root mounted");
     },

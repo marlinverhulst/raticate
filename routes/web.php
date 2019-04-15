@@ -26,4 +26,5 @@ Route::resource('/jobs','JobsController');
 
 route::get('/reportclient', 'ReportController@generateByClient');
 route::get('/loaddates', 'TechnicianController@getVisits');
+route::get('/loadjobs', 'TechnicianController@getJobs');
 

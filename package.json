@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "toastr": "^2.1.4",
+        "vue-toasted": "^1.1.26",
         "vuejs-datepicker": "^1.5.4"
     }
 }

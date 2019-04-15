@@ -23,12 +23,25 @@ class TechnicianController extends Controller
     
         //
         
-        $jobs = Job::getVisitdates();
+        $dates = Job::getVisitdates();
         
         
         return response()->json([
-            'jobs' => $jobs
+            'dates' => $dates
         ], 200);
+    }
+
+    public function getJobs(Request $request){
+        
+    
+        //
+        $date = $request->visitdate;
+        
+        return Job::getVisitJobs($date);
+       
+        
+        
+        
     }
 
         

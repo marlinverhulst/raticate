@@ -370,11 +370,15 @@ export default {
       console.log(this.job.client_id);
       this.check();
     },
+     message(){
+            this.$toasted.show('Logged In');
+        }
     
   },
 
   mounted() {
     console.log("Job Component mounted.");
+    this.message();
   }
 };
 </script>
