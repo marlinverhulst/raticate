@@ -102,7 +102,8 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body2">
+            <div style="margin: 20px">
             <div class="form-row">
               <div class="form-group col-6">
                 <!-- <label for="clientSelect">Client:</label> -->
@@ -133,7 +134,7 @@
                 </select>
               </div>
             </div>
-
+            
             <div class="form-row">
               <div class="form-group col-6">
                 <input
@@ -196,7 +197,7 @@
                 <vuejs-datepicker name="datepicker" v-model="job.visitDate"></vuejs-datepicker>
                 </div>
               </div>
-              <div class="form-group" col-6>
+              <div class="form-group col-6">
                 <label for="novisit">&nbsp;Do not visit ?&nbsp;</label>
                 <input type="checkbox" name="novisit" v-model="job.noVisit" id="novisit">
                 <label for="done">Job closed ?&nbsp;</label>
@@ -246,6 +247,7 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="closeCreateJobsModal">Close</button>
               <button type="button" @click="createJob()" class="btn btn-primary">Save changes</button>
+            </div>
             </div>
           </div>
         </div>

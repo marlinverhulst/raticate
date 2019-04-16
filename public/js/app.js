@@ -2335,6 +2335,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3210,6 +3212,96 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3220,7 +3312,8 @@ __webpack_require__.r(__webpack_exports__);
       datesUri: "/loaddates/",
       jobsUri: "/loadjobs/",
       visitDates: [],
-      openJobs: []
+      openJobs: [],
+      activeJob: []
     };
   },
   props: {},
@@ -3231,6 +3324,13 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(this.datesUri).then(function (response) {
         _this.visitDates = response.data.dates;
       });
+    },
+    startInspection: function startInspection(index) {
+      this.activeJob = this.openJobs[index];
+      this.openModal('#visitModal');
+    },
+    openModal: function openModal(modalId) {
+      $(modalId).modal("show");
     },
     loadJobs: function loadJobs(date) {
       var _this2 = this;
@@ -39494,302 +39594,300 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("div", { staticClass: "form-row" }, [
-                  _c("div", { staticClass: "form-group col-6" }, [
-                    _c(
-                      "select",
-                      {
+              _c("div", { staticClass: "modal-body2" }, [
+                _c("div", { staticStyle: { margin: "20px" } }, [
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-6" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selectedIndex,
+                              expression: "selectedIndex"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { id: "clientSelect" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.selectedIndex = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              },
+                              function($event) {
+                                return _vm.makeSelectedClient()
+                              }
+                            ]
+                          }
+                        },
+                        _vm._l(_vm.clients, function(client, index) {
+                          return _c("option", { domProps: { value: index } }, [
+                            _vm._v(_vm._s(client.name))
+                          ])
+                        }),
+                        0
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-6" }, [
+                      _vm.selectedClient.pricetags
+                        ? _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.job.pricetag_id,
+                                  expression: "job.pricetag_id"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { id: "priceTagSelect" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.job,
+                                      "pricetag_id",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  function($event) {
+                                    return _vm.check()
+                                  }
+                                ]
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { disabled: "", value: "" } },
+                                [_vm._v("Select a Pricetag")]
+                              ),
+                              _vm._v(" "),
+                              _vm._l(_vm.selectedClient.pricetags, function(
+                                priceTag
+                              ) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: priceTag.id } },
+                                  [
+                                    _vm._v(
+                                      _vm._s(priceTag.kind) +
+                                        "  " +
+                                        _vm._s(priceTag.name) +
+                                        ":      €  " +
+                                        _vm._s(priceTag.cost)
+                                    )
+                                  ]
+                                )
+                              })
+                            ],
+                            2
+                          )
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-6" }, [
+                      _c("input", {
                         directives: [
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.selectedIndex,
-                            expression: "selectedIndex"
+                            value: _vm.job.address,
+                            expression: "job.address"
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { id: "clientSelect" },
+                        attrs: {
+                          type: "text",
+                          id: "adres",
+                          required: "",
+                          placeholder: "Address"
+                        },
+                        domProps: { value: _vm.job.address },
                         on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.selectedIndex = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                            function($event) {
-                              return _vm.makeSelectedClient()
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          ]
-                        }
-                      },
-                      _vm._l(_vm.clients, function(client, index) {
-                        return _c("option", { domProps: { value: index } }, [
-                          _vm._v(_vm._s(client.name))
-                        ])
-                      }),
-                      0
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group col-6" }, [
-                    _vm.selectedClient.pricetags
-                      ? _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.job.pricetag_id,
-                                expression: "job.pricetag_id"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { id: "priceTagSelect" },
-                            on: {
-                              change: [
-                                function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.job,
-                                    "pricetag_id",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
-                                },
-                                function($event) {
-                                  return _vm.check()
-                                }
-                              ]
-                            }
-                          },
-                          [
-                            _c(
-                              "option",
-                              { attrs: { disabled: "", value: "" } },
-                              [_vm._v("Select a Pricetag")]
-                            ),
-                            _vm._v(" "),
-                            _vm._l(_vm.selectedClient.pricetags, function(
-                              priceTag
-                            ) {
-                              return _c(
-                                "option",
-                                { domProps: { value: priceTag.id } },
-                                [
-                                  _vm._v(
-                                    _vm._s(priceTag.kind) +
-                                      "  " +
-                                      _vm._s(priceTag.name) +
-                                      ":      €  " +
-                                      _vm._s(priceTag.cost)
-                                  )
-                                ]
-                              )
-                            })
-                          ],
-                          2
-                        )
-                      : _vm._e()
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-row" }, [
-                  _c("div", { staticClass: "form-group col-6" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.job.address,
-                          expression: "job.address"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        id: "adres",
-                        required: "",
-                        placeholder: "Address"
-                      },
-                      domProps: { value: _vm.job.address },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                            _vm.$set(_vm.job, "address", $event.target.value)
                           }
-                          _vm.$set(_vm.job, "address", $event.target.value)
                         }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group col-3" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.job.zip,
-                          expression: "job.zip"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        id: "zip",
-                        maxlength: "6",
-                        placeholder: "Zipcode"
-                      },
-                      domProps: { value: _vm.job.zip },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.job, "zip", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group col-3" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.job.city,
-                          expression: "job.city"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        id: "city",
-                        required: "",
-                        placeholder: "City"
-                      },
-                      domProps: { value: _vm.job.city },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.job, "city", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.job.tel,
-                        expression: "job.tel"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "tel",
-                      maxlength: "10",
-                      placeholder: "Tel"
-                    },
-                    domProps: { value: _vm.job.tel },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.job, "tel", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.job.description,
-                        expression: "job.description"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      name: "description",
-                      id: "description",
-                      cols: "30",
-                      rows: "6",
-                      placeholder: "Description.."
-                    },
-                    domProps: { value: _vm.job.description },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.job, "description", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-row" }, [
-                  _c("div", { staticClass: "form-group col-6" }, [
-                    _c("label", { attrs: { for: "datepicker" } }, [
-                      _vm._v("Visit date: ")
+                      })
                     ]),
                     _vm._v(" "),
-                    _vm.job.noVisit == 0 && _vm.job.done == 0
-                      ? _c(
-                          "div",
-                          [
-                            _c("vuejs-datepicker", {
-                              attrs: { name: "datepicker" },
-                              model: {
-                                value: _vm.job.visitDate,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.job, "visitDate", $$v)
-                                },
-                                expression: "job.visitDate"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      : _vm._e()
+                    _c("div", { staticClass: "form-group col-3" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.job.zip,
+                            expression: "job.zip"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "zip",
+                          maxlength: "6",
+                          placeholder: "Zipcode"
+                        },
+                        domProps: { value: _vm.job.zip },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.job, "zip", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-3" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.job.city,
+                            expression: "job.city"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "city",
+                          required: "",
+                          placeholder: "City"
+                        },
+                        domProps: { value: _vm.job.city },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.job, "city", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "form-group", attrs: { "col-6": "" } },
-                    [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.job.tel,
+                          expression: "job.tel"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "tel",
+                        maxlength: "10",
+                        placeholder: "Tel"
+                      },
+                      domProps: { value: _vm.job.tel },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.job, "tel", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.job.description,
+                          expression: "job.description"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        name: "description",
+                        id: "description",
+                        cols: "30",
+                        rows: "6",
+                        placeholder: "Description.."
+                      },
+                      domProps: { value: _vm.job.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.job, "description", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-6" }, [
+                      _c("label", { attrs: { for: "datepicker" } }, [
+                        _vm._v("Visit date: ")
+                      ]),
+                      _vm._v(" "),
+                      _vm.job.noVisit == 0 && _vm.job.done == 0
+                        ? _c(
+                            "div",
+                            [
+                              _c("vuejs-datepicker", {
+                                attrs: { name: "datepicker" },
+                                model: {
+                                  value: _vm.job.visitDate,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.job, "visitDate", $$v)
+                                  },
+                                  expression: "job.visitDate"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-6" }, [
                       _c("label", { attrs: { for: "novisit" } }, [
                         _vm._v(" Do not visit ? ")
                       ]),
@@ -39887,185 +39985,185 @@ var render = function() {
                           }
                         }
                       })
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-row" }, [
-                  _c("div", { staticClass: "form-group col-4" }, [
-                    _c("label", { attrs: { for: "callbefore" } }, [
-                      _vm._v("Call before visit ?:")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.job.callfirst,
-                          expression: "job.callfirst"
-                        }
-                      ],
-                      attrs: {
-                        type: "checkbox",
-                        name: "callbefore",
-                        id: "callbefore"
-                      },
-                      domProps: {
-                        checked: Array.isArray(_vm.job.callfirst)
-                          ? _vm._i(_vm.job.callfirst, null) > -1
-                          : _vm.job.callfirst
-                      },
-                      on: {
-                        change: function($event) {
-                          var $$a = _vm.job.callfirst,
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = null,
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 &&
-                                _vm.$set(
-                                  _vm.job,
-                                  "callfirst",
-                                  $$a.concat([$$v])
-                                )
-                            } else {
-                              $$i > -1 &&
-                                _vm.$set(
-                                  _vm.job,
-                                  "callfirst",
-                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                )
-                            }
-                          } else {
-                            _vm.$set(_vm.job, "callfirst", $$c)
-                          }
-                        }
-                      }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-row" }, [
-                  _c("div", { staticClass: "form-group col-8" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.job.time,
-                          expression: "job.time"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        id: "time",
-                        placeholder: "Time restrictions here ..."
-                      },
-                      domProps: { value: _vm.job.time },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.job, "time", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-row" }, [
-                  _c("div", { staticClass: "form-group col-8" }, [
-                    _c("label", { attrs: { for: "clientSelect" } }, [
-                      _vm._v("Assign to:")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-4" }, [
+                      _c("label", { attrs: { for: "callbefore" } }, [
+                        _vm._v("Call before visit ?:")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
                         directives: [
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.job.user_id,
-                            expression: "job.user_id"
+                            value: _vm.job.callfirst,
+                            expression: "job.callfirst"
+                          }
+                        ],
+                        attrs: {
+                          type: "checkbox",
+                          name: "callbefore",
+                          id: "callbefore"
+                        },
+                        domProps: {
+                          checked: Array.isArray(_vm.job.callfirst)
+                            ? _vm._i(_vm.job.callfirst, null) > -1
+                            : _vm.job.callfirst
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.job.callfirst,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(
+                                    _vm.job,
+                                    "callfirst",
+                                    $$a.concat([$$v])
+                                  )
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    _vm.job,
+                                    "callfirst",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
+                            } else {
+                              _vm.$set(_vm.job, "callfirst", $$c)
+                            }
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-8" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.job.time,
+                            expression: "job.time"
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { id: "clientSelect" },
+                        attrs: {
+                          type: "text",
+                          id: "time",
+                          placeholder: "Time restrictions here ..."
+                        },
+                        domProps: { value: _vm.job.time },
                         on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.job,
-                                "user_id",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            },
-                            function($event) {
-                              return _vm.check()
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          ]
+                            _vm.$set(_vm.job, "time", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-8" }, [
+                      _c("label", { attrs: { for: "clientSelect" } }, [
+                        _vm._v("Assign to:")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.job.user_id,
+                              expression: "job.user_id"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { id: "clientSelect" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.job,
+                                  "user_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                return _vm.check()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { disabled: "", value: "" } }, [
+                            _vm._v("Select a Technician")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.getTechnicians, function(technician) {
+                            return _c(
+                              "option",
+                              { domProps: { value: technician.id } },
+                              [_vm._v(_vm._s(technician.name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button" },
+                        on: { click: _vm.closeCreateJobsModal }
+                      },
+                      [_vm._v("Close")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.createJob()
+                          }
                         }
                       },
-                      [
-                        _c("option", { attrs: { disabled: "", value: "" } }, [
-                          _vm._v("Select a Technician")
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(_vm.getTechnicians, function(technician) {
-                          return _c(
-                            "option",
-                            { domProps: { value: technician.id } },
-                            [_vm._v(_vm._s(technician.name))]
-                          )
-                        })
-                      ],
-                      2
+                      [_vm._v("Save changes")]
                     )
                   ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "modal-footer" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button" },
-                      on: { click: _vm.closeCreateJobsModal }
-                    },
-                    [_vm._v("Close")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.createJob()
-                        }
-                      }
-                    },
-                    [_vm._v("Save changes")]
-                  )
                 ])
               ])
             ])
@@ -41357,26 +41455,36 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "card card-body" },
-                _vm._l(_vm.openJobs, function(job) {
+                _vm._l(_vm.openJobs, function(job, index) {
                   return _c("div", { staticClass: "btn-group" }, [
                     _c(
                       "button",
                       {
                         staticClass: "btn dropdown-toggle shadow-sm",
-                        attrs: {
-                          type: "button",
-                          "data-toggle": "dropdown",
-                          "aria-haspopup": "true",
-                          "aria-expanded": "false"
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.startInspection(index)
+                          }
                         }
                       },
                       [
                         _vm._v(
                           "\n              " +
                             _vm._s(job.address) +
-                            "\n              "
+                            "  -  " +
+                            _vm._s(job.city) +
+                            "  \n              "
                         ),
-                        _vm._m(1, true)
+                        _c("div", { staticClass: "float-right" }, [
+                          job.time
+                            ? _c("i", { staticClass: "far fa-clock" })
+                            : _vm._e(),
+                          _vm._v(" "),
+                          job.callfirst
+                            ? _c("i", { staticClass: "fas fa-phone" })
+                            : _vm._e()
+                        ])
                       ]
                     )
                   ])
@@ -41388,6 +41496,145 @@ var render = function() {
         ])
       }),
       0
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "visitModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v(_vm._s(_vm.activeJob.address))]
+                ),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "row justify-content-center mt-1" }, [
+                  _c("div", { staticClass: "col-10" }, [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "description" } }, [
+                        _vm._v("Description:")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.activeJob.description,
+                            expression: "activeJob.description"
+                          }
+                        ],
+                        attrs: {
+                          disabled: "",
+                          name: "",
+                          id: "description",
+                          cols: "30",
+                          rows: "5"
+                        },
+                        domProps: { value: _vm.activeJob.description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.activeJob,
+                              "description",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "observation" } }, [
+                        _vm._v("Observations:")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.activeJob.comments,
+                            expression: "activeJob.comments"
+                          }
+                        ],
+                        attrs: {
+                          name: "",
+                          id: "observation",
+                          cols: "30",
+                          rows: "5"
+                        },
+                        domProps: { value: _vm.activeJob.comments },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.activeJob,
+                              "comments",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _vm._m(4),
+                    _vm._v(" "),
+                    _vm._m(5),
+                    _vm._v(" "),
+                    _vm._m(6),
+                    _vm._v(" "),
+                    _vm._m(7),
+                    _vm._v(" "),
+                    _vm._m(8),
+                    _vm._v(" "),
+                    _vm._m(9),
+                    _vm._v(" "),
+                    _vm._m(10),
+                    _vm._v(" "),
+                    _vm._m(11),
+                    _vm._v(" "),
+                    _vm._m(12)
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(13)
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -41404,12 +41651,188 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "float-right" }, [
-      _c("i", { staticClass: "fas fa-ambulance" }),
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: " mb-2" }, [
+      _c("strong", [_vm._v("Comments:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: " mb-1" }, [
+      _c("strong", [_vm._v("Cause:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "custom-control custom-radio" }, [
+      _c("input", {
+        staticClass: "custom-control-input",
+        attrs: { type: "radio", id: "voer", name: "cause" }
+      }),
       _vm._v(" "),
-      _c("i", { staticClass: "far fa-clock" }),
+      _c(
+        "label",
+        { staticClass: "custom-control-label", attrs: { for: "voer" } },
+        [_vm._v("Voer")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "custom-control custom-radio" }, [
+      _c("input", {
+        staticClass: "custom-control-input",
+        attrs: { type: "radio", id: "vervuiling", name: "cause" }
+      }),
       _vm._v(" "),
-      _c("i", { staticClass: "fas fa-phone" })
+      _c(
+        "label",
+        { staticClass: "custom-control-label", attrs: { for: "vervuiling" } },
+        [_vm._v("Vervuiling")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "custom-control custom-radio" }, [
+      _c("input", {
+        staticClass: "custom-control-input",
+        attrs: { type: "radio", id: "riool", name: "cause" }
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "custom-control-label", attrs: { for: "riool" } },
+        [_vm._v("Riool")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "custom-control custom-radio" }, [
+      _c("input", {
+        staticClass: "custom-control-input",
+        attrs: { type: "radio", id: "sloot", name: "cause" }
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "custom-control-label", attrs: { for: "sloot" } },
+        [_vm._v("Sloot")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "custom-control custom-radio" }, [
+      _c("input", {
+        staticClass: "custom-control-input",
+        attrs: { type: "radio", id: "vijver", name: "cause" }
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "custom-control-label", attrs: { for: "vijver" } },
+        [_vm._v("Vijver")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "custom-control custom-radio" }, [
+      _c("input", {
+        staticClass: "custom-control-input",
+        attrs: { type: "radio", id: "overig", name: "cause" }
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "custom-control-label", attrs: { for: "overig" } },
+        [_vm._v("Overig")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("hr")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group mt-2" }, [
+      _c("div", { staticClass: " mb-1" }, [
+        _c("strong", [_vm._v("Next Visit:")])
+      ]),
+      _vm._v(" "),
+      _c("input", { attrs: { id: "datepicker", width: "276" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("label", { staticClass: "switch" }, [
+        _c("input", { attrs: { type: "checkbox", name: "finished" } }),
+        _vm._v(" "),
+        _c("span", { staticClass: "slider round" })
+      ]),
+      _vm._v(" "),
+      _c("strong", [_vm._v("Problem Solved ?")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary ",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Back")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "button" } },
+        [_vm._v("End Visit")]
+      )
     ])
   }
 ]

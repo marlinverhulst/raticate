@@ -62,7 +62,7 @@ class Job extends Model
         $userId = Auth::user();
         
 
-        $jobs = $userId->jobs()->where([['done','=', 0],['visitdate', '=', $date]])->get();
+        $jobs = $userId->jobs()->where([['done','=', 0],['visitdate', '=', $date]])->orderBy('zip')->get();
         
         return response()->json([
             'jobs' => $jobs,

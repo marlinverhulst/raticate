@@ -54,12 +54,12 @@
                             <a class="dropdown-item" href="#"><div class="float-left mr-4"><i class="fas fa-book-open"></i></div> Help </a>
                             
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href={{ route('logout') }}><div class="float-left mr-4"><i class="fas fa-sign-out-alt"></i></div> Log-out </a>
-                            <a class="btn btn-primary" href="{{ route('logout') }}"onclick="event.preventDefault();
-          document.getElementById('teclogout-form').submit();">Logout</a>
-          <form id="teclogout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
+                            <a class="dropdown-item" href={{ route('logout') }} onclick="event.preventDefault();
+                            document.getElementById('teclogout-form').submit();"><div class="float-left mr-4"><i class="fas fa-sign-out-alt"></i></div> Log-out </a>
+                            
+                              <form id="teclogout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                 @csrf
+                              </form>
                         </div>
                     </div>
                 </div>

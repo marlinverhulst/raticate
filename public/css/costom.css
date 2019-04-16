@@ -12,7 +12,8 @@
 .modal-dialog{
     overflow-y: initial !important
 }
-.modal-body{
+.modal-body2{
     height: 700px;
     overflow-y: auto;
 }
+
