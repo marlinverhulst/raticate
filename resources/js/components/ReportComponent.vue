@@ -36,6 +36,7 @@
                   class="btn btn-secondary btn-sm dropdown-toggle"
                 >By Client</button>
                 <button
+                  disabled
                   @click="openOption('VisitOptionDiv')"
                   class="btn btn-secondary btn-sm dropdown-toggle"
                 >By Visit-date</button>
@@ -86,7 +87,7 @@
                   <div class="form-row mt-2">
                     <div class="form-group">
                       <a class="btn btn-primary" @click="getReportbyClients()" href="#">Generate</a>
-                      <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                      <a v-if="reportGenerated" @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
                     </div>
                   </div>
                 </div>
@@ -121,7 +122,7 @@
               <div class="form-row mt-2">
                 <div class="form-group">
                   <a class="btn btn-primary" href="#">Generate</a>
-                  <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                  <a  @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
                 </div>
               </div>
             </div>
@@ -213,8 +214,9 @@ export default {
       endDate: new Date(),
       inspectionDate: new Date(),
       openOptionDiv: "none",
-      optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv"],
-      reportByClientUri: "/reportclient/"
+      hideDivArray: ["VisitOptionDiv", "clientOptionDiv","test"],
+      reportByClientUri: "/reportclient/",
+      reportGenerated: false
     };
   },
   props: {
@@ -236,7 +238,7 @@ export default {
       return dates;
     },
     init() {
-      this.optionsdDivArray.forEach(name => {
+      this.hideDivArray.forEach(name => {
         let div = document.getElementById(name);
         div.style.display = "none";
       });
@@ -270,6 +272,7 @@ export default {
         })
         .then(response => {
           this.reportData = response.data.jobs;
+          this.reportGenerated = true;
         });
     },
     download_csv(csv, filename) {

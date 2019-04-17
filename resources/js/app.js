@@ -103,6 +103,15 @@ const app = new Vue({
         setJobStatus(status) {
             this.jobstatus = status;
             this.getJobs();
+        },
+        messageShow(message){
+            this.$toasted.show(message);
+        },
+        messageSuccess(message){
+            this.$toasted.success(message);
+        },
+        messageError(message){
+            this.$toasted.error(message);
         }
 
        

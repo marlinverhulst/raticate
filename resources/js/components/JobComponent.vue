@@ -233,7 +233,7 @@
                   v-model="job.user_id"
                   class="form-control"
                   id="clientSelect"
-                  @change="check()"
+                  
                 >
                   <option disabled value>Select a Technician</option>
                   <option
@@ -333,19 +333,16 @@ export default {
         .then(response => {
           this.closeCreateJobsModal();
           this.$root.getJobs();
+          this.$root.messageSuccess('Job created')
+        }).catch(error => {
+          this.$root.messageError('Client, pricetag and technician are required !');
         });
     },
 
     clearPricetagId() {
       this.job.pricetag_id = "";
     },
-    check() {
-      // console.log(this.job.pricetag_id);
-      // console.log(this.job.callfirst);
-      // console.log(this.job.user_id);
-      // console.log(this.job.visitDate);
-      console.log(this.job.noVisit);
-    },
+   
     makeActive(index) {
       this.selectedTab = index;
     },
@@ -372,15 +369,14 @@ export default {
       console.log(this.job.client_id);
       this.check();
     },
-     message(){
-            this.$toasted.show('Logged In');
-        }
+     
     
   },
 
   mounted() {
     console.log("Job Component mounted.");
-    this.message();
+    
+
   }
 };
 </script>

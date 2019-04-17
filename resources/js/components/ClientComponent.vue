@@ -232,8 +232,10 @@ export default {
           this.$root.getClients();
           this.resetData();
           this.closeCreateClientModal();
-          toastr.success(response.data.message);
-        });
+          this.$root.messageSuccess('Client added');
+        }).catch(error => {
+          this.$root.messageError(error);
+        });;
     },
     createPriceTag() {
       axios
@@ -247,10 +249,10 @@ export default {
           this.new_update_client.pricetags.push(response.data.pricetag);
           this.resetPriceTagData();
 
-          toastr.success(response.data.message);
+           this.$root.messageSuccess('Pricetag created');
         })
         .catch(error => {
-          console.log(error);
+          this.$root.messageError(error);
         });
     },
 
@@ -265,9 +267,10 @@ export default {
         })
         .then(response => {
           $("#edit-client-modal").modal("hide");
+          this.$root.messageSuccess('Client Updated');
         })
         .catch(error => {
-          this.errors = [];
+          this.$root.messageError(error);
         });
     },
 
@@ -281,10 +284,11 @@ export default {
           .delete(this.uri + this.clients[index].id)
           .then(response => {
             this.$delete(this.clients, index);
+             
           })
           .catch(error => {
-            console.log("could not delete");
-          });
+          this.$root.messageError('could not delete');
+        });
       }
     },
     deletePriceTag(index) {
@@ -299,8 +303,8 @@ export default {
             this.$delete(this.new_update_client.pricetags, index);
           })
           .catch(error => {
-            consol.log("can't delete");
-          });
+          this.$root.messageError('Could not delete Pricetag');
+        });
       }
     },
     resetPriceTagData() {

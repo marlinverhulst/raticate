@@ -1995,8 +1995,11 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.closeCreateClientModal();
 
-        toastr.success(response.data.message);
+        _this.$root.messageSuccess('Client added');
+      }).catch(function (error) {
+        _this.$root.messageError(error);
       });
+      ;
     },
     createPriceTag: function createPriceTag() {
       var _this2 = this;
@@ -2011,9 +2014,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.resetPriceTagData();
 
-        toastr.success(response.data.message);
+        _this2.$root.messageSuccess('Pricetag created');
       }).catch(function (error) {
-        console.log(error);
+        _this2.$root.messageError(error);
       });
     },
     init: function init() {
@@ -2026,8 +2029,10 @@ __webpack_require__.r(__webpack_exports__);
         name: this.new_update_client.name
       }).then(function (response) {
         $("#edit-client-modal").modal("hide");
+
+        _this3.$root.messageSuccess('Client Updated');
       }).catch(function (error) {
-        _this3.errors = [];
+        _this3.$root.messageError(error);
       });
     },
     deleteClient: function deleteClient(index) {
@@ -2039,7 +2044,7 @@ __webpack_require__.r(__webpack_exports__);
         axios.delete(this.uri + this.clients[index].id).then(function (response) {
           _this4.$delete(_this4.clients, index);
         }).catch(function (error) {
-          console.log("could not delete");
+          _this4.$root.messageError('could not delete');
         });
       }
     },
@@ -2052,7 +2057,7 @@ __webpack_require__.r(__webpack_exports__);
         axios.delete("/pricetags/" + this.new_update_client.pricetags[index].id).then(function (response) {
           _this5.$delete(_this5.new_update_client.pricetags, index);
         }).catch(function (error) {
-          consol.log("can't delete");
+          _this5.$root.messageError('Could not delete Pricetag');
         });
       }
     },
@@ -2411,17 +2416,14 @@ __webpack_require__.r(__webpack_exports__);
         _this2.closeCreateJobsModal();
 
         _this2.$root.getJobs();
+
+        _this2.$root.messageSuccess('Job created');
+      }).catch(function (error) {
+        _this2.$root.messageError('Client, pricetag and technician are required !');
       });
     },
     clearPricetagId: function clearPricetagId() {
       this.job.pricetag_id = "";
-    },
-    check: function check() {
-      // console.log(this.job.pricetag_id);
-      // console.log(this.job.callfirst);
-      // console.log(this.job.user_id);
-      // console.log(this.job.visitDate);
-      console.log(this.job.noVisit);
     },
     makeActive: function makeActive(index) {
       this.selectedTab = index;
@@ -2446,14 +2448,10 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.selectedClient.id);
       console.log(this.job.client_id);
       this.check();
-    },
-    message: function message() {
-      this.$toasted.show('Logged In');
     }
   },
   mounted: function mounted() {
     console.log("Job Component mounted.");
-    this.message();
   }
 });
 
@@ -2668,6 +2666,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2683,8 +2682,9 @@ __webpack_require__.r(__webpack_exports__);
       endDate: new Date(),
       inspectionDate: new Date(),
       openOptionDiv: "none",
-      optionsdDivArray: ["VisitOptionDiv", "clientOptionDiv"],
-      reportByClientUri: "/reportclient/"
+      hideDivArray: ["VisitOptionDiv", "clientOptionDiv", "test"],
+      reportByClientUri: "/reportclient/",
+      reportGenerated: false
     };
   },
   props: {
@@ -2702,7 +2702,7 @@ __webpack_require__.r(__webpack_exports__);
       return dates;
     },
     init: function init() {
-      this.optionsdDivArray.forEach(function (name) {
+      this.hideDivArray.forEach(function (name) {
         var div = document.getElementById(name);
         div.style.display = "none";
       });
@@ -2736,6 +2736,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         _this.reportData = response.data.jobs;
+        _this.reportGenerated = true;
       });
     },
     download_csv: function download_csv(csv, filename) {
@@ -3049,7 +3050,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     openEditUserModal: function openEditUserModal(index) {
       this.errors = [];
-      this.new_update_user = this.users[index]; // resores User to previous when canceled 
+      this.new_update_user = this.users[index]; // resores User to previous when canceled
 
       this.restoreUser = Object.assign({}, this.users[index]);
 
@@ -3075,13 +3076,17 @@ __webpack_require__.r(__webpack_exports__);
       this.user.role_id = "2";
     },
     updateUser: function updateUser() {
+      var _this = this;
+
       axios.patch(this.uri + this.new_update_user.id, {
         name: this.new_update_user.name,
         password: this.new_update_user.password,
         email: this.new_update_user.email,
         role_id: this.new_update_user.role_id
       }).then(function (response) {
-        $('#update-user-modal').modal('hide');
+        $("#update-user-modal").modal("hide");
+
+        _this.$root.messageSuccess('Client Updated');
       }).catch(function (error) {
         console.log(error);
       });
@@ -3116,7 +3121,7 @@ __webpack_require__.r(__webpack_exports__);
       $("#adminUpdateButton").show();
     },
     createUser: function createUser() {
-      var _this = this;
+      var _this2 = this;
 
       axios.post(this.uri, {
         name: this.user.name,
@@ -3124,34 +3129,33 @@ __webpack_require__.r(__webpack_exports__);
         password: this.user.password,
         role_id: this.user.role_id
       }).then(function (response) {
-        _this.users.push(response.data.user);
+        _this2.users.push(response.data.user);
 
-        _this.resetData();
+        _this2.resetData();
 
-        _this.closeCreateUserModal();
+        _this2.closeCreateUserModal();
 
-        toastr.success(response.data.message);
+        _this2.messageSuccess("User Created");
       }).catch(function (error) {
         console.log(error);
       });
     },
     deleteUser: function deleteUser(index) {
-      var _this2 = this;
+      var _this3 = this;
 
       var confirmbox = confirm("Do you realy want to delete this User ?");
 
       if (confirmbox == true) {
         axios.delete(this.uri + this.users[index].id).then(function (response) {
-          _this2.$delete(_this2.users, index);
+          _this3.$delete(_this3.users, index);
         }).catch(function (error) {
-          console.log("could not delete");
+          _this3.messageError("Could not delete User");
         });
       }
     }
   },
   mounted: function mounted() {
     console.log("Users Component mounted.");
-    toastr.info("LOaded");
   }
 });
 
@@ -3302,6 +3306,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3313,11 +3325,34 @@ __webpack_require__.r(__webpack_exports__);
       jobsUri: "/loadjobs/",
       visitDates: [],
       openJobs: [],
-      activeJob: []
+      activeJob: [],
+      causes: [{
+        name: "Voer"
+      }, {
+        name: "Vervuiling"
+      }, {
+        name: "Riool"
+      }, {
+        name: "Sloot"
+      }, {
+        name: "Vijver"
+      }, {
+        name: "Overig"
+      }],
+      hasOpenTab: false
     };
   },
   props: {},
   methods: {
+    closeOpenDateTab: function closeOpenDateTab(index) {
+      if (this.hasOpenTab == true) {
+        $('.collapse').collapse("hide");
+        this.hasOpenTab = false;
+      } else if (this.hasOpenTab == false) {
+        $('#collapseExampl' + index).collapse("show");
+        this.hasOpenTab = true;
+      }
+    },
     getDates: function getDates() {
       var _this = this;
 
@@ -3327,14 +3362,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     startInspection: function startInspection(index) {
       this.activeJob = this.openJobs[index];
-      this.openModal('#visitModal');
+      this.openModal("#visitModal");
     },
     openModal: function openModal(modalId) {
       $(modalId).modal("show");
     },
-    loadJobs: function loadJobs(date) {
+    loadJobs: function loadJobs(date, index) {
       var _this2 = this;
 
+      this.closeOpenDateTab(index);
       this.openJobs = [];
       axios.get(this.jobsUri, {
         params: {
@@ -40097,28 +40133,23 @@ var render = function() {
                           staticClass: "form-control",
                           attrs: { id: "clientSelect" },
                           on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.job,
-                                  "user_id",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              },
-                              function($event) {
-                                return _vm.check()
-                              }
-                            ]
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.job,
+                                "user_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
                           }
                         },
                         [
@@ -40277,6 +40308,7 @@ var render = function() {
                       "button",
                       {
                         staticClass: "btn btn-secondary btn-sm dropdown-toggle",
+                        attrs: { disabled: "" },
                         on: {
                           click: function($event) {
                             return _vm.openOption("VisitOptionDiv")
@@ -40470,19 +40502,21 @@ var render = function() {
                               [_vm._v("Generate")]
                             ),
                             _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass: "btn btn-primary",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.save("#test")
-                                  }
-                                }
-                              },
-                              [_vm._v("Save file")]
-                            )
+                            _vm.reportGenerated
+                              ? _c(
+                                  "a",
+                                  {
+                                    staticClass: "btn btn-primary",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.save("#test")
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Save file")]
+                                )
+                              : _vm._e()
                           ])
                         ])
                       ])
@@ -41427,14 +41461,12 @@ var render = function() {
               staticClass: "btn btn-dark btn-block shadow",
               attrs: {
                 type: "button",
-                "data-toggle": "collapse",
-                "data-target": "#collapseExampl" + index,
                 "aria-expanded": "false",
                 "aria-controls": "collapseExample"
               },
               on: {
                 click: function($event) {
-                  return _vm.loadJobs(date.visitdate)
+                  return _vm.loadJobs(date.visitdate, index)
                 }
               }
             },
@@ -41532,7 +41564,16 @@ var render = function() {
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "row justify-content-center mt-1" }, [
                   _c("div", { staticClass: "col-10" }, [
-                    _vm._m(2),
+                    _vm.activeJob.inspections != undefined
+                      ? _c("div", { staticClass: "mb-2" }, [
+                          _c("strong", [
+                            _vm._v(
+                              "Visit #: " +
+                                _vm._s(_vm.activeJob.inspections.length + 1)
+                            )
+                          ])
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("label", { attrs: { for: "description" } }, [
@@ -41548,6 +41589,7 @@ var render = function() {
                             expression: "activeJob.description"
                           }
                         ],
+                        staticClass: "form-control",
                         attrs: {
                           disabled: "",
                           name: "",
@@ -41585,6 +41627,7 @@ var render = function() {
                             expression: "activeJob.comments"
                           }
                         ],
+                        staticClass: "form-control",
                         attrs: {
                           name: "",
                           id: "observation",
@@ -41607,30 +41650,186 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
-                    _vm._m(3),
+                    _c("div", { staticClass: "form-row" }, [
+                      _c("div", { staticClass: "form-group col-8" }, [
+                        _c("label", { attrs: { for: "causeSelect" } }, [
+                          _vm._v("Cause :")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.activeJob.cause,
+                                expression: "activeJob.cause"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { id: "causeSelect" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.activeJob,
+                                  "cause",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "option",
+                              { attrs: { disabled: "", value: "" } },
+                              [_vm._v("Select a Cause")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.causes, function(cause) {
+                              return _c(
+                                "option",
+                                { domProps: { value: cause.name } },
+                                [_vm._v(_vm._s(cause.name))]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ])
+                    ]),
                     _vm._v(" "),
-                    _vm._m(4),
+                    _vm._m(2),
                     _vm._v(" "),
-                    _vm._m(5),
+                    _c("div", { staticClass: "form-group mt-2" }, [
+                      _vm._m(3),
+                      _vm._v(" "),
+                      _vm.activeJob.done == 0
+                        ? _c(
+                            "div",
+                            [
+                              _c("vuejs-datepicker", {
+                                attrs: { name: "datepicker" },
+                                model: {
+                                  value: _vm.activeJob.visitdate,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.activeJob, "visitdate", $$v)
+                                  },
+                                  expression: "activeJob.visitdate"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e()
+                    ]),
                     _vm._v(" "),
-                    _vm._m(6),
+                    _c("div", [
+                      _c("label", { staticClass: "switch" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.activeJob.done,
+                              expression: "activeJob.done"
+                            }
+                          ],
+                          attrs: { type: "checkbox", name: "done" },
+                          domProps: {
+                            checked: Array.isArray(_vm.activeJob.done)
+                              ? _vm._i(_vm.activeJob.done, null) > -1
+                              : _vm.activeJob.done
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.activeJob.done,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.activeJob,
+                                      "done",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.activeJob,
+                                      "done",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.activeJob, "done", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "slider round" })
+                      ]),
+                      _vm._v(" "),
+                      _c("strong", [_vm._v("Job completed ?")])
+                    ]),
                     _vm._v(" "),
-                    _vm._m(7),
-                    _vm._v(" "),
-                    _vm._m(8),
-                    _vm._v(" "),
-                    _vm._m(9),
-                    _vm._v(" "),
-                    _vm._m(10),
-                    _vm._v(" "),
-                    _vm._m(11),
-                    _vm._v(" "),
-                    _vm._m(12)
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "feedback" } }, [
+                        _vm._v("Feedback to Admin:")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.activeJob.message,
+                            expression: "activeJob.message"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          name: "",
+                          id: "feedback",
+                          cols: "30",
+                          rows: "2"
+                        },
+                        domProps: { value: _vm.activeJob.message },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.activeJob,
+                              "message",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
                   ])
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(13)
+              _vm._m(4)
             ])
           ]
         )
@@ -41668,150 +41867,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: " mb-2" }, [
-      _c("strong", [_vm._v("Comments:")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: " mb-1" }, [
-      _c("strong", [_vm._v("Cause:")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "custom-control custom-radio" }, [
-      _c("input", {
-        staticClass: "custom-control-input",
-        attrs: { type: "radio", id: "voer", name: "cause" }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "custom-control-label", attrs: { for: "voer" } },
-        [_vm._v("Voer")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "custom-control custom-radio" }, [
-      _c("input", {
-        staticClass: "custom-control-input",
-        attrs: { type: "radio", id: "vervuiling", name: "cause" }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "custom-control-label", attrs: { for: "vervuiling" } },
-        [_vm._v("Vervuiling")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "custom-control custom-radio" }, [
-      _c("input", {
-        staticClass: "custom-control-input",
-        attrs: { type: "radio", id: "riool", name: "cause" }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "custom-control-label", attrs: { for: "riool" } },
-        [_vm._v("Riool")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "custom-control custom-radio" }, [
-      _c("input", {
-        staticClass: "custom-control-input",
-        attrs: { type: "radio", id: "sloot", name: "cause" }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "custom-control-label", attrs: { for: "sloot" } },
-        [_vm._v("Sloot")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "custom-control custom-radio" }, [
-      _c("input", {
-        staticClass: "custom-control-input",
-        attrs: { type: "radio", id: "vijver", name: "cause" }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "custom-control-label", attrs: { for: "vijver" } },
-        [_vm._v("Vijver")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "custom-control custom-radio" }, [
-      _c("input", {
-        staticClass: "custom-control-input",
-        attrs: { type: "radio", id: "overig", name: "cause" }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "custom-control-label", attrs: { for: "overig" } },
-        [_vm._v("Overig")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", [_c("hr")])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group mt-2" }, [
-      _c("div", { staticClass: " mb-1" }, [
-        _c("strong", [_vm._v("Next Visit:")])
-      ]),
-      _vm._v(" "),
-      _c("input", { attrs: { id: "datepicker", width: "276" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("label", { staticClass: "switch" }, [
-        _c("input", { attrs: { type: "checkbox", name: "finished" } }),
-        _vm._v(" "),
-        _c("span", { staticClass: "slider round" })
-      ]),
-      _vm._v(" "),
-      _c("strong", [_vm._v("Problem Solved ?")])
+    return _c("div", { staticClass: "mb-1" }, [
+      _c("strong", [_vm._v("Next Visit:")])
     ])
   },
   function() {
@@ -41822,7 +41885,7 @@ var staticRenderFns = [
       _c(
         "button",
         {
-          staticClass: "btn btn-secondary ",
+          staticClass: "btn btn-secondary",
           attrs: { type: "button", "data-dismiss": "modal" }
         },
         [_vm._v("Back")]
@@ -55579,6 +55642,15 @@ var app = new Vue({
     setJobStatus: function setJobStatus(status) {
       this.jobstatus = status;
       this.getJobs();
+    },
+    messageShow: function messageShow(message) {
+      this.$toasted.show(message);
+    },
+    messageSuccess: function messageSuccess(message) {
+      this.$toasted.success(message);
+    },
+    messageError: function messageError(message) {
+      this.$toasted.error(message);
     }
   },
   mounted: function mounted() {

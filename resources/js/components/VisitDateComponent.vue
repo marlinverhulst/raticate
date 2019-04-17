@@ -3,11 +3,11 @@
     <div class="row justify-content-center mt-1">
       <div class="col-10 mt-1" v-for="(date, index) in visitDates">
         <button
-          @click="loadJobs(date.visitdate)"
+          @click="loadJobs(date.visitdate, index)"
           class="btn btn-dark btn-block shadow"
           type="button"
-          data-toggle="collapse"
-          :data-target="'#collapseExampl' + index"
+          
+          
           aria-expanded="false"
           aria-controls="collapseExample"
         >
@@ -24,12 +24,9 @@
                 type="button"
                 class="btn dropdown-toggle shadow-sm"
                 @click="startInspection(index)"
-                
-                
               >
                 {{job.address}}&nbsp; - &nbsp;{{job.city}}&nbsp;&nbsp;
                 <div class="float-right">
-                  
                   <i v-if="job.time" class="far fa-clock"></i>
                   <i v-if="job.callfirst" class="fas fa-phone"></i>
                 </div>
@@ -39,98 +36,109 @@
         </div>
       </div>
     </div>
-      <!-- Modal -->
-    <div class="modal fade" id="visitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{{activeJob.address}}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="visitModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{activeJob.address}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
             <div class="row justify-content-center mt-1">
-                <div class="col-10">
-                    <div class=" mb-2"><strong>Comments:</strong></div>
-                    <div class="form-group">
-                        <label for="description">Description:</label>
-                        <textarea disabled name="" v-model="activeJob.description" id="description" cols="30" rows="5"></textarea>
-        
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="observation">Observations:</label>
-                        <textarea name="" v-model="activeJob.comments" id="observation" cols="30" rows="5"></textarea>
-        
-                    </div>
-                    <div class=" mb-1"><strong>Cause:</strong></div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="voer" name="cause" class="custom-control-input">
-                        <label class="custom-control-label" for="voer">Voer</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="vervuiling" name="cause" class="custom-control-input">
-                        <label class="custom-control-label" for="vervuiling">Vervuiling</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="riool" name="cause" class="custom-control-input">
-                        <label class="custom-control-label" for="riool">Riool</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="sloot" name="cause" class="custom-control-input">
-                        <label class="custom-control-label" for="sloot">Sloot</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="vijver" name="cause" class="custom-control-input">
-                        <label class="custom-control-label" for="vijver">Vijver</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="overig" name="cause" class="custom-control-input">
-                        <label class="custom-control-label" for="overig">Overig</label>
-                    </div>
-                    <div><hr></div>
-                    <!--Date Picker-->
-                    <div class="form-group mt-2">
-                        <div class=" mb-1"><strong>Next Visit:</strong></div>     
-                    <input id="datepicker" width="276" />
-                  
-                    </div>
+              <div class="col-10">
+                <div v-if="activeJob.inspections != undefined" class="mb-2">
+                  <strong>Visit #:&nbsp;{{activeJob.inspections.length + 1}}</strong>
+                </div>
 
-                    <div>
-                       
-                    <!-- Rounded switch -->
-                <label class="switch">
-                <input type="checkbox" name="finished">
-                <span class="slider round"></span>
-                </label>
-                <strong>Problem Solved ?</strong>
-        
+                <div class="form-group">
+                  <label for="description">Description:</label>
+                  <textarea
+                    class="form-control"
+                    disabled
+                    name
+                    v-model="activeJob.description"
+                    id="description"
+                    cols="30"
+                    rows="5"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="observation">Observations:</label>
+                  <textarea
+                    name
+                    v-model="activeJob.comments"
+                    id="observation"
+                    cols="30"
+                    rows="5"
+                    class="form-control"
+                  ></textarea>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-8">
+                    <label for="causeSelect">Cause :</label>
+                    <select v-model="activeJob.cause" class="form-control" id="causeSelect">
+                      <option disabled value>Select a Cause</option>
+                      <option v-for="cause in causes" :value="cause.name">{{cause.name}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <hr>
+                </div>
+                <!--Date Picker-->
+                <div class="form-group mt-2">
+                  <div class="mb-1">
+                    <strong>Next Visit:</strong>
+                  </div>
+                  <div v-if="activeJob.done == 0">
+                    <vuejs-datepicker name="datepicker" v-model="activeJob.visitdate"></vuejs-datepicker>
+                  </div>
+                </div>
+
+                <div>
+                  <!-- Rounded switch -->
+                  <label class="switch">
+                    <input v-model="activeJob.done" type="checkbox" name="done">
+                    <span class="slider round"></span>
+                  </label>
+                  <strong>Job completed ?</strong>
+                </div>
+                <div class="form-group">
+                  <label for="feedback">Feedback to Admin:</label>
+                  <textarea
+                    name
+                    v-model="activeJob.message"
+                    class="form-control"
+                    id="feedback"
+                    cols="30"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+              <!-- end of column-->
             </div>
-                   
-                </div> <!-- end of column-->
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary " data-dismiss="modal">Back</button>
-          <button type="button" class="btn btn-primary">End Visit</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+            <button type="button" class="btn btn-primary">End Visit</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  
-
-
-
-
-
-
-
-
-  </div>
   <!-- end of component div -->
-
-  
 </template>
 
 <script>
@@ -145,33 +153,54 @@ export default {
       jobsUri: "/loadjobs/",
       visitDates: [],
       openJobs: [],
-      activeJob:[],
-      
+      activeJob: [],
+      causes: [
+        { name: "Voer" },
+        { name: "Vervuiling" },
+        { name: "Riool" },
+        { name: "Sloot" },
+        { name: "Vijver" },
+        { name: "Overig" }
+      ],
+      hasOpenTab: false
     };
   },
   props: {},
 
   methods: {
+    
+    closeOpenDateTab(index){
+        if(this.hasOpenTab == true){
+          $('.collapse').collapse("hide");
+          this.hasOpenTab = false ;
+        }
+        else if (this.hasOpenTab == false) {
+          $('#collapseExampl' + index).collapse("show");
+          this.hasOpenTab = true ;
+
+        }
+      },
     getDates() {
       axios.get(this.datesUri).then(response => {
         this.visitDates = response.data.dates;
       });
-
-
-      
     },
 
-    startInspection(index){
+    startInspection(index) {
       this.activeJob = this.openJobs[index];
-      this.openModal('#visitModal')
+      this.openModal("#visitModal");
     },
 
-    openModal(modalId){
+    openModal(modalId) {
       $(modalId).modal("show");
-        
-      },
+    },
 
-    loadJobs(date) {
+    loadJobs(date, index) {
+     
+    
+      this.closeOpenDateTab(index);
+     
+      
       this.openJobs = [];
       axios
         .get(this.jobsUri, { params: { visitdate: date } })

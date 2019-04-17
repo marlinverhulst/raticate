@@ -112,7 +112,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
-            <button type="button" class="close" @click = "closeUserUpdateModal" aria-label="Close">
+            <button type="button" class="close" @click="closeUserUpdateModal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -186,7 +186,7 @@ export default {
       },
       // users: [],
       new_update_user: [],
-      
+
       restoreUser: {},
 
       errors: [],
@@ -194,33 +194,32 @@ export default {
 
       uri: "/users/"
     };
-    
   },
-  props:{
-      users: Array,
-    },
+  props: {
+    users: Array
+  },
   methods: {
     openEditUserModal(index) {
       this.errors = [];
 
       this.new_update_user = this.users[index];
 
-      // resores User to previous when canceled 
+      // resores User to previous when canceled
 
-      this.restoreUser = Object.assign({},this.users[index]);
+      this.restoreUser = Object.assign({}, this.users[index]);
 
       if (this.new_update_user.role_id == "2") {
         $("#adminUpdateButton").hide();
         $("#technicianUpdateButton").show();
       } else {
-         $("#adminUpdateButton").show();
+        $("#adminUpdateButton").show();
         $("#technicianUpdateButton").hide();
       }
       $("#update-user-modal").modal("show");
     },
     closeUserUpdateModal() {
       Object.assign(this.new_update_user, this.restoreUser);
-      this.restoreUser = null ;
+      this.restoreUser = null;
       $("#update-user-modal").modal("hide");
     },
     resetData() {
@@ -238,14 +237,14 @@ export default {
           role_id: this.new_update_user.role_id
         })
         .then(response => {
-          $('#update-user-modal').modal('hide');
+          $("#update-user-modal").modal("hide");
+          this.$root.messageSuccess('Client Updated');
         })
         .catch(error => {
           console.log(error);
         });
     },
     openCreateUserModal() {
-      
       this.resetData();
       $("#adminButton").hide();
       $("#technicianButton").show();
@@ -286,10 +285,12 @@ export default {
           this.users.push(response.data.user);
           this.resetData();
           this.closeCreateUserModal();
-          toastr.success(response.data.message);
-        }).catch(error => {console.log(error);});
+          this.messageSuccess("User Created");
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    
 
     deleteUser(index) {
       let confirmbox = confirm("Do you realy want to delete this User ?");
@@ -301,7 +302,7 @@ export default {
             this.$delete(this.users, index);
           })
           .catch(error => {
-            console.log("could not delete");
+            this.messageError("Could not delete User");
           });
       }
     }
@@ -309,8 +310,6 @@ export default {
 
   mounted() {
     console.log("Users Component mounted.");
-    
-    toastr.info("LOaded");
   }
 };
 </script>
