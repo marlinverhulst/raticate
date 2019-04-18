@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Job;
 use App\Client;
+use App\Inspection;
 use Carbon\Carbon;
 
 class JobsController extends Controller
@@ -141,6 +142,44 @@ class JobsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
+        if($request->done == 0){
+
+            $request->validate([
+                
+                'cause' =>'required',
+                'visitdate' =>'required'
+            ]);
+
+            $parsedDate = Carbon::parse($request->visitdate)->toDateTimeString();
+
+        }
+
+        $job = Job::findOrFail($id);
+        
+        $job->update([
+        
+        
+        'comments' => $request->comments,
+        'callfirst' => $request->callfirst,
+        'message' => $request->message,
+        'time' => $request->time,
+        'cause'=> $request->cause,
+        'done' => $request->done,
+        'visitdate' => Carbon::parse($request->visitdate)->toDateTimeString()]);
+
+        
+
+        $job->inspections()->create([
+            'job_id' => $job->id,
+            'date' => "1-1-10",
+            'comment' => $job->comments
+        ]);
+        
+       
+           
+        return response()->json([
+            'job' => $job]);
         //
     }
 

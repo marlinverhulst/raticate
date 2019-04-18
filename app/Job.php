@@ -52,7 +52,7 @@ class Job extends Model
 
       
 
-        $dates = $userId->jobs()->where([['done','=', 0],['visitdate', '!=', null]])->select('visitdate')->distinct()->get();
+        $dates = $userId->jobs()->where([['done','=', 0],['visitdate', '!=', null]])->select('visitdate')->distinct()->orderBy('visitdate')->get();
         
         return $dates;
     }

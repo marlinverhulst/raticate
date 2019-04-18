@@ -3314,6 +3314,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3321,6 +3336,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      uri: "/jobs/",
       datesUri: "/loaddates/",
       jobsUri: "/loadjobs/",
       visitDates: [],
@@ -3339,25 +3355,49 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         name: "Overig"
       }],
-      hasOpenTab: false
+      hasOpenTab: undefined
     };
   },
   props: {},
   methods: {
+    finishJob: function finishJob() {
+      var _this = this;
+
+      axios.patch(this.uri + this.activeJob.id, {
+        comments: this.activeJob.comments,
+        callfirst: this.activeJob.callfirst,
+        time: this.activeJob.time,
+        done: this.activeJob.done,
+        visitdate: this.activeJob.visitdate,
+        cause: this.activeJob.cause,
+        message: this.activeJob.message
+      }).then(function (response) {
+        $("#visitModal").modal("hide");
+
+        _this.$root.messageSuccess('Job has been send');
+      }).catch(function (error) {
+        _this.$root.messageError(error);
+      });
+    },
     closeOpenDateTab: function closeOpenDateTab(index) {
-      if (this.hasOpenTab == true) {
-        $('.collapse').collapse("hide");
-        this.hasOpenTab = false;
-      } else if (this.hasOpenTab == false) {
-        $('#collapseExampl' + index).collapse("show");
-        this.hasOpenTab = true;
+      if (this.hasOpenTab == undefined) {
+        this.hasOpenTab = index;
+        $("#collapseExampl" + index).collapse("show");
+      } else if (this.hasOpenTab == index) {
+        $("#collapseExampl" + index).collapse("hide");
+        this.hasOpenTab = undefined;
+      } else if (this.hasOpenTab != index && this.hasOpenTab != undefined) {
+        $(".collapse").collapse("hide");
+        this.hasOpenTab = undefined;
+        $("#collapseExampl" + index).collapse("show");
+        this.hasOpenTab = index;
       }
     },
     getDates: function getDates() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get(this.datesUri).then(function (response) {
-        _this.visitDates = response.data.dates;
+        _this2.visitDates = response.data.dates;
       });
     },
     startInspection: function startInspection(index) {
@@ -3368,7 +3408,7 @@ __webpack_require__.r(__webpack_exports__);
       $(modalId).modal("show");
     },
     loadJobs: function loadJobs(date, index) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.closeOpenDateTab(index);
       this.openJobs = [];
@@ -3377,7 +3417,7 @@ __webpack_require__.r(__webpack_exports__);
           visitdate: date
         }
       }).then(function (response) {
-        _this2.openJobs = response.data.jobs;
+        _this3.openJobs = response.data.jobs;
       });
     },
     formatDate: function formatDate(date) {
@@ -41789,6 +41829,103 @@ var render = function() {
                       _c("strong", [_vm._v("Job completed ?")])
                     ]),
                     _vm._v(" "),
+                    _vm.activeJob.done == 0
+                      ? _c("div", { staticClass: "form-row" }, [
+                          _c("div", { staticClass: "form-group col-4" }, [
+                            _c("label", { attrs: { for: "callbefore" } }, [
+                              _vm._v("Call before visit ?:")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.activeJob.callfirst,
+                                  expression: "activeJob.callfirst"
+                                }
+                              ],
+                              attrs: {
+                                type: "checkbox",
+                                name: "callbefore",
+                                id: "callbefore"
+                              },
+                              domProps: {
+                                checked: Array.isArray(_vm.activeJob.callfirst)
+                                  ? _vm._i(_vm.activeJob.callfirst, null) > -1
+                                  : _vm.activeJob.callfirst
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.activeJob.callfirst,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = null,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        _vm.$set(
+                                          _vm.activeJob,
+                                          "callfirst",
+                                          $$a.concat([$$v])
+                                        )
+                                    } else {
+                                      $$i > -1 &&
+                                        _vm.$set(
+                                          _vm.activeJob,
+                                          "callfirst",
+                                          $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1))
+                                        )
+                                    }
+                                  } else {
+                                    _vm.$set(_vm.activeJob, "callfirst", $$c)
+                                  }
+                                }
+                              }
+                            })
+                          ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.activeJob.done == 0
+                      ? _c("div", { staticClass: "form-row" }, [
+                          _c("div", { staticClass: "form-group col-8" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.activeJob.time,
+                                  expression: "activeJob.time"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                id: "time",
+                                placeholder: "Time restrictions here ..."
+                              },
+                              domProps: { value: _vm.activeJob.time },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.activeJob,
+                                    "time",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("label", { attrs: { for: "feedback" } }, [
                         _vm._v("Feedback to Admin:")
@@ -41829,7 +41966,30 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(4)
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Back")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.finishJob()
+                      }
+                    }
+                  },
+                  [_vm._v("End Visit")]
+                )
+              ])
             ])
           ]
         )
@@ -41875,27 +42035,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "mb-1" }, [
       _c("strong", [_vm._v("Next Visit:")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Back")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "button" } },
-        [_vm._v("End Visit")]
-      )
     ])
   }
 ]
