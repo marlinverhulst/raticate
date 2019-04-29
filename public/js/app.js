@@ -2342,6 +2342,171 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2365,11 +2530,26 @@ __webpack_require__.r(__webpack_exports__);
         noVisit: false,
         cause: ""
       },
+      causes: [{
+        name: "Voer"
+      }, {
+        name: "Vervuiling"
+      }, {
+        name: "Riool"
+      }, {
+        name: "Sloot"
+      }, {
+        name: "Vijver"
+      }, {
+        name: "Overig"
+      }],
+      updateJob: [],
       uri: "/jobs/",
       selectedTab: 0,
       selectedIndex: 0,
       selectedClient: [],
-      searchName: ""
+      searchName: "",
+      restoreJob: {}
     };
   },
   props: {
@@ -2392,6 +2572,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getUpdateJobClientName: function getUpdateJobClientName(id) {
+      var client = this.clients.filter(function (client) {
+        return client.id == id;
+        return client.name;
+      });
+    },
     setSearchName: function setSearchName(name) {
       this.searchName = name;
     },
@@ -2417,9 +2603,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.$root.getJobs();
 
-        _this2.$root.messageSuccess('Job created');
+        _this2.$root.messageSuccess("Job created");
       }).catch(function (error) {
-        _this2.$root.messageError('Client, pricetag and technician are required !');
+        _this2.$root.messageError("Client, pricetag and technician are required !");
       });
     },
     clearPricetagId: function clearPricetagId() {
@@ -2433,6 +2619,11 @@ __webpack_require__.r(__webpack_exports__);
       this.selectedClient = this.clients[this.selectedIndex];
       this.job.client_id = this.selectedClient.id;
     },
+    updateSelectedClient: function updateSelectedClient() {
+      this.updateJob.pricetag_id = "";
+      this.selectedClient = this.clients[this.selectedIndex];
+      this.updateJob.client_id = this.selectedClient.id;
+    },
     openCreateJobsModal: function openCreateJobsModal() {
       if (this.clients.length > 0) {
         this.selectedClient = this.clients[this.selectedIndex];
@@ -2443,11 +2634,21 @@ __webpack_require__.r(__webpack_exports__);
         console.log("No Clients ");
       }
     },
+    openUpdateJobModal: function openUpdateJobModal(index) {
+      this.updateJob = this.jobs[index];
+      $("#update-job-modal").modal("show"); // resores Job to previous when canceled
+
+      this.restoreJob = Object.assign({}, this.jobs[index]);
+    },
+    closeUpdateJobModal: function closeUpdateJobModal() {
+      Object.assign(this.updateJob, this.restoreJob);
+      this.restoreJob = null;
+      $("#update-job-modal").modal("hide");
+    },
     closeCreateJobsModal: function closeCreateJobsModal() {
       $("#create-job-modal").modal("hide");
       console.log(this.selectedClient.id);
       console.log(this.job.client_id);
-      this.check();
     }
   },
   mounted: function mounted() {
@@ -3329,6 +3530,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3354,6 +3559,13 @@ __webpack_require__.r(__webpack_exports__);
         name: "Vijver"
       }, {
         name: "Overig"
+      }],
+      statuses: [{
+        name: "Needs extra visit",
+        value: 0
+      }, {
+        name: "Job completed",
+        value: 1
       }],
       hasOpenTab: undefined
     };
@@ -3402,6 +3614,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     startInspection: function startInspection(index) {
       this.activeJob = this.openJobs[index];
+      this.activeJob.done = 'No';
       this.openModal("#visitModal");
     },
     openModal: function openModal(modalId) {
@@ -39611,7 +39824,18 @@ var render = function() {
                                   ])
                                 : _c("td", [_vm._v("Not Planned")]),
                               _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(job.user.name))])
+                              _c("td", [_vm._v(_vm._s(job.user.name))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("i", {
+                                  staticClass: "fas fa-tools fa-1x",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.openUpdateJobModal(index)
+                                    }
+                                  }
+                                })
+                              ])
                             ])
                           }),
                           0
@@ -39733,29 +39957,24 @@ var render = function() {
                               staticClass: "form-control",
                               attrs: { id: "priceTagSelect" },
                               on: {
-                                change: [
-                                  function($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call($event.target.options, function(o) {
-                                        return o.selected
-                                      })
-                                      .map(function(o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      _vm.job,
-                                      "pricetag_id",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  },
-                                  function($event) {
-                                    return _vm.check()
-                                  }
-                                ]
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.job,
+                                    "pricetag_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
                               }
                             },
                             [
@@ -40155,7 +40374,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-8" }, [
-                      _c("label", { attrs: { for: "clientSelect" } }, [
+                      _c("label", { attrs: { for: "TechnSelect" } }, [
                         _vm._v("Assign to:")
                       ]),
                       _vm._v(" "),
@@ -40171,7 +40390,7 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
-                          attrs: { id: "clientSelect" },
+                          attrs: { id: "TechnSelect" },
                           on: {
                             change: function($event) {
                               var $$selectedVal = Array.prototype.filter
@@ -40241,6 +40460,632 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "update-job-modal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "updateExampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "updateExampleModalLabel" }
+                  },
+                  [_vm._v("Update Job")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "aria-label": "Cancel" },
+                    on: {
+                      click: function($event) {
+                        return _vm.closeUpdateJobModal()
+                      }
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body2" }, [
+                _c("div", { staticStyle: { margin: "20px" } }, [
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-6" }, [
+                      _c("h2", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.getUpdateJobClientName(_vm.updateJob.client_id)
+                          ) + " "
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-6" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.updateJob.address,
+                            expression: "updateJob.address"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "updateAdres",
+                          required: "",
+                          placeholder: "Address"
+                        },
+                        domProps: { value: _vm.updateJob.address },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.updateJob,
+                              "address",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-3" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.updateJob.zip,
+                            expression: "updateJob.zip"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "updateZip",
+                          maxlength: "6",
+                          placeholder: "Zipcode"
+                        },
+                        domProps: { value: _vm.updateJob.zip },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.updateJob, "zip", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-3" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.updateJob.city,
+                            expression: "updateJob.city"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "updateCity",
+                          required: "",
+                          placeholder: "City"
+                        },
+                        domProps: { value: _vm.updateJob.city },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.updateJob, "city", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.updateJob.tel,
+                          expression: "updateJob.tel"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "updateTel",
+                        maxlength: "10",
+                        placeholder: "Tel"
+                      },
+                      domProps: { value: _vm.updateJob.tel },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.updateJob, "tel", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.updateJob.description,
+                          expression: "updateJob.description"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        name: "updateDescription",
+                        id: "updateDescription",
+                        cols: "30",
+                        rows: "6",
+                        placeholder: "Description.."
+                      },
+                      domProps: { value: _vm.updateJob.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.updateJob,
+                            "description",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.updateJob.comments,
+                          expression: "updateJob.comments"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        name: "updateComments",
+                        id: "updateComments",
+                        cols: "30",
+                        rows: "6",
+                        placeholder: "Comments from technician.."
+                      },
+                      domProps: { value: _vm.updateJob.comments },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.updateJob,
+                            "comments",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-8" }, [
+                      _c("label", { attrs: { for: "updateCauseSelect" } }, [
+                        _vm._v("Cause :")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.updateJob.cause,
+                              expression: "updateJob.cause"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { id: "updateCauseSelect" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.updateJob,
+                                "cause",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { disabled: "", value: "" } }, [
+                            _vm._v("Select a Cause")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.causes, function(cause) {
+                            return _c(
+                              "option",
+                              { domProps: { value: cause.name } },
+                              [_vm._v(_vm._s(cause.name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-6" }, [
+                      _c("label", { attrs: { for: "updateDatepicker" } }, [
+                        _vm._v("Visit date: ")
+                      ]),
+                      _vm._v(" "),
+                      _vm.updateJob.noVisit == 0 && _vm.updateJob.done == 0
+                        ? _c(
+                            "div",
+                            [
+                              _c("vuejs-datepicker", {
+                                attrs: { name: "updateDatepicker" },
+                                model: {
+                                  value: _vm.updateJob.visitDate,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.updateJob, "visitDate", $$v)
+                                  },
+                                  expression: "updateJob.visitDate"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-6" }, [
+                      _c("label", { attrs: { for: "updateNovisit" } }, [
+                        _vm._v(" Do not visit ? ")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.updateJob.noVisit,
+                            expression: "updateJob.noVisit"
+                          }
+                        ],
+                        attrs: {
+                          type: "checkbox",
+                          name: "updateNovisit",
+                          id: "updateNovisit"
+                        },
+                        domProps: {
+                          checked: Array.isArray(_vm.updateJob.noVisit)
+                            ? _vm._i(_vm.updateJob.noVisit, null) > -1
+                            : _vm.updateJob.noVisit
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.updateJob.noVisit,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(
+                                    _vm.updateJob,
+                                    "noVisit",
+                                    $$a.concat([$$v])
+                                  )
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    _vm.updateJob,
+                                    "noVisit",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
+                            } else {
+                              _vm.$set(_vm.updateJob, "noVisit", $$c)
+                            }
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: "updateDone" } }, [
+                        _vm._v("Job closed ? ")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.updateJob.done,
+                            expression: "updateJob.done"
+                          }
+                        ],
+                        attrs: {
+                          type: "checkbox",
+                          name: "updateDone",
+                          id: "updateDone"
+                        },
+                        domProps: {
+                          checked: Array.isArray(_vm.updateJob.done)
+                            ? _vm._i(_vm.updateJob.done, null) > -1
+                            : _vm.updateJob.done
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.updateJob.done,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(
+                                    _vm.updateJob,
+                                    "done",
+                                    $$a.concat([$$v])
+                                  )
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    _vm.updateJob,
+                                    "done",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
+                            } else {
+                              _vm.$set(_vm.updateJob, "done", $$c)
+                            }
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-4" }, [
+                      _c("label", { attrs: { for: "updateCallbefore" } }, [
+                        _vm._v("Call before visit ?:")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.updateJob.callfirst,
+                            expression: "updateJob.callfirst"
+                          }
+                        ],
+                        attrs: {
+                          type: "checkbox",
+                          name: "updateCallbefore",
+                          id: "updateCallbefore"
+                        },
+                        domProps: {
+                          checked: Array.isArray(_vm.updateJob.callfirst)
+                            ? _vm._i(_vm.updateJob.callfirst, null) > -1
+                            : _vm.updateJob.callfirst
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.updateJob.callfirst,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(
+                                    _vm.updateJob,
+                                    "callfirst",
+                                    $$a.concat([$$v])
+                                  )
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    _vm.updateJob,
+                                    "callfirst",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
+                            } else {
+                              _vm.$set(_vm.updateJob, "callfirst", $$c)
+                            }
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-8" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.updateJob.time,
+                            expression: "updateJob.time"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "updateTime",
+                          placeholder: "Time restrictions here ..."
+                        },
+                        domProps: { value: _vm.updateJob.time },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.updateJob, "time", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-8" }, [
+                      _c("label", { attrs: { for: "UpdateTechnSelect" } }, [
+                        _vm._v("Assign to:")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.updateJob.user_id,
+                              expression: "updateJob.user_id"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { id: "UpdateTechnSelect" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.updateJob,
+                                "user_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { disabled: "", value: "" } }, [
+                            _vm._v("Select a Technician")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.getTechnicians, function(technician) {
+                            return _c(
+                              "option",
+                              { domProps: { value: technician.id } },
+                              [_vm._v(_vm._s(technician.name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.closeUpdateJobModal()
+                          }
+                        }
+                      },
+                      [_vm._v("Close")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.updateJob()
+                          }
+                        }
+                      },
+                      [_vm._v("Save changes")]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -40264,7 +41109,9 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Planned on:")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Technician")])
+      _c("th", [_vm._v("Technician")]),
+      _vm._v(" "),
+      _c("th")
     ])
   }
 ]
@@ -41751,6 +42598,65 @@ var render = function() {
                     _vm._v(" "),
                     _vm._m(2),
                     _vm._v(" "),
+                    _c("div", { staticClass: "form-row" }, [
+                      _c("div", { staticClass: "form-group col-8" }, [
+                        _c("label", { attrs: { for: "statusSelect" } }, [
+                          _vm._v("Status :")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.activeJob.done,
+                                expression: "activeJob.done"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { id: "statusSelect" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.activeJob,
+                                  "done",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "option",
+                              { attrs: { disabled: "", value: "" } },
+                              [_vm._v("Status of job")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.statuses, function(status) {
+                              return _c(
+                                "option",
+                                { domProps: { value: status.value } },
+                                [_vm._v(_vm._s(status.name))]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group mt-2" }, [
                       _vm._m(3),
                       _vm._v(" "),
@@ -41774,65 +42680,10 @@ var render = function() {
                         : _vm._e()
                     ]),
                     _vm._v(" "),
-                    _c("div", [
-                      _c("label", { staticClass: "switch" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.activeJob.done,
-                              expression: "activeJob.done"
-                            }
-                          ],
-                          attrs: { type: "checkbox", name: "done" },
-                          domProps: {
-                            checked: Array.isArray(_vm.activeJob.done)
-                              ? _vm._i(_vm.activeJob.done, null) > -1
-                              : _vm.activeJob.done
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = _vm.activeJob.done,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      _vm.activeJob,
-                                      "done",
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      _vm.activeJob,
-                                      "done",
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
-                                }
-                              } else {
-                                _vm.$set(_vm.activeJob, "done", $$c)
-                              }
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "slider round" })
-                      ]),
-                      _vm._v(" "),
-                      _c("strong", [_vm._v("Job completed ?")])
-                    ]),
-                    _vm._v(" "),
                     _vm.activeJob.done == 0
                       ? _c("div", { staticClass: "form-row" }, [
-                          _c("div", { staticClass: "form-group col-4" }, [
-                            _c("label", { attrs: { for: "callbefore" } }, [
+                          _c("div", { staticClass: "form-group col-12" }, [
+                            _c("label", { attrs: { for: "callbeforev" } }, [
                               _vm._v("Call before visit ?:")
                             ]),
                             _vm._v(" "),
@@ -41847,8 +42698,8 @@ var render = function() {
                               ],
                               attrs: {
                                 type: "checkbox",
-                                name: "callbefore",
-                                id: "callbefore"
+                                name: "callbeforev",
+                                id: "callbeforev"
                               },
                               domProps: {
                                 checked: Array.isArray(_vm.activeJob.callfirst)
@@ -41892,7 +42743,7 @@ var render = function() {
                     _vm._v(" "),
                     _vm.activeJob.done == 0
                       ? _c("div", { staticClass: "form-row" }, [
-                          _c("div", { staticClass: "form-group col-8" }, [
+                          _c("div", { staticClass: "form-group col-12" }, [
                             _c("input", {
                               directives: [
                                 {
@@ -41928,7 +42779,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("label", { attrs: { for: "feedback" } }, [
-                        _vm._v("Feedback to Admin:")
+                        _vm._v("Feedback for Admin:")
                       ]),
                       _vm._v(" "),
                       _c("textarea", {
@@ -41976,19 +42827,21 @@ var render = function() {
                   [_vm._v("Back")]
                 ),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        return _vm.finishJob()
-                      }
-                    }
-                  },
-                  [_vm._v("End Visit")]
-                )
+                _vm.activeJob.done != "No"
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.finishJob()
+                          }
+                        }
+                      },
+                      [_vm._v("End Visit")]
+                    )
+                  : _vm._e()
               ])
             ])
           ]

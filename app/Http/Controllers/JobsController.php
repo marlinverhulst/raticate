@@ -173,8 +173,8 @@ class JobsController extends Controller
         $job->inspections()->create([
             'job_id' => $job->id,
             'date' => "1-1-10",
-            'comment' => $job->comments
-        ]);
+            'comment' => "testing"
+         ]);
         
        
            

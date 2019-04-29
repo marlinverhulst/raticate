@@ -95,7 +95,17 @@
                 <div>
                   <hr>
                 </div>
+                <div class="form-row">
+                  <div class="form-group col-8">
+                    <label for="statusSelect">Status :</label>
+                    <select v-model="activeJob.done" class="form-control" id="statusSelect">
+                      <option disabled value>Status of job</option>
+                      <option v-for="status in statuses" :value="status.value">{{status.name}}</option>
+                    </select>
+                  </div>
+                </div>
                 <!--Date Picker-->
+
                 <div class="form-group mt-2">
                   <div class="mb-1">
                     <strong>Next Visit:</strong>
@@ -105,22 +115,16 @@
                   </div>
                 </div>
 
-                <div>
-                  <!-- Rounded switch -->
-                  <label class="switch">
-                    <input v-model="activeJob.done" type="checkbox" name="done">
-                    <span class="slider round"></span>
-                  </label>
-                  <strong>Job completed ?</strong>
-                </div>
+                
+                 
                  <div v-if="activeJob.done == 0" class="form-row">
-              <div class="form-group col-4">
-                <label for="callbefore">Call before visit ?:</label>
-                <input type="checkbox" name="callbefore" v-model="activeJob.callfirst" id="callbefore">
+              <div class="form-group col-12">
+                <label for="callbeforev">Call before visit ?:</label>
+                <input type="checkbox" name="callbeforev" v-model="activeJob.callfirst" id="callbeforev">
               </div>
             </div>
             <div v-if="activeJob.done == 0" class="form-row">
-              <div class="form-group col-8">
+              <div class="form-group col-12">
                 <input
                   v-model="activeJob.time"
                   type="text"
@@ -131,7 +135,7 @@
               </div>
             </div>
                 <div class="form-group">
-                  <label for="feedback">Feedback to Admin:</label>
+                  <label for="feedback">Feedback for Admin:</label>
                   <textarea
                     name
                     v-model="activeJob.message"
@@ -147,7 +151,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
-            <button type="button" @click="finishJob()" class="btn btn-primary">End Visit</button>
+            <button v-if="activeJob.done !='No'" type="button" @click="finishJob()" class="btn btn-primary">End Visit</button>
           </div>
         </div>
       </div>
@@ -178,7 +182,13 @@ export default {
         { name: "Vijver" },
         { name: "Overig" }
       ],
+      statuses: [
+        { name: "Needs extra visit", value: 0  },
+        { name: "Job completed", value: 1 },
+        
+      ],
       hasOpenTab: undefined,
+      
       
     };
   },
@@ -235,6 +245,9 @@ export default {
 
     startInspection(index) {
       this.activeJob = this.openJobs[index];
+      this.activeJob.done = 'No';
+        
+        
       this.openModal("#visitModal");
     },
 
