@@ -31,7 +31,7 @@ Vue.component('visit-component', require('./components/VisitDateComponent.vue').
 // register the plugin on vue
 import Toasted from 'vue-toasted';
 
-let options = {position: 'top-center', duration: 1000, fullWidth: true, theme: 'outline'};
+let options = {position: 'top-center', duration: 1500, fullWidth: true, theme: 'outline'};
  
 Vue.use(Toasted, options)
 

@@ -143,38 +143,61 @@ class JobsController extends Controller
     public function update(Request $request, $id)
     {
         
-        if($request->done == 0){
+        if($request->noVisit == 0 && $request->done == 0){
 
             $request->validate([
                 
-                'cause' =>'required',
-                'visitdate' =>'required'
+               
+                'pricetag_id' =>'required',
+                'client_id' => 'required'
             ]);
 
-            $parsedDate = Carbon::parse($request->visitdate)->toDateTimeString();
+            $parsedDate = Carbon::parse($request->visitDate)->toDateTimeString();
 
         }
 
         $job = Job::findOrFail($id);
         
         $job->update([
-        
-        
+         
+        'address' => $request->address,
+        'zip' => $request->zip,
+        'city' => $request->city,
+        'client_id' => $request->client_id,
+        'pricetag_id' => $request->pricetag_id,
+        'user_id' => $request->user_id,
+        'description' => $request->description,
         'comments' => $request->comments,
         'callfirst' => $request->callfirst,
         'message' => $request->message,
         'time' => $request->time,
+        'done' => $request->done,   
+        'tel' => $request->tel,
+        
+        
+        
         'cause'=> $request->cause,
-        'done' => $request->done,
-        'visitdate' => Carbon::parse($request->visitdate)->toDateTimeString()]);
+       
+        ]);
 
         
+        if($request->noVisit == 0 && $request->done == 0  ){
 
-        $job->inspections()->create([
-            'job_id' => $job->id,
-            'date' => "1-1-10",
-            'comment' => "testing"
-         ]);
+            $parsedDate = Carbon::parse($request->visitDate)->toDateTimeString();
+            
+            $job->visitdate = $parsedDate;
+
+            $job->save();
+                
+                
+                
+            
+             
+        }
+        else {
+            $job->visitdate = null;
+            $job->save();
+        }
         
        
            
@@ -183,14 +206,21 @@ class JobsController extends Controller
         //
     }
 
+    
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Job $job)
     {
         //
+        $job->delete();
+        return response()->json([
+            'job' => $job,
+            'message' => 'Client has been deleted'
+        ]);
     }
 }

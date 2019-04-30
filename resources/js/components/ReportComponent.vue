@@ -24,7 +24,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Generate Reports</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" @click="closeModal()" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -187,7 +187,7 @@
           </div>
           <!--end of modal body -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" @click="closeModal()">Close</button>
            
           </div>
         </div>
@@ -260,6 +260,10 @@ export default {
         this.openOptionDiv = "none";
       }
     },
+    closeModal(){
+      this.reportGenerated = false;
+       $("#ReportModal").modal("hide");
+    },
     getReportbyClients() {
       axios
         .get(this.reportByClientUri, {
@@ -325,6 +329,7 @@ export default {
     save(htmlTable) {
       // var html = document.getElementById("test").outerHTML;
       this.export_table_to_csv(htmlTable, "table.csv");
+       this.closeModal();
     }
   },
   computed: {},

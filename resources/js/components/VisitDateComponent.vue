@@ -115,25 +115,28 @@
                   </div>
                 </div>
 
-                
-                 
-                 <div v-if="activeJob.done == 0" class="form-row">
-              <div class="form-group col-12">
-                <label for="callbeforev">Call before visit ?:</label>
-                <input type="checkbox" name="callbeforev" v-model="activeJob.callfirst" id="callbeforev">
-              </div>
-            </div>
-            <div v-if="activeJob.done == 0" class="form-row">
-              <div class="form-group col-12">
-                <input
-                  v-model="activeJob.time"
-                  type="text"
-                  id="time"
-                  class="form-control"
-                  placeholder="Time restrictions here ..."
-                >
-              </div>
-            </div>
+                <div v-if="activeJob.done == 0" class="form-row">
+                  <div class="form-group col-12">
+                    <label for="callbeforev">Call before visit ?:</label>
+                    <input
+                      type="checkbox"
+                      name="callbeforev"
+                      v-model="activeJob.callfirst"
+                      id="callbeforev"
+                    >
+                  </div>
+                </div>
+                <div v-if="activeJob.done == 0" class="form-row">
+                  <div class="form-group col-12">
+                    <input
+                      v-model="activeJob.time"
+                      type="text"
+                      id="time"
+                      class="form-control"
+                      placeholder="Time restrictions here ..."
+                    >
+                  </div>
+                </div>
                 <div class="form-group">
                   <label for="feedback">Feedback for Admin:</label>
                   <textarea
@@ -151,7 +154,12 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
-            <button v-if="activeJob.done !='No'" type="button" @click="finishJob()" class="btn btn-primary">End Visit</button>
+            <button
+              v-if="activeJob.done !='No'"
+              type="button"
+              @click="finishJob()"
+              class="btn btn-primary"
+            >End Visit</button>
           </div>
         </div>
       </div>
@@ -168,7 +176,7 @@ export default {
   },
   data() {
     return {
-      uri:"/jobs/",
+      uri: "/technicians/",
       datesUri: "/loaddates/",
       jobsUri: "/loadjobs/",
       visitDates: [],
@@ -183,13 +191,10 @@ export default {
         { name: "Overig" }
       ],
       statuses: [
-        { name: "Needs extra visit", value: 0  },
-        { name: "Job completed", value: 1 },
-        
+        { name: "Needs extra visit", value: 0 },
+        { name: "Job completed", value: 1 }
       ],
-      hasOpenTab: undefined,
-      
-      
+      hasOpenTab: undefined
     };
   },
   props: {},
@@ -198,7 +203,6 @@ export default {
     finishJob() {
       axios
         .patch(this.uri + this.activeJob.id, {
-
           comments: this.activeJob.comments,
           callfirst: this.activeJob.callfirst,
           time: this.activeJob.time,
@@ -206,36 +210,30 @@ export default {
           visitdate: this.activeJob.visitdate,
           cause: this.activeJob.cause,
           message: this.activeJob.message
-         
         })
         .then(response => {
           $("#visitModal").modal("hide");
-          this.$root.messageSuccess('Job has been send');
+          this.$root.messageSuccess("Job has been send");
         })
         .catch(error => {
           this.$root.messageError(error);
         });
     },
-    
 
-    closeOpenDateTab(index){
-      if (this.hasOpenTab == undefined){
+    closeOpenDateTab(index) {
+      if (this.hasOpenTab == undefined) {
         this.hasOpenTab = index;
         $("#collapseExampl" + index).collapse("show");
-        
-      }
-      else if (this.hasOpenTab == index){
+      } else if (this.hasOpenTab == index) {
         $("#collapseExampl" + index).collapse("hide");
         this.hasOpenTab = undefined;
-      }
-      else if (this.hasOpenTab != index && this.hasOpenTab != undefined ){
+      } else if (this.hasOpenTab != index && this.hasOpenTab != undefined) {
         $(".collapse").collapse("hide");
         this.hasOpenTab = undefined;
         $("#collapseExampl" + index).collapse("show");
         this.hasOpenTab = index;
       }
     },
-
 
     getDates() {
       axios.get(this.datesUri).then(response => {
@@ -245,9 +243,8 @@ export default {
 
     startInspection(index) {
       this.activeJob = this.openJobs[index];
-      this.activeJob.done = 'No';
-        
-        
+      this.activeJob.done = "No";
+
       this.openModal("#visitModal");
     },
 

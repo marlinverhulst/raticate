@@ -23,8 +23,10 @@ Route::resource('/users','UsersController');
 Route::resource('/clients','ClientsController');
 Route::resource('/pricetags','PriceTagController');
 Route::resource('/jobs','JobsController');
+Route::resource('/technicians','TechnicianController');
 
 route::get('/reportclient', 'ReportController@generateByClient');
 route::get('/loaddates', 'TechnicianController@getVisits');
 route::get('/loadjobs', 'TechnicianController@getJobs');
+
 

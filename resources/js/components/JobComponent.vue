@@ -61,7 +61,8 @@
                       <th># of Visits</th>
                       <th>Planned on:</th>
                       <th>Technician</th>
-                      <th></th>
+                      <th style="width: 10%" scope="col"></th>
+                      <th style="width: 10%" scope="col"></th>
                     </thead>
                     <tbody>
                       <tr v-for="(job , index) in getJobByName">
@@ -78,7 +79,18 @@
                         <td v-else>Not Planned</td>
                         <td>{{job.user.name}}</td>
                         <td>
-                          <i @click="openUpdateJobModal(index)" class="fas fa-tools fa-1x"></i>
+                          <i
+                            v-if="searchName == ''"
+                            @click="openUpdateJobModal(index)"
+                            class="fas fa-tools fa-1x"
+                          ></i>
+                        </td>
+                        <td>
+                          <i
+                            v-if="searchName == ''"
+                            @click="deleteJob(index)"
+                            class="fas fa-minus-circle fa-1x"
+                          ></i>
                         </td>
                       </tr>
                     </tbody>
@@ -118,6 +130,7 @@
                     class="form-control"
                     id="clientSelect"
                     @change="makeSelectedClient()"
+                    @click="makeSelectedClient()"
                   >
                     <option v-for="(client, index) in clients" :value="index">{{client.name}}</option>
                   </select>
@@ -261,7 +274,7 @@
       aria-labelledby="updateExampleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="updateExampleModalLabel">Update Job</h5>
@@ -273,7 +286,32 @@
             <div style="margin: 20px">
               <div class="form-row">
                 <div class="form-group col-6">
-                  <h2 v-for="client in getUpdateJobClientName() ">{{client.name}}</h2>
+                  <!-- <label for="clientSelect">Client:</label> -->
+                  <select
+                    v-model="updateSelectedIndex"
+                    class="form-control"
+                    id="updateClientSelect"
+                    @change="makeUpdateSelectedClient()"
+                    @click="makeUpdateSelectedClient()"
+                  >
+                    <option v-for="(client, index) in clients" :value="index">{{client.name}}</option>
+                  </select>
+                </div>
+                <div class="form-group col-5">
+                  <!-- <label for="priceTagSelect">&#160;</label> -->
+
+                  <select
+                    v-model="updateJob.pricetag_id"
+                    v-if="updateSelectedClient.pricetags"
+                    class="form-control"
+                    id="priceTagSelect"
+                  >
+                    <option disabled value>Select a Pricetag</option>
+                    <option
+                      v-for="priceTag in updateSelectedClient.pricetags"
+                      :value="priceTag.id"
+                    >{{priceTag.kind}}&#160;&#160;{{priceTag.name}}: &#160;&#160;&#160;&#160;&#160;€&#160; {{priceTag.cost}}</option>
+                  </select>
                 </div>
               </div>
 
@@ -358,6 +396,9 @@
                   <div v-if="updateJob.noVisit == 0 && updateJob.done == 0 ">
                     <vuejs-datepicker name="updateDatepicker" v-model="updateJob.visitDate"></vuejs-datepicker>
                   </div>
+                  <div v-else>
+                    <p>Visitdate has been set.. press Do not visit 2x to reset it.</p>
+                  </div>
                 </div>
                 <div class="form-group col-6">
                   <label for="updateNovisit">&nbsp;Do not visit ?&nbsp;</label>
@@ -411,7 +452,7 @@
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @click="closeUpdateJobModal()">Close</button>
-                <button type="button" @click="updateJob()" class="btn btn-primary">Save changes</button>
+                <button type="button" @click="updateTheJob()" class="btn btn-primary">Save changes</button>
               </div>
             </div>
           </div>
@@ -446,6 +487,7 @@ export default {
         noVisit: false,
         cause: ""
       },
+
       causes: [
         { name: "Voer" },
         { name: "Vervuiling" },
@@ -455,10 +497,14 @@ export default {
         { name: "Overig" }
       ],
       updateJob: [],
+
       uri: "/jobs/",
+
       selectedTab: 0,
       selectedIndex: 0,
+      updateSelectedIndex: 0,
       selectedClient: [],
+      updateSelectedClient: [],
       searchName: "",
       restoreJob: {}
     };
@@ -470,27 +516,51 @@ export default {
   },
 
   computed: {
-    
-
     getTechnicians: function() {
       return this.users.filter(user => {
         return user.role_id == 2;
       });
     },
+
     getJobByName: function() {
-      return this.jobs.filter(job => {
-        return job.client.name.match(this.searchName);
-      });
+      if (this.jobs.length > 0) {
+        return this.jobs.filter(job => {
+          return job.client.name.match(this.searchName);
+        });
+      }
     }
   },
 
   methods: {
-    getUpdateJobClientName: function() {
-      let name = this.clients.filter(client => {
-        return client.id == this.updateJob.client_id;
-        
-      });
+    updateTheJob() {
+      axios
+        .patch(this.uri + this.updateJob.id, {
+          address: this.updateJob.address,
+          zip: this.updateJob.zip,
+          tel: this.updateJob.tel,
+          city: this.updateJob.city,
+          client_id: this.updateJob.client_id,
+          pricetag_id: this.updateJob.pricetag_id,
+          user_id: this.updateJob.user_id,
+          description: this.updateJob.description,
+          visitDate: this.updateJob.visitDate,
+          callfirst: this.updateJob.callfirst,
+          comments: this.updateJob.comments,
+          time: this.updateJob.time,
+          done: this.updateJob.done,
+          noVisit: this.updateJob.noVisit,
+          cause: this.updateJob.cause
+        })
+        .then(response => {
+          $("#update-job-modal").modal("hide");
+          this.$root.getJobs();
+          this.$root.messageSuccess("Job Updated");
+        })
+        .catch(error => {
+          this.$root.messageError("Client, pricetag and technician are required !");
+        });
     },
+
     setSearchName(name) {
       this.searchName = name;
     },
@@ -536,10 +606,11 @@ export default {
       this.selectedClient = this.clients[this.selectedIndex];
       this.job.client_id = this.selectedClient.id;
     },
-    updateSelectedClient() {
+
+    makeUpdateSelectedClient() {
       this.updateJob.pricetag_id = "";
-      this.selectedClient = this.clients[this.selectedIndex];
-      this.updateJob.client_id = this.selectedClient.id;
+      this.updateSelectedClient = this.clients[this.updateSelectedIndex];
+      this.updateJob.client_id = this.updateSelectedClient.id;
     },
 
     openCreateJobsModal() {
@@ -554,8 +625,11 @@ export default {
     },
     openUpdateJobModal(index) {
       this.updateJob = this.jobs[index];
+      this.updateJob.done == 0;
+      this.updateJob.noVisit == 0;
+
       $("#update-job-modal").modal("show");
-      
+
       // resores Job to previous when canceled
       this.restoreJob = Object.assign({}, this.jobs[index]);
     },
@@ -563,6 +637,7 @@ export default {
     closeUpdateJobModal() {
       Object.assign(this.updateJob, this.restoreJob);
       this.restoreJob = null;
+      this.updateSelectedClient = [];
       $("#update-job-modal").modal("hide");
     },
 
@@ -570,6 +645,24 @@ export default {
       $("#create-job-modal").modal("hide");
       console.log(this.selectedClient.id);
       console.log(this.job.client_id);
+    },
+    deleteJob(index) {
+      let confirmbox = confirm(
+        "Do you realy want to delete this Job ? Inspections won't be deleted. If you want them gone delete them first"
+      );
+
+      if (confirmbox == true) {
+        axios
+          .delete(this.uri + this.jobs[index].id)
+          .then(response => {
+            this.$delete(this.jobs, index);
+            this.$root.messageSuccess("Job Deleted");
+            this.$root.getJobs();
+          })
+          .catch(error => {
+            this.$root.messageError("could not delete");
+          });
+      }
     }
   },
 
