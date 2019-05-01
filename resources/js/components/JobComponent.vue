@@ -381,6 +381,17 @@
                   placeholder="Comments from technician.."
                 ></textarea>
               </div>
+              <div class="form-group">
+                <textarea
+                  v-model="updateJob.message"
+                  name="updateComments"
+                  id="updateComments"
+                  cols="30"
+                  rows="6"
+                  class="form-control"
+                  placeholder="Message for admin.."
+                ></textarea>
+              </div>
               <div class="form-row">
                 <div class="form-group col-8">
                   <label for="updateCauseSelect">Cause :</label>
@@ -555,7 +566,8 @@ export default {
           time: this.updateJob.time,
           done: this.updateJob.done,
           noVisit: this.updateJob.noVisit,
-          cause: this.updateJob.cause
+          cause: this.updateJob.cause,
+          message: this.updateJob.message
         })
         .then(response => {
           $("#update-job-modal").modal("hide");

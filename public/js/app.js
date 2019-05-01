@@ -1754,6 +1754,73 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminMessageComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AdminMessageComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+  props: {
+    jobs: Array
+  },
+  methods: {},
+  computed: {
+    jobsWithMessage: function jobsWithMessage() {
+      return this.jobs.filter(function (job) {
+        if (job.message != '' && job.message != null) {
+          return job;
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    console.log("Messagecomponent mounted.");
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ClientComponent.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ClientComponent.vue?vue&type=script&lang=js& ***!
@@ -2548,6 +2615,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2641,7 +2719,8 @@ __webpack_require__.r(__webpack_exports__);
         time: this.updateJob.time,
         done: this.updateJob.done,
         noVisit: this.updateJob.noVisit,
-        cause: this.updateJob.cause
+        cause: this.updateJob.cause,
+        message: this.updateJob.message
       }).then(function (response) {
         $("#update-job-modal").modal("hide");
 
@@ -3646,6 +3725,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3659,6 +3741,7 @@ __webpack_require__.r(__webpack_exports__);
       visitDates: [],
       openJobs: [],
       activeJob: [],
+      indexOfActiveJob: undefined,
       causes: [{
         name: "Voer"
       }, {
@@ -3699,6 +3782,10 @@ __webpack_require__.r(__webpack_exports__);
         $("#visitModal").modal("hide");
 
         _this.$root.messageSuccess("Job has been send");
+
+        _this.$delete(_this.openJobs, _this.indexOfActiveJob);
+
+        _this.indexOfActiveJob = undefined;
       }).catch(function (error) {
         _this.$root.messageError(error);
       });
@@ -3727,6 +3814,7 @@ __webpack_require__.r(__webpack_exports__);
     startInspection: function startInspection(index) {
       this.activeJob = this.openJobs[index];
       this.activeJob.done = "No";
+      this.indexOfActiveJob = index;
       this.openModal("#visitModal");
     },
     openModal: function openModal(modalId) {
@@ -39267,6 +39355,114 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminMessageComponent.vue?vue&type=template&id=03357b6c&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AdminMessageComponent.vue?vue&type=template&id=03357b6c& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("li", { staticClass: "nav-item dropdown no-arrow mx-1" }, [
+    _c(
+      "a",
+      {
+        staticClass: "nav-link dropdown-toggle",
+        attrs: {
+          href: "#",
+          id: "messagesDropdown",
+          role: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _c("i", { staticClass: "fas fa-envelope fa-fw" }),
+        _vm._v(" "),
+        _vm.jobsWithMessage
+          ? _c("span", { staticClass: "badge badge-danger badge-counter" }, [
+              _vm._v(_vm._s(_vm.jobsWithMessage.length))
+            ])
+          : _c("span", { staticClass: "badge badge-danger badge-counter" }, [
+              _vm._v("0")
+            ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass:
+          "dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in",
+        attrs: { "aria-labelledby": "messagesDropdown" }
+      },
+      [
+        _c("h6", { staticClass: "dropdown-header" }, [
+          _vm._v("\n                Message Center \n              ")
+        ]),
+        _vm._v(" "),
+        _vm._l(_vm.jobsWithMessage, function(job, index) {
+          return _c(
+            "a",
+            {
+              staticClass: "dropdown-item d-flex align-items-center",
+              attrs: { href: "#" }
+            },
+            [
+              _vm._m(0, true),
+              _vm._v(" "),
+              _c("div", { staticClass: "font-weight-bold" }, [
+                _c("div", { staticClass: "text" }, [
+                  _vm._v(_vm._s(job.message))
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "small text-gray-500" }, [
+                  _vm._v(_vm._s(job.city) + " - " + _vm._s(job.address))
+                ])
+              ])
+            ]
+          )
+        }),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "dropdown-item text-center small text-gray-500",
+            attrs: { href: "#" }
+          },
+          [_vm._v("Read More Messages")]
+        )
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "dropdown-list-image mr-3" }, [
+      _c("i", { staticClass: "far fa-envelope-open fa-2x" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "status-indicator bg-success" })
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ClientComponent.vue?vue&type=template&id=778f3e52&":
 /*!******************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ClientComponent.vue?vue&type=template&id=778f3e52& ***!
@@ -40944,6 +41140,40 @@ var render = function() {
                           _vm.$set(
                             _vm.updateJob,
                             "comments",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.updateJob.message,
+                          expression: "updateJob.message"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        name: "updateComments",
+                        id: "updateComments",
+                        cols: "30",
+                        rows: "6",
+                        placeholder: "Message for admin.."
+                      },
+                      domProps: { value: _vm.updateJob.message },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.updateJob,
+                            "message",
                             $event.target.value
                           )
                         }
@@ -42693,6 +42923,24 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "row justify-content-center mt-1" }, [
+                  _vm.activeJob.time != null && _vm.activeJob.time != ""
+                    ? _c(
+                        "span",
+                        {
+                          staticClass: "border border-danger col-12 pt-3 mb-2"
+                        },
+                        [
+                          _c("p", [
+                            _vm._v(
+                              " Time restriction: " +
+                                _vm._s(_vm.activeJob.time) +
+                                " "
+                            )
+                          ])
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c("div", { staticClass: "col-10" }, [
                     _vm.activeJob.inspections != undefined
                       ? _c("div", { staticClass: "mb-2" }, [
@@ -56794,7 +57042,8 @@ Vue.component('search-component', __webpack_require__(/*! ./components/SearchCom
 Vue.component('user-component', __webpack_require__(/*! ./components/UserComponent.vue */ "./resources/js/components/UserComponent.vue").default);
 Vue.component('job-component', __webpack_require__(/*! ./components/JobComponent.vue */ "./resources/js/components/JobComponent.vue").default);
 Vue.component('report-component', __webpack_require__(/*! ./components/ReportComponent.vue */ "./resources/js/components/ReportComponent.vue").default);
-Vue.component('visit-component', __webpack_require__(/*! ./components/VisitDateComponent.vue */ "./resources/js/components/VisitDateComponent.vue").default); // register the plugin on vue
+Vue.component('visit-component', __webpack_require__(/*! ./components/VisitDateComponent.vue */ "./resources/js/components/VisitDateComponent.vue").default);
+Vue.component('adminmessage-component', __webpack_require__(/*! ./components/AdminMessageComponent.vue */ "./resources/js/components/AdminMessageComponent.vue").default); // register the plugin on vue
 
 
 var options = {
@@ -56955,6 +57204,75 @@ window.toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/AdminMessageComponent.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/AdminMessageComponent.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AdminMessageComponent_vue_vue_type_template_id_03357b6c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AdminMessageComponent.vue?vue&type=template&id=03357b6c& */ "./resources/js/components/AdminMessageComponent.vue?vue&type=template&id=03357b6c&");
+/* harmony import */ var _AdminMessageComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AdminMessageComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/AdminMessageComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AdminMessageComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AdminMessageComponent_vue_vue_type_template_id_03357b6c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AdminMessageComponent_vue_vue_type_template_id_03357b6c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/AdminMessageComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/AdminMessageComponent.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/AdminMessageComponent.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminMessageComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./AdminMessageComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminMessageComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminMessageComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/AdminMessageComponent.vue?vue&type=template&id=03357b6c&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/AdminMessageComponent.vue?vue&type=template&id=03357b6c& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminMessageComponent_vue_vue_type_template_id_03357b6c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./AdminMessageComponent.vue?vue&type=template&id=03357b6c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminMessageComponent.vue?vue&type=template&id=03357b6c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminMessageComponent_vue_vue_type_template_id_03357b6c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminMessageComponent_vue_vue_type_template_id_03357b6c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 

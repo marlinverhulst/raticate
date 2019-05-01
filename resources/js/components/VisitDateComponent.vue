@@ -53,11 +53,14 @@
           </div>
           <div class="modal-body">
             <div class="row justify-content-center mt-1">
+              
+                <span v-if="activeJob.time != null && activeJob.time != ''" class="border border-danger col-12 pt-3 mb-2"> <p> Time restriction: {{activeJob.time}} </p></span>
+                
               <div class="col-10">
                 <div v-if="activeJob.inspections != undefined" class="mb-2">
                   <strong>Visit #:&nbsp;{{activeJob.inspections.length + 1}}</strong>
                 </div>
-
+                
                 <div class="form-group">
                   <label for="description">Description:</label>
                   <textarea
@@ -182,6 +185,7 @@ export default {
       visitDates: [],
       openJobs: [],
       activeJob: [],
+      indexOfActiveJob: undefined,
       causes: [
         { name: "Voer" },
         { name: "Vervuiling" },
@@ -212,8 +216,11 @@ export default {
           message: this.activeJob.message
         })
         .then(response => {
+
           $("#visitModal").modal("hide");
           this.$root.messageSuccess("Job has been send");
+          this.$delete(this.openJobs, this.indexOfActiveJob);
+          this.indexOfActiveJob = undefined;
         })
         .catch(error => {
           this.$root.messageError(error);
@@ -244,6 +251,7 @@ export default {
     startInspection(index) {
       this.activeJob = this.openJobs[index];
       this.activeJob.done = "No";
+      this.indexOfActiveJob = index;
 
       this.openModal("#visitModal");
     },
