@@ -66,7 +66,7 @@
                     </thead>
                     <tbody>
                       <tr v-for="(job , index) in getJobByName">
-                        <td>{{job.client.name}}</td>
+                        <td v-if="job.client != undefined">{{job.client.name}}</td><td v-else>Undefined client  </td>
                         <td>{{job.address}}</td>
                         <td>{{job.zip}}</td>
                         <td>{{job.city}}</td>
@@ -77,7 +77,7 @@
                           v-if="job.visitdate != undefined"
                         >{{$root.getFormattedDate(job.visitdate)}}</td>
                         <td v-else>Not Planned</td>
-                        <td>{{job.user.name}}</td>
+                        <td v-if="job.user != undefined">{{job.user.name}}</td><td v-else>Undefined technician</td>
                         <td>
                           <i
                             v-if="searchName == ''"
@@ -516,16 +516,22 @@ export default {
   },
 
   computed: {
+    // Returns list of technicians filtered from Users 
     getTechnicians: function() {
       return this.users.filter(user => {
         return user.role_id == 2;
       });
     },
-
+    //Filters list of jobs based on the clicked tab in table
     getJobByName: function() {
       if (this.jobs.length > 0) {
         return this.jobs.filter(job => {
+          if(job.client != undefined){
           return job.client.name.match(this.searchName);
+          }else{
+            return "Undefined";  
+          }
+
         });
       }
     }
@@ -560,7 +566,7 @@ export default {
           this.$root.messageError("Client, pricetag and technician are required !");
         });
     },
-
+    //passes the "clients name" for filtering the clients tabs
     setSearchName(name) {
       this.searchName = name;
     },
@@ -600,13 +606,14 @@ export default {
     makeActive(index) {
       this.selectedTab = index;
     },
+    // fucntion for switching clients in create/update. pricetag needs to be reset before switching. 
     makeSelectedClient() {
       this.clearPricetagId();
 
       this.selectedClient = this.clients[this.selectedIndex];
       this.job.client_id = this.selectedClient.id;
     },
-
+    // fucntion for switching clients in create/update. pricetag needs to be reset before switching. 
     makeUpdateSelectedClient() {
       this.updateJob.pricetag_id = "";
       this.updateSelectedClient = this.clients[this.updateSelectedIndex];

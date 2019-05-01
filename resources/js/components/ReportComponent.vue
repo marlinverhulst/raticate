@@ -34,16 +34,11 @@
                 <button
                   @click="openOption('clientOptionDiv')"
                   class="btn btn-secondary btn-sm dropdown-toggle"
-                >By Client</button>
-                <button
-                  disabled
-                  @click="openOption('VisitOptionDiv')"
-                  class="btn btn-secondary btn-sm dropdown-toggle"
-                >By Visit-date</button>
+                >By Clients</button>
               </div>
             </div>
             <div id="clientOptionDiv">
-              <div class="card  bg-dark mb-3 shadow-sm" style="max-width: 18rem;">
+              <div class="card bg-light mb-3 shadow-sm" style="max-width: 50rem;">
                 <!-- <div class="card-header">By Client</div> -->
                 <div class="card-body">
                   <div class="form-row mt-3">
@@ -87,7 +82,12 @@
                   <div class="form-row mt-2">
                     <div class="form-group">
                       <a class="btn btn-primary" @click="getReportbyClients()" href="#">Generate</a>
-                      <a v-if="reportGenerated" @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                      <a
+                        v-if="reportGenerated"
+                        @click="save('#test')"
+                        class="btn btn-primary"
+                        href="#"
+                      >Save file</a>
                     </div>
                   </div>
                 </div>
@@ -95,41 +95,40 @@
             </div>
             <!-- end of Client Option div -->
             <div id="VisitOptionDiv">
-              <div class="card  bg-dark mb-3" style="max-width: 18rem;">
+              <div class="card bg-dark mb-3" style="max-width: 18rem;">
                 <!-- <div class="card-header">Header</div> -->
                 <div class="card-body">
                   <div class="form-row mt-3">
-                <div class="col-12">
-                  <select
-                    name="selectClient"
-                    id="selectClient"
-                    v-model="selectedClientId"
-                    class="form-control"
-                  >
-                    <option disabled value>Select Client</option>
-                    <option :value="0">All</option>
-                    <option v-for="client in clients" :value="client.id">{{client.name}}</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div class="form-row">
-                <div class="col-12">
-                  <label for="visitDate">Inspection date:</label>
-                  <vuejs-datepicker name="visitDate" v-model="inspectionDate"></vuejs-datepicker>
-                </div>
-              </div>
-              <div class="form-row mt-2">
-                <div class="form-group">
-                  <a class="btn btn-primary" href="#">Generate</a>
-                  <a  @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                    <div class="col-12">
+                      <select
+                        name="selectClient"
+                        id="selectClient"
+                        v-model="selectedClientId"
+                        class="form-control"
+                      >
+                        <option disabled value>Select Client</option>
+                        <option :value="0">All</option>
+                        <option v-for="client in clients" :value="client.id">{{client.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="col-12">
+                      <label for="visitDate">Inspection date:</label>
+                      <vuejs-datepicker name="visitDate" v-model="inspectionDate"></vuejs-datepicker>
+                    </div>
+                  </div>
+                  <div class="form-row mt-2">
+                    <div class="form-group">
+                      <a class="btn btn-primary" href="#">Generate</a>
+                      <a @click="save('#test')" class="btn btn-primary" href="#">Save file</a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-                 
-                </div>
-              </div>
-               <!--End Of By Inspection -->
+            <!--End Of By Inspection -->
 
             <div id="hiddenTable" class="form-row mt-5">
               <table class="table" id="test" style="overflow-y : scroll">
@@ -149,10 +148,13 @@
                 </thead>
                 <tbody>
                   <tr v-for="(job, index) in reportData">
-                    <td>{{job.client.name}}</td>
-                    <td v-if="job.pricetag.kind != null">{{job.pricetag.kind}}</td>
+                    <td v-if="job.client != undefined">{{job.client.name}}</td>
+                    <td v-else>Undefined</td>
+                    <td v-if="job.pricetag != undefined ">{{job.pricetag.kind}}</td>
+                    <td v-else>Undefined</td>
                     <td v-else></td>
-                    <td>{{job.pricetag.name}}</td>
+                    <td v-if="job.pricetag != undefined">{{job.pricetag.name}}</td>
+                    <td v-else>Undefined</td>
                     <td>{{$root.getFormattedDate(job.created_at)}}</td>
                     <td>{{job.address}}</td>
                     <td>{{job.city}}</td>
@@ -164,7 +166,8 @@
                       v-if="job.inspections.length > 0 "
                     >{{getAddedInspectionDates(job.inspections)}}</td>
                     <td v-else>No inspections</td>
-                    <td>{{job.pricetag.cost}}</td>
+                    <td v-if="job.pricetag != undefined">{{job.pricetag.cost}}</td>
+                    <td v-else>0</td>
                   </tr>
                   <tr>
                     <td></td>
@@ -188,7 +191,6 @@
           <!--end of modal body -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="closeModal()">Close</button>
-           
           </div>
         </div>
       </div>
@@ -214,7 +216,7 @@ export default {
       endDate: new Date(),
       inspectionDate: new Date(),
       openOptionDiv: "none",
-      hideDivArray: ["VisitOptionDiv", "clientOptionDiv","test"],
+      hideDivArray: ["VisitOptionDiv", "clientOptionDiv"],
       reportByClientUri: "/reportclient/",
       reportGenerated: false
     };
@@ -260,9 +262,9 @@ export default {
         this.openOptionDiv = "none";
       }
     },
-    closeModal(){
+    closeModal() {
       this.reportGenerated = false;
-       $("#ReportModal").modal("hide");
+      $("#ReportModal").modal("hide");
     },
     getReportbyClients() {
       axios
@@ -329,7 +331,7 @@ export default {
     save(htmlTable) {
       // var html = document.getElementById("test").outerHTML;
       this.export_table_to_csv(htmlTable, "table.csv");
-       this.closeModal();
+      this.closeModal();
     }
   },
   computed: {},

@@ -2601,17 +2601,23 @@ __webpack_require__.r(__webpack_exports__);
     jobs: Array
   },
   computed: {
+    // Returns list of technicians filtered from Users 
     getTechnicians: function getTechnicians() {
       return this.users.filter(function (user) {
         return user.role_id == 2;
       });
     },
+    //Filters list of jobs based on the clicked tab in table
     getJobByName: function getJobByName() {
       var _this = this;
 
       if (this.jobs.length > 0) {
         return this.jobs.filter(function (job) {
-          return job.client.name.match(_this.searchName);
+          if (job.client != undefined) {
+            return job.client.name.match(_this.searchName);
+          } else {
+            return "Undefined";
+          }
         });
       }
     }
@@ -2646,6 +2652,7 @@ __webpack_require__.r(__webpack_exports__);
         _this2.$root.messageError("Client, pricetag and technician are required !");
       });
     },
+    //passes the "clients name" for filtering the clients tabs
     setSearchName: function setSearchName(name) {
       this.searchName = name;
     },
@@ -2682,11 +2689,13 @@ __webpack_require__.r(__webpack_exports__);
     makeActive: function makeActive(index) {
       this.selectedTab = index;
     },
+    // fucntion for switching clients in create/update. pricetag needs to be reset before switching. 
     makeSelectedClient: function makeSelectedClient() {
       this.clearPricetagId();
       this.selectedClient = this.clients[this.selectedIndex];
       this.job.client_id = this.selectedClient.id;
     },
+    // fucntion for switching clients in create/update. pricetag needs to be reset before switching. 
     makeUpdateSelectedClient: function makeUpdateSelectedClient() {
       this.updateJob.pricetag_id = "";
       this.updateSelectedClient = this.clients[this.updateSelectedIndex];
@@ -2956,6 +2965,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2971,7 +2982,7 @@ __webpack_require__.r(__webpack_exports__);
       endDate: new Date(),
       inspectionDate: new Date(),
       openOptionDiv: "none",
-      hideDivArray: ["VisitOptionDiv", "clientOptionDiv", "test"],
+      hideDivArray: ["VisitOptionDiv", "clientOptionDiv"],
       reportByClientUri: "/reportclient/",
       reportGenerated: false
     };
@@ -39893,7 +39904,9 @@ var render = function() {
                           "tbody",
                           _vm._l(_vm.getJobByName, function(job, index) {
                             return _c("tr", [
-                              _c("td", [_vm._v(_vm._s(job.client.name))]),
+                              job.client != undefined
+                                ? _c("td", [_vm._v(_vm._s(job.client.name))])
+                                : _c("td", [_vm._v("Undefined client  ")]),
                               _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(job.address))]),
                               _vm._v(" "),
@@ -39925,7 +39938,9 @@ var render = function() {
                                   ])
                                 : _c("td", [_vm._v("Not Planned")]),
                               _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(job.user.name))]),
+                              job.user != undefined
+                                ? _c("td", [_vm._v(_vm._s(job.user.name))])
+                                : _c("td", [_vm._v("Undefined technician")]),
                               _vm._v(" "),
                               _c("td", [
                                 _vm.searchName == ""
@@ -41446,21 +41461,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("By Client")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-secondary btn-sm dropdown-toggle",
-                        attrs: { disabled: "" },
-                        on: {
-                          click: function($event) {
-                            return _vm.openOption("VisitOptionDiv")
-                          }
-                        }
-                      },
-                      [_vm._v("By Visit-date")]
+                      [_vm._v("By Clients")]
                     )
                   ])
                 ]),
@@ -41469,8 +41470,8 @@ var render = function() {
                   _c(
                     "div",
                     {
-                      staticClass: "card  bg-dark mb-3 shadow-sm",
-                      staticStyle: { "max-width": "18rem" }
+                      staticClass: "card bg-light mb-3 shadow-sm",
+                      staticStyle: { "max-width": "50rem" }
                     },
                     [
                       _c("div", { staticClass: "card-body" }, [
@@ -41673,7 +41674,7 @@ var render = function() {
                   _c(
                     "div",
                     {
-                      staticClass: "card  bg-dark mb-3",
+                      staticClass: "card bg-dark mb-3",
                       staticStyle: { "max-width": "18rem" }
                     },
                     [
@@ -41815,15 +41816,21 @@ var render = function() {
                           [
                             _vm._l(_vm.reportData, function(job, index) {
                               return _c("tr", [
-                                _c("td", [_vm._v(_vm._s(job.client.name))]),
+                                job.client != undefined
+                                  ? _c("td", [_vm._v(_vm._s(job.client.name))])
+                                  : _c("td", [_vm._v("Undefined")]),
                                 _vm._v(" "),
-                                job.pricetag.kind != null
+                                job.pricetag != undefined
                                   ? _c("td", [
                                       _vm._v(_vm._s(job.pricetag.kind))
                                     ])
-                                  : _c("td"),
+                                  : _c("td", [_vm._v("Undefined")]),
                                 _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(job.pricetag.name))]),
+                                job.pricetag != undefined
+                                  ? _c("td", [
+                                      _vm._v(_vm._s(job.pricetag.name))
+                                    ])
+                                  : _c("td", [_vm._v("Undefined")]),
                                 _vm._v(" "),
                                 _c("td", [
                                   _vm._v(
@@ -41859,7 +41866,11 @@ var render = function() {
                                     ])
                                   : _c("td", [_vm._v("No inspections")]),
                                 _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(job.pricetag.cost))])
+                                job.pricetag != undefined
+                                  ? _c("td", [
+                                      _vm._v(_vm._s(job.pricetag.cost))
+                                    ])
+                                  : _c("td", [_vm._v("0")])
                               ])
                             }),
                             _vm._v(" "),

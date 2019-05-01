@@ -28,7 +28,7 @@ class CreateJobsTable extends Migration
            
             $table->text('comments')->nullable();
             $table->boolean('callfirst');
-            $table->boolean('message')->nullable();
+            $table->string('message')->nullable();
             $table->string('time')->nullable();
             $table->boolean('done');
             $table->string('cause')->nullable();
