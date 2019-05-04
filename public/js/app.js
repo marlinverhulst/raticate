@@ -1797,18 +1797,62 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      uri: "/message/",
+      updateJob: []
+    };
   },
   props: {
     jobs: Array
   },
-  methods: {},
+  methods: {
+    findJob: function findJob(address) {
+      this.$root.searchString = address;
+    },
+    clearMessageOnJob: function clearMessageOnJob(index) {
+      var _this = this;
+
+      this.updateJob = this.jobsWithMessage[index];
+      console.log(this.updateJob.message);
+      var confirmbox = confirm("Delete Message ?");
+
+      if (confirmbox == true) {
+        axios.patch(this.uri + this.updateJob.id, {
+          message: ''
+        }).then(function (response) {
+          _this.updateJob.message = '';
+
+          _this.$root.messageSuccess("Message Deleted");
+        }).catch(function (error) {
+          _this.$root.messageError(error);
+        });
+      }
+    }
+  },
   computed: {
     jobsWithMessage: function jobsWithMessage() {
       return this.jobs.filter(function (job) {
-        if (job.message != '' && job.message != null) {
+        if (job.message != "" && job.message != null) {
           return job;
         }
       });
@@ -2105,7 +2149,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteClient: function deleteClient(index) {
       var _this4 = this;
 
-      var confirmbox = confirm("Do you realy want to delete this Client ? Pricetags won't be deleted. If you want them gone delete them first");
+      var confirmbox = confirm("Do you realy want to delete this Client ? Pricetags will be delete too ! ");
 
       if (confirmbox == true) {
         axios.delete(this.uri + this.clients[index].id).then(function (response) {
@@ -2118,7 +2162,7 @@ __webpack_require__.r(__webpack_exports__);
     deletePriceTag: function deletePriceTag(index) {
       var _this5 = this;
 
-      var confirmbox = confirm("Let's think of the consequences first shall we ? It's best to update all jobs with a new pricetag first");
+      var confirmbox = confirm("Do you realy want to delete this Pricetag ? It's best to update all jobs with a new pricetag first");
 
       if (confirmbox == true) {
         axios.delete("/pricetags/" + this.new_update_client.pricetags[index].id).then(function (response) {
@@ -2151,6 +2195,42 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2664,6 +2744,8 @@ __webpack_require__.r(__webpack_exports__);
       }],
       updateJob: [],
       uri: "/jobs/",
+      InspectionUri: "/inspections/",
+      newInspectionDate: new Date(),
       selectedTab: 0,
       selectedIndex: 0,
       updateSelectedIndex: 0,
@@ -2679,7 +2761,7 @@ __webpack_require__.r(__webpack_exports__);
     jobs: Array
   },
   computed: {
-    // Returns list of technicians filtered from Users 
+    // Returns list of technicians filtered from Users
     getTechnicians: function getTechnicians() {
       return this.users.filter(function (user) {
         return user.role_id == 2;
@@ -2701,8 +2783,22 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    updateTheJob: function updateTheJob() {
+    createInspection: function createInspection() {
       var _this2 = this;
+
+      axios.post(this.InspectionUri, {
+        job_id: this.updateJob.id,
+        created_at: this.newInspectionDate
+      }).then(function (response) {
+        _this2.updateJob.inspections.push(response.data.inspection);
+
+        _this2.$root.messageSuccess("Inspection created");
+      }).catch(function (error) {
+        _this2.$root.messageError("Could not update!");
+      });
+    },
+    updateTheJob: function updateTheJob() {
+      var _this3 = this;
 
       axios.patch(this.uri + this.updateJob.id, {
         address: this.updateJob.address,
@@ -2724,11 +2820,12 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         $("#update-job-modal").modal("hide");
 
-        _this2.$root.getJobs();
+        _this3.$root.getJobs(); // this.updateJob = response.data.job;
 
-        _this2.$root.messageSuccess("Job Updated");
+
+        _this3.$root.messageSuccess("Job Updated");
       }).catch(function (error) {
-        _this2.$root.messageError("Client, pricetag and technician are required !");
+        _this3.$root.messageError("Client, pricetag and technician are required !");
       });
     },
     //passes the "clients name" for filtering the clients tabs
@@ -2736,7 +2833,7 @@ __webpack_require__.r(__webpack_exports__);
       this.searchName = name;
     },
     createJob: function createJob() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post(this.uri, {
         address: this.job.address,
@@ -2753,13 +2850,13 @@ __webpack_require__.r(__webpack_exports__);
         visitDate: this.job.visitDate,
         noVisit: this.job.noVisit
       }).then(function (response) {
-        _this3.closeCreateJobsModal();
+        _this4.closeCreateJobsModal();
 
-        _this3.$root.getJobs();
+        _this4.$root.getJobs();
 
-        _this3.$root.messageSuccess("Job created");
+        _this4.$root.messageSuccess("Job created");
       }).catch(function (error) {
-        _this3.$root.messageError("Client, pricetag and technician are required !");
+        _this4.$root.messageError("Client, pricetag and technician are required !");
       });
     },
     clearPricetagId: function clearPricetagId() {
@@ -2768,13 +2865,13 @@ __webpack_require__.r(__webpack_exports__);
     makeActive: function makeActive(index) {
       this.selectedTab = index;
     },
-    // fucntion for switching clients in create/update. pricetag needs to be reset before switching. 
+    // fucntion for switching clients in create/update. pricetag needs to be reset before switching.
     makeSelectedClient: function makeSelectedClient() {
       this.clearPricetagId();
       this.selectedClient = this.clients[this.selectedIndex];
       this.job.client_id = this.selectedClient.id;
     },
-    // fucntion for switching clients in create/update. pricetag needs to be reset before switching. 
+    // fucntion for switching clients in create/update. pricetag needs to be reset before switching.
     makeUpdateSelectedClient: function makeUpdateSelectedClient() {
       this.updateJob.pricetag_id = "";
       this.updateSelectedClient = this.clients[this.updateSelectedIndex];
@@ -2810,19 +2907,35 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.job.client_id);
     },
     deleteJob: function deleteJob(index) {
-      var _this4 = this;
+      var _this5 = this;
 
-      var confirmbox = confirm("Do you realy want to delete this Job ? Inspections won't be deleted. If you want them gone delete them first");
+      var confirmbox = confirm("Do you realy want to delete this Job ? Inspections will be deleted too.");
 
       if (confirmbox == true) {
         axios.delete(this.uri + this.jobs[index].id).then(function (response) {
-          _this4.$delete(_this4.jobs, index);
+          _this5.$delete(_this5.jobs, index);
 
-          _this4.$root.messageSuccess("Job Deleted");
+          _this5.$root.messageSuccess("Job Deleted");
 
-          _this4.$root.getJobs();
+          _this5.$root.getJobs();
         }).catch(function (error) {
-          _this4.$root.messageError("could not delete");
+          _this5.$root.messageError("could not delete");
+        });
+      }
+    },
+    deleteInspection: function deleteInspection(index) {
+      var _this6 = this;
+
+      var confirmbox = confirm("Do you realy want to delete this Inspection ? ");
+
+      if (confirmbox == true) {
+        axios.delete(this.InspectionUri + this.updateJob.inspections[index].id).then(function (response) {
+          _this6.$delete(_this6.updateJob.inspections, index);
+
+          _this6.$root.messageSuccess("Inspection Deleted"); // this.$root.getJobs();
+
+        }).catch(function (error) {
+          _this6.$root.messageError("could not delete");
         });
       }
     }
@@ -3555,6 +3668,16 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39406,7 +39529,7 @@ var render = function() {
       },
       [
         _c("h6", { staticClass: "dropdown-header" }, [
-          _vm._v("\n                Message Center \n              ")
+          _vm._v("Message Center")
         ]),
         _vm._v(" "),
         _vm._l(_vm.jobsWithMessage, function(job, index) {
@@ -39426,7 +39549,31 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "small text-gray-500" }, [
                   _vm._v(_vm._s(job.city) + " - " + _vm._s(job.address))
-                ])
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "col-6" }, [
+                  _c("i", {
+                    staticClass: "fab fa-searchengin fa-1x",
+                    on: {
+                      click: function($event) {
+                        return _vm.findJob(job.address)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    staticClass: "col-6",
+                    on: {
+                      click: function($event) {
+                        return _vm.clearMessageOnJob(index)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-minus-circle fa-1x" })]
+                )
               ])
             ]
           )
@@ -40102,7 +40249,7 @@ var render = function() {
                             return _c("tr", [
                               job.client != undefined
                                 ? _c("td", [_vm._v(_vm._s(job.client.name))])
-                                : _c("td", [_vm._v("Undefined client  ")]),
+                                : _c("td", [_vm._v("Undefined client")]),
                               _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(job.address))]),
                               _vm._v(" "),
@@ -40311,7 +40458,7 @@ var render = function() {
                               _c(
                                 "option",
                                 { attrs: { disabled: "", value: "" } },
-                                [_vm._v("Select a Pricetag")]
+                                [_vm._v("Select a Pricetag*")]
                               ),
                               _vm._v(" "),
                               _vm._l(_vm.selectedClient.pricetags, function(
@@ -40354,7 +40501,7 @@ var render = function() {
                           type: "text",
                           id: "adres",
                           required: "",
-                          placeholder: "Address"
+                          placeholder: "Address*"
                         },
                         domProps: { value: _vm.job.address },
                         on: {
@@ -40412,7 +40559,7 @@ var render = function() {
                           type: "text",
                           id: "city",
                           required: "",
-                          placeholder: "City"
+                          placeholder: "City*"
                         },
                         domProps: { value: _vm.job.city },
                         on: {
@@ -40472,7 +40619,7 @@ var render = function() {
                         id: "description",
                         cols: "30",
                         rows: "6",
-                        placeholder: "Description.."
+                        placeholder: "Description*.."
                       },
                       domProps: { value: _vm.job.description },
                       on: {
@@ -40488,9 +40635,11 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-6" }, [
-                      _c("label", { attrs: { for: "datepicker" } }, [
-                        _vm._v("Visit date: ")
-                      ]),
+                      _vm.job.noVisit == 0 && _vm.job.done == 0
+                        ? _c("label", { attrs: { for: "datepicker" } }, [
+                            _vm._v("Visit date: ")
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _vm.job.noVisit == 0 && _vm.job.done == 0
                         ? _c(
@@ -40705,7 +40854,7 @@ var render = function() {
                   _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-8" }, [
                       _c("label", { attrs: { for: "TechnSelect" } }, [
-                        _vm._v("Assign to:")
+                        _vm._v("Assign to*:")
                       ]),
                       _vm._v(" "),
                       _c(
@@ -40929,7 +41078,7 @@ var render = function() {
                               _c(
                                 "option",
                                 { attrs: { disabled: "", value: "" } },
-                                [_vm._v("Select a Pricetag")]
+                                [_vm._v("Select a Pricetag*")]
                               ),
                               _vm._v(" "),
                               _vm._l(
@@ -41240,9 +41389,11 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-6" }, [
-                      _c("label", { attrs: { for: "updateDatepicker" } }, [
-                        _vm._v("Visit date: ")
-                      ]),
+                      _vm.updateJob.noVisit == 0 && _vm.updateJob.done == 0
+                        ? _c("label", { attrs: { for: "updateDatepicker" } }, [
+                            _vm._v("Visit date* : ")
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _vm.updateJob.noVisit == 0 && _vm.updateJob.done == 0
                         ? _c(
@@ -41471,7 +41622,7 @@ var render = function() {
                   _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-8" }, [
                       _c("label", { attrs: { for: "UpdateTechnSelect" } }, [
-                        _vm._v("Assign to:")
+                        _vm._v("Assign to* :")
                       ]),
                       _vm._v(" "),
                       _c(
@@ -41522,6 +41673,76 @@ var render = function() {
                         ],
                         2
                       )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-12" }, [
+                      _vm.updateJob.inspections
+                        ? _c("table", { staticClass: "table border" }, [
+                            _vm._m(2),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              [
+                                _vm._l(_vm.updateJob.inspections, function(
+                                  inspection,
+                                  index
+                                ) {
+                                  return _c("tr", [
+                                    _c("td", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.$root.getFormattedDate(
+                                            inspection.created_at
+                                          )
+                                        )
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _c("i", {
+                                        staticClass:
+                                          "far fa-times-circle fa-2x",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteInspection(index)
+                                          }
+                                        }
+                                      })
+                                    ])
+                                  ])
+                                }),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("td", [_vm._v("Add inspection on today")]),
+                                  _vm._v(" "),
+                                  _c("td"),
+                                  _vm._v(" "),
+                                  _c("td"),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _c("i", {
+                                      staticClass: "fas fa-plus-circle fa-2x",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.createInspection()
+                                        }
+                                      }
+                                    })
+                                  ])
+                                ])
+                              ],
+                              2
+                            )
+                          ])
+                        : _vm._e()
                     ])
                   ]),
                   _vm._v(" "),
@@ -41588,6 +41809,26 @@ var staticRenderFns = [
       _c("th", { staticStyle: { width: "10%" }, attrs: { scope: "col" } }),
       _vm._v(" "),
       _c("th", { staticStyle: { width: "10%" }, attrs: { scope: "col" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("hr")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", { staticStyle: { width: "50%" } }, [_vm._v("Inspection dates")]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { width: "25%" } }),
+      _vm._v(" "),
+      _c("th", { staticStyle: { width: "25%" } }),
+      _vm._v(" "),
+      _c("th", { staticStyle: { width: "25%" } })
     ])
   }
 ]
@@ -42932,9 +43173,7 @@ var render = function() {
                         [
                           _c("p", [
                             _vm._v(
-                              " Time restriction: " +
-                                _vm._s(_vm.activeJob.time) +
-                                " "
+                              "Time restriction: " + _vm._s(_vm.activeJob.time)
                             )
                           ])
                         ]
@@ -43031,7 +43270,7 @@ var render = function() {
                     _c("div", { staticClass: "form-row" }, [
                       _c("div", { staticClass: "form-group col-8" }, [
                         _c("label", { attrs: { for: "causeSelect" } }, [
-                          _vm._v("Cause :")
+                          _vm._v("Cause* :")
                         ]),
                         _vm._v(" "),
                         _c(
@@ -43092,7 +43331,7 @@ var render = function() {
                     _c("div", { staticClass: "form-row" }, [
                       _c("div", { staticClass: "form-group col-8" }, [
                         _c("label", { attrs: { for: "statusSelect" } }, [
-                          _vm._v("Status :")
+                          _vm._v("Status* :")
                         ]),
                         _vm._v(" "),
                         _c(
@@ -43149,7 +43388,11 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group mt-2" }, [
-                      _vm._m(3),
+                      _vm.activeJob.done == 0
+                        ? _c("div", { staticClass: "mb-1" }, [
+                            _c("strong", [_vm._v("Next Visit* :")])
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _vm.activeJob.done == 0
                         ? _c(
@@ -43268,6 +43511,8 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
+                    _vm._m(3),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("label", { attrs: { for: "feedback" } }, [
                         _vm._v("Feedback for Admin:")
@@ -43377,9 +43622,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mb-1" }, [
-      _c("strong", [_vm._v("Next Visit:")])
-    ])
+    return _c("div", [_c("hr")])
   }
 ]
 render._withStripped = true

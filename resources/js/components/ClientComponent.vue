@@ -276,7 +276,7 @@ export default {
 
     deleteClient(index) {
       let confirmbox = confirm(
-        "Do you realy want to delete this Client ? Pricetags won't be deleted. If you want them gone delete them first"
+        "Do you realy want to delete this Client ? Pricetags will be delete too ! "
       );
 
       if (confirmbox == true) {
@@ -293,7 +293,7 @@ export default {
     },
     deletePriceTag(index) {
       let confirmbox = confirm(
-        "Let's think of the consequences first shall we ? It's best to update all jobs with a new pricetag first"
+        "Do you realy want to delete this Pricetag ? It's best to update all jobs with a new pricetag first"
       );
 
       if (confirmbox == true) {

@@ -140,6 +140,25 @@ class JobsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function deleteMessage(Request $request, $id){
+
+        $job = Job::findOrFail($id);
+        
+        $job->update([
+         
+        
+        'message' => $request->message
+       
+       
+        ]);
+
+        $job->save();
+
+        
+        
+
+    }
+
     public function update(Request $request, $id)
     {
         
@@ -216,7 +235,8 @@ class JobsController extends Controller
      */
     public function destroy(Job $job)
     {
-        //
+        // Delete Inspections
+        $job->inspections()->delete();
         $job->delete();
         return response()->json([
             'job' => $job,

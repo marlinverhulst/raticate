@@ -10,7 +10,8 @@ class Inspection extends Model
     protected $fillable = [
         'job_id',
         'date',
-        'comment'
+        'comment',
+        
         
 
     ];

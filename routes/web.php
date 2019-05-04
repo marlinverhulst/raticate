@@ -14,6 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::patch('/message/{id}',[
+    'uses' => 'JobsController@deleteMessage'
+]);
+
+
 
 Auth::routes();
 
@@ -24,6 +29,7 @@ Route::resource('/clients','ClientsController');
 Route::resource('/pricetags','PriceTagController');
 Route::resource('/jobs','JobsController');
 Route::resource('/technicians','TechnicianController');
+Route::resource('/inspections', 'InspectionController');
 
 route::get('/reportclient', 'ReportController@generateByClient');
 route::get('/loaddates', 'TechnicianController@getVisits');

@@ -66,7 +66,8 @@
                     </thead>
                     <tbody>
                       <tr v-for="(job , index) in getJobByName">
-                        <td v-if="job.client != undefined">{{job.client.name}}</td><td v-else>Undefined client  </td>
+                        <td v-if="job.client != undefined">{{job.client.name}}</td>
+                        <td v-else>Undefined client</td>
                         <td>{{job.address}}</td>
                         <td>{{job.zip}}</td>
                         <td>{{job.city}}</td>
@@ -77,7 +78,8 @@
                           v-if="job.visitdate != undefined"
                         >{{$root.getFormattedDate(job.visitdate)}}</td>
                         <td v-else>Not Planned</td>
-                        <td v-if="job.user != undefined">{{job.user.name}}</td><td v-else>Undefined technician</td>
+                        <td v-if="job.user != undefined">{{job.user.name}}</td>
+                        <td v-else>Undefined technician</td>
                         <td>
                           <i
                             v-if="searchName == ''"
@@ -144,7 +146,7 @@
                     class="form-control"
                     id="priceTagSelect"
                   >
-                    <option disabled value>Select a Pricetag</option>
+                    <option disabled value>Select a Pricetag*</option>
                     <option
                       v-for="priceTag in selectedClient.pricetags"
                       :value="priceTag.id"
@@ -161,7 +163,7 @@
                     id="adres"
                     class="form-control"
                     required
-                    placeholder="Address"
+                    placeholder="Address*"
                   >
                 </div>
 
@@ -183,7 +185,7 @@
                     id="city"
                     class="form-control"
                     required
-                    placeholder="City"
+                    placeholder="City*"
                   >
                 </div>
               </div>
@@ -205,12 +207,12 @@
                   cols="30"
                   rows="6"
                   class="form-control"
-                  placeholder="Description.."
+                  placeholder="Description*.."
                 ></textarea>
               </div>
               <div class="form-row">
                 <div class="form-group col-6">
-                  <label for="datepicker">Visit date:&nbsp;</label>
+                  <label v-if="job.noVisit == 0 && job.done == 0 " for="datepicker">Visit date:&nbsp;</label>
                   <div v-if="job.noVisit == 0 && job.done == 0 ">
                     <vuejs-datepicker name="datepicker" v-model="job.visitDate"></vuejs-datepicker>
                   </div>
@@ -244,7 +246,7 @@
 
               <div class="form-row">
                 <div class="form-group col-8">
-                  <label for="TechnSelect">Assign to:</label>
+                  <label for="TechnSelect">Assign to*:</label>
                   <select v-model="job.user_id" class="form-control" id="TechnSelect">
                     <option disabled value>Select a Technician</option>
                     <option
@@ -306,7 +308,7 @@
                     class="form-control"
                     id="priceTagSelect"
                   >
-                    <option disabled value>Select a Pricetag</option>
+                    <option disabled value>Select a Pricetag*</option>
                     <option
                       v-for="priceTag in updateSelectedClient.pricetags"
                       :value="priceTag.id"
@@ -403,7 +405,7 @@
               </div>
               <div class="form-row">
                 <div class="form-group col-6">
-                  <label for="updateDatepicker">Visit date:&nbsp;</label>
+                  <label v-if="updateJob.noVisit == 0 && updateJob.done == 0 " for="updateDatepicker">Visit date* :&nbsp;</label>
                   <div v-if="updateJob.noVisit == 0 && updateJob.done == 0 ">
                     <vuejs-datepicker name="updateDatepicker" v-model="updateJob.visitDate"></vuejs-datepicker>
                   </div>
@@ -450,7 +452,7 @@
 
               <div class="form-row">
                 <div class="form-group col-8">
-                  <label for="UpdateTechnSelect">Assign to:</label>
+                  <label for="UpdateTechnSelect">Assign to* :</label>
                   <select v-model="updateJob.user_id" class="form-control" id="UpdateTechnSelect">
                     <option disabled value>Select a Technician</option>
                     <option
@@ -458,6 +460,40 @@
                       :value="technician.id"
                     >{{technician.name}}</option>
                   </select>
+                </div>
+              </div>
+              <div>
+                <hr>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  <table class="table border" v-if="updateJob.inspections">
+                    <thead>
+                      <th style="width: 50%">Inspection dates</th>
+                      <th style="width: 25%"></th>
+                      <th style="width: 25%"></th>
+                      <th style="width: 25%"></th>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(inspection, index) in updateJob.inspections">
+                        <td>{{$root.getFormattedDate(inspection.created_at)}}</td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <i @click="deleteInspection(index)" class="far fa-times-circle fa-2x"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Add inspection on today</td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <i @click="createInspection()" class="fas fa-plus-circle fa-2x"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -510,7 +546,9 @@ export default {
       updateJob: [],
 
       uri: "/jobs/",
+      InspectionUri: "/inspections/",
 
+      newInspectionDate: new Date(),
       selectedTab: 0,
       selectedIndex: 0,
       updateSelectedIndex: 0,
@@ -527,7 +565,7 @@ export default {
   },
 
   computed: {
-    // Returns list of technicians filtered from Users 
+    // Returns list of technicians filtered from Users
     getTechnicians: function() {
       return this.users.filter(user => {
         return user.role_id == 2;
@@ -537,18 +575,33 @@ export default {
     getJobByName: function() {
       if (this.jobs.length > 0) {
         return this.jobs.filter(job => {
-          if(job.client != undefined){
-          return job.client.name.match(this.searchName);
-          }else{
-            return "Undefined";  
+          if (job.client != undefined) {
+            return job.client.name.match(this.searchName);
+          } else {
+            return "Undefined";
           }
-
         });
       }
     }
   },
 
   methods: {
+    createInspection() {
+      axios
+        .post(this.InspectionUri, {
+          job_id: this.updateJob.id,
+          created_at: this.newInspectionDate
+        })
+        .then(response => {
+          this.updateJob.inspections.push(response.data.inspection);
+          this.$root.messageSuccess("Inspection created");
+          
+        })
+        .catch(error => {
+          this.$root.messageError("Could not update!");
+        });
+    },
+
     updateTheJob() {
       axios
         .patch(this.uri + this.updateJob.id, {
@@ -572,10 +625,14 @@ export default {
         .then(response => {
           $("#update-job-modal").modal("hide");
           this.$root.getJobs();
+          // this.updateJob = response.data.job;
+          
           this.$root.messageSuccess("Job Updated");
         })
         .catch(error => {
-          this.$root.messageError("Client, pricetag and technician are required !");
+          this.$root.messageError(
+            "Client, pricetag and technician are required !"
+          );
         });
     },
     //passes the "clients name" for filtering the clients tabs
@@ -618,14 +675,14 @@ export default {
     makeActive(index) {
       this.selectedTab = index;
     },
-    // fucntion for switching clients in create/update. pricetag needs to be reset before switching. 
+    // fucntion for switching clients in create/update. pricetag needs to be reset before switching.
     makeSelectedClient() {
       this.clearPricetagId();
 
       this.selectedClient = this.clients[this.selectedIndex];
       this.job.client_id = this.selectedClient.id;
     },
-    // fucntion for switching clients in create/update. pricetag needs to be reset before switching. 
+    // fucntion for switching clients in create/update. pricetag needs to be reset before switching.
     makeUpdateSelectedClient() {
       this.updateJob.pricetag_id = "";
       this.updateSelectedClient = this.clients[this.updateSelectedIndex];
@@ -667,7 +724,7 @@ export default {
     },
     deleteJob(index) {
       let confirmbox = confirm(
-        "Do you realy want to delete this Job ? Inspections won't be deleted. If you want them gone delete them first"
+        "Do you realy want to delete this Job ? Inspections will be deleted too."
       );
 
       if (confirmbox == true) {
@@ -677,6 +734,25 @@ export default {
             this.$delete(this.jobs, index);
             this.$root.messageSuccess("Job Deleted");
             this.$root.getJobs();
+          })
+          .catch(error => {
+            this.$root.messageError("could not delete");
+          });
+      }
+    },
+
+    deleteInspection(index) {
+      let confirmbox = confirm(
+        "Do you realy want to delete this Inspection ? "
+      );
+
+      if (confirmbox == true) {
+        axios
+          .delete(this.InspectionUri + this.updateJob.inspections[index].id)
+          .then(response => {
+            this.$delete(this.updateJob.inspections, index);
+            this.$root.messageSuccess("Inspection Deleted");
+            // this.$root.getJobs();
           })
           .catch(error => {
             this.$root.messageError("could not delete");

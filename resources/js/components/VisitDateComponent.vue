@@ -53,14 +53,18 @@
           </div>
           <div class="modal-body">
             <div class="row justify-content-center mt-1">
-              
-                <span v-if="activeJob.time != null && activeJob.time != ''" class="border border-danger col-12 pt-3 mb-2"> <p> Time restriction: {{activeJob.time}} </p></span>
-                
+              <span
+                v-if="activeJob.time != null && activeJob.time != ''"
+                class="border border-danger col-12 pt-3 mb-2"
+              >
+                <p>Time restriction: {{activeJob.time}}</p>
+              </span>
+
               <div class="col-10">
                 <div v-if="activeJob.inspections != undefined" class="mb-2">
                   <strong>Visit #:&nbsp;{{activeJob.inspections.length + 1}}</strong>
                 </div>
-                
+
                 <div class="form-group">
                   <label for="description">Description:</label>
                   <textarea
@@ -87,7 +91,7 @@
                 </div>
                 <div class="form-row">
                   <div class="form-group col-8">
-                    <label for="causeSelect">Cause :</label>
+                    <label for="causeSelect">Cause* :</label>
                     <select v-model="activeJob.cause" class="form-control" id="causeSelect">
                       <option disabled value>Select a Cause</option>
                       <option v-for="cause in causes" :value="cause.name">{{cause.name}}</option>
@@ -98,9 +102,10 @@
                 <div>
                   <hr>
                 </div>
+
                 <div class="form-row">
                   <div class="form-group col-8">
-                    <label for="statusSelect">Status :</label>
+                    <label for="statusSelect">Status* :</label>
                     <select v-model="activeJob.done" class="form-control" id="statusSelect">
                       <option disabled value>Status of job</option>
                       <option v-for="status in statuses" :value="status.value">{{status.name}}</option>
@@ -110,8 +115,8 @@
                 <!--Date Picker-->
 
                 <div class="form-group mt-2">
-                  <div class="mb-1">
-                    <strong>Next Visit:</strong>
+                  <div v-if="activeJob.done == 0" class="mb-1">
+                    <strong>Next Visit* :</strong>
                   </div>
                   <div v-if="activeJob.done == 0">
                     <vuejs-datepicker name="datepicker" v-model="activeJob.visitdate"></vuejs-datepicker>
@@ -140,6 +145,11 @@
                     >
                   </div>
                 </div>
+
+                <div>
+                  <hr>
+                </div>
+                
                 <div class="form-group">
                   <label for="feedback">Feedback for Admin:</label>
                   <textarea
@@ -216,7 +226,6 @@ export default {
           message: this.activeJob.message
         })
         .then(response => {
-
           $("#visitModal").modal("hide");
           this.$root.messageSuccess("Job has been send");
           this.$delete(this.openJobs, this.indexOfActiveJob);

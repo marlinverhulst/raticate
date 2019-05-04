@@ -125,7 +125,7 @@ class ClientsController extends Controller
     {
         // Code for deleting pricetags/jobs on client 
         // $client->jobs()->delete();
-        // $client->priceTags()->delete();
+        $client->priceTags()->delete();
         $client->delete();
         return response()->json([
             'client' => $client,
