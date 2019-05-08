@@ -2112,13 +2112,19 @@ __webpack_require__.r(__webpack_exports__);
       });
       ;
     },
+    // function to replace "," for "." in the price when creating a pricetag (collum requires ".")//
+    replaceComma: function replaceComma(str) {
+      var string = str;
+      string = string.replace(/,/g, '.');
+      return string;
+    },
     createPriceTag: function createPriceTag() {
       var _this2 = this;
 
       axios.post("/pricetags", {
         kind: this.pricetag.kind,
         name: this.pricetag.name,
-        cost: this.pricetag.cost,
+        cost: this.pricetag.cost = this.replaceComma(this.pricetag.cost),
         client_id: this.new_update_client.id
       }).then(function (response) {
         _this2.new_update_client.pricetags.push(response.data.pricetag);

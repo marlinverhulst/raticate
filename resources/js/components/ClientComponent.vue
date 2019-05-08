@@ -237,12 +237,21 @@ export default {
           this.$root.messageError(error);
         });;
     },
+    // function to replace "," for "." in the price when creating a pricetag (collum requires ".")//
+    replaceComma(str){
+      let string = str;
+
+      string = string.replace(/,/g, '.' );
+
+      return string;
+    },
+
     createPriceTag() {
       axios
         .post("/pricetags", {
-          kind: this.pricetag.kind,
+          kind: this.pricetag.kind ,
           name: this.pricetag.name,
-          cost: this.pricetag.cost,
+          cost: this.pricetag.cost = this.replaceComma(this.pricetag.cost),
           client_id: this.new_update_client.id
         })
         .then(response => {
