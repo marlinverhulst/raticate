@@ -193,7 +193,7 @@ export default {
       toast: (toastr.options = { positionClass: "toast-top-full-width" }),
 
       uri: "users/",
-      posturi: 'user'
+      posturi: 'users'
     };
   },
   props: {
@@ -286,7 +286,7 @@ export default {
           this.users.push(response.data.user);
           this.resetData();
           this.closeCreateUserModal();
-          this.messageSuccess("User Created");
+          this.$root.messageSuccess("User Created");
         })
         .catch(error => {
           console.log(error);

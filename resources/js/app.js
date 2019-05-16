@@ -27,6 +27,7 @@ Vue.component('job-component', require('./components/JobComponent.vue').default)
 Vue.component('report-component', require('./components/ReportComponent.vue').default);
 Vue.component('visit-component', require('./components/VisitDateComponent.vue').default);
 Vue.component('adminmessage-component', require('./components/AdminMessageComponent.vue').default);
+Vue.component('routebuilder-component', require('./components/RouteBuilderComponent.vue').default);
 
 
 // register the plugin on vue

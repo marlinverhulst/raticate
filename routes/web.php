@@ -30,6 +30,7 @@ Route::resource('/pricetags','PriceTagController');
 Route::resource('/jobs','JobsController');
 Route::resource('/technicians','TechnicianController');
 Route::resource('/inspections', 'InspectionController');
+Route::resource('/routebuilder','RouteBuilderController');
 
 route::get('/reportclient', 'ReportController@generateByClient');
 route::get('/loaddates', 'TechnicianController@getVisits');

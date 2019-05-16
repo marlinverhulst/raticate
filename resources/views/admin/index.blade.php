@@ -192,11 +192,14 @@
             
 
           <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+          <div class="d-sm-flex align-items-center justify-content-between mb-2">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>           
             <report-component :clients = 'clients'></report-component>
           </div>
-          
+          <div class="d-sm-flex align-items-center justify-content-end mb-2">
+              
+              <routebuilder-component :users = 'users'></routebuilder-component>
+          </div>
           
 
           <!-- Content Row -->
