@@ -10,7 +10,7 @@
           <i @click="openCreateClientModal" class="fas fa-plus-circle fa-2x"></i>
         </div>
         <!-- Card Body -->
-        <div class="card-body">
+        <div  class="card-body">
           <div class="costumheight">
             <table class="table" v-if="clients.length > 0">
               <thead>
@@ -193,7 +193,10 @@ export default {
 
       new_update_client: [],
 
-      uri: "/clients/"
+      uri: "clients/",
+
+      posturi: "clients"
+
     };
   },
   props: {
@@ -223,12 +226,13 @@ export default {
       $("#edit-client-modal").modal("hide");
     },
     createClient() {
+      
       axios
-        .post(this.uri, {
+        .post(this.posturi, {
           name: this.client.name
         })
         .then(response => {
-          this.clients.push(response.data.client);
+          this.clients.push(response.data.client);  
           this.$root.getClients();
           this.resetData();
           this.closeCreateClientModal();
@@ -248,7 +252,7 @@ export default {
 
     createPriceTag() {
       axios
-        .post("/pricetags", {
+        .post("pricetags", {
           kind: this.pricetag.kind ,
           name: this.pricetag.name,
           cost: this.pricetag.cost = this.replaceComma(this.pricetag.cost),
@@ -307,7 +311,7 @@ export default {
 
       if (confirmbox == true) {
         axios
-          .delete("/pricetags/" + this.new_update_client.pricetags[index].id)
+          .delete("pricetags/" + this.new_update_client.pricetags[index].id)
           .then(response => {
             this.$delete(this.new_update_client.pricetags, index);
           })

@@ -192,7 +192,8 @@ export default {
       errors: [],
       toast: (toastr.options = { positionClass: "toast-top-full-width" }),
 
-      uri: "/users/"
+      uri: "users/",
+      posturi: 'user'
     };
   },
   props: {
@@ -275,7 +276,7 @@ export default {
     },
     createUser() {
       axios
-        .post(this.uri, {
+        .post(this.posturi, {
           name: this.user.name,
           email: this.user.email,
           password: this.user.password,

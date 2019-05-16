@@ -75,6 +75,7 @@ class TechnicianController extends Controller
         'time' => $request->time,
         'cause'=> $request->cause,
         'done' => $request->done,
+        'tel'  => $request->tel,
         'visitdate' => Carbon::parse($request->visitdate)->toDateTimeString()]);
 
         

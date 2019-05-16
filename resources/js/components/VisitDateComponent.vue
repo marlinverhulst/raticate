@@ -57,7 +57,13 @@
                 v-if="activeJob.time != null && activeJob.time != ''"
                 class="border border-danger col-12 pt-3 mb-2"
               >
-                <p>Time restriction: {{activeJob.time}}</p>
+                <label for>Time restriction: {{activeJob.time}}</label>
+              </span>
+              <span
+                v-if="activeJob.callfirst != null && activeJob.callfirst != ''"
+                class="border border-danger col-12 pt-3 mb-2"
+              >
+                <label for>Call before visiting: {{activeJob.tel}}</label>
               </span>
 
               <div class="col-10">
@@ -65,9 +71,8 @@
                   <strong>Visit #:&nbsp;{{activeJob.inspections.length + 1}}</strong>
                 </div>
 
-                <div class="form-group">
-                  <label for="description">Description:</label>
-                  <textarea
+                <div class="form-group border">
+                  <!-- <textarea
                     class="form-control"
                     disabled
                     name
@@ -75,7 +80,18 @@
                     id="description"
                     cols="30"
                     rows="5"
-                  ></textarea>
+                  >
+                  
+                  </textarea>-->
+                  <p>
+                    &nbsp;&nbsp;Address: {{activeJob.address}}
+                    <br>
+                    &nbsp;&nbsp;Zipcode: {{activeJob.zip}} / City: {{activeJob.city}}
+                    <br>
+                    &nbsp;&nbsp;Tel: {{activeJob.tel}}
+                    <br>
+                    &nbsp;&nbsp;Description: {{activeJob.description}}
+                  </p>
                 </div>
 
                 <div class="form-group">
@@ -132,6 +148,14 @@
                       v-model="activeJob.callfirst"
                       id="callbeforev"
                     >
+                    <input
+                      v-model="activeJob.tel"
+                      type="text"
+                      id="tel"
+                      class="form-control"
+                      maxlength="10"
+                      placeholder="Tel"
+                    >
                   </div>
                 </div>
                 <div v-if="activeJob.done == 0" class="form-row">
@@ -149,7 +173,7 @@
                 <div>
                   <hr>
                 </div>
-                
+
                 <div class="form-group">
                   <label for="feedback">Feedback for Admin:</label>
                   <textarea
@@ -189,9 +213,9 @@ export default {
   },
   data() {
     return {
-      uri: "/technicians/",
-      datesUri: "/loaddates/",
-      jobsUri: "/loadjobs/",
+      uri: "technicians/",
+      datesUri: "loaddates/",
+      jobsUri: "loadjobs/",
       visitDates: [],
       openJobs: [],
       activeJob: [],
@@ -223,7 +247,8 @@ export default {
           done: this.activeJob.done,
           visitdate: this.activeJob.visitdate,
           cause: this.activeJob.cause,
-          message: this.activeJob.message
+          message: this.activeJob.message,
+          tel: this.activeJob.tel
         })
         .then(response => {
           $("#visitModal").modal("hide");

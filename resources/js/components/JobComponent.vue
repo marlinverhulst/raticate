@@ -545,8 +545,10 @@ export default {
       ],
       updateJob: [],
 
-      uri: "/jobs/",
-      InspectionUri: "/inspections/",
+      uri: "jobs/",
+      InspectionUri: "inspections/",
+      posturi: 'jobs',
+      postInspectionUri:'inspection',
 
       newInspectionDate: new Date(),
       selectedTab: 0,
@@ -588,7 +590,7 @@ export default {
   methods: {
     createInspection() {
       axios
-        .post(this.InspectionUri, {
+        .post(this.postInspectionUri, {
           job_id: this.updateJob.id,
           created_at: this.newInspectionDate
         })
@@ -641,7 +643,7 @@ export default {
     },
     createJob() {
       axios
-        .post(this.uri, {
+        .post(this.posturi, {
           address: this.job.address,
           zip: this.job.zip,
           tel: this.job.tel,

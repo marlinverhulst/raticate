@@ -211,13 +211,13 @@ export default {
       reportData: [],
       selectedClientId: "",
       selectedStatus: "",
-      URI: "/generate/",
+      URI: "generate/",
       startDate: new Date(),
       endDate: new Date(),
       inspectionDate: new Date(),
       openOptionDiv: "none",
       hideDivArray: ["VisitOptionDiv", "clientOptionDiv"],
-      reportByClientUri: "/reportclient/",
+      reportByClientUri: "reportclient/",
       reportGenerated: false
     };
   },

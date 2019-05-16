@@ -1818,7 +1818,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      uri: "/message/",
+      uri: "message/",
       updateJob: []
     };
   },
@@ -2063,7 +2063,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       errors: [],
       new_update_client: [],
-      uri: "/clients/"
+      uri: "clients/",
+      posturi: "clients"
     };
   },
   props: {
@@ -2095,7 +2096,7 @@ __webpack_require__.r(__webpack_exports__);
     createClient: function createClient() {
       var _this = this;
 
-      axios.post(this.uri, {
+      axios.post(this.posturi, {
         name: this.client.name
       }).then(function (response) {
         _this.clients.push(response.data.client);
@@ -2121,7 +2122,7 @@ __webpack_require__.r(__webpack_exports__);
     createPriceTag: function createPriceTag() {
       var _this2 = this;
 
-      axios.post("/pricetags", {
+      axios.post("pricetags", {
         kind: this.pricetag.kind,
         name: this.pricetag.name,
         cost: this.pricetag.cost = this.replaceComma(this.pricetag.cost),
@@ -2171,7 +2172,7 @@ __webpack_require__.r(__webpack_exports__);
       var confirmbox = confirm("Do you realy want to delete this Pricetag ? It's best to update all jobs with a new pricetag first");
 
       if (confirmbox == true) {
-        axios.delete("/pricetags/" + this.new_update_client.pricetags[index].id).then(function (response) {
+        axios.delete("pricetags/" + this.new_update_client.pricetags[index].id).then(function (response) {
           _this5.$delete(_this5.new_update_client.pricetags, index);
         }).catch(function (error) {
           _this5.$root.messageError('Could not delete Pricetag');
@@ -2749,8 +2750,10 @@ __webpack_require__.r(__webpack_exports__);
         name: "Overig"
       }],
       updateJob: [],
-      uri: "/jobs/",
-      InspectionUri: "/inspections/",
+      uri: "jobs/",
+      InspectionUri: "inspections/",
+      posturi: 'jobs',
+      postInspectionUri: 'inspection',
       newInspectionDate: new Date(),
       selectedTab: 0,
       selectedIndex: 0,
@@ -2792,7 +2795,7 @@ __webpack_require__.r(__webpack_exports__);
     createInspection: function createInspection() {
       var _this2 = this;
 
-      axios.post(this.InspectionUri, {
+      axios.post(this.postInspectionUri, {
         job_id: this.updateJob.id,
         created_at: this.newInspectionDate
       }).then(function (response) {
@@ -2841,7 +2844,7 @@ __webpack_require__.r(__webpack_exports__);
     createJob: function createJob() {
       var _this4 = this;
 
-      axios.post(this.uri, {
+      axios.post(this.posturi, {
         address: this.job.address,
         zip: this.job.zip,
         tel: this.job.tel,
@@ -3175,13 +3178,13 @@ __webpack_require__.r(__webpack_exports__);
       reportData: [],
       selectedClientId: "",
       selectedStatus: "",
-      URI: "/generate/",
+      URI: "generate/",
       startDate: new Date(),
       endDate: new Date(),
       inspectionDate: new Date(),
       openOptionDiv: "none",
       hideDivArray: ["VisitOptionDiv", "clientOptionDiv"],
-      reportByClientUri: "/reportclient/",
+      reportByClientUri: "reportclient/",
       reportGenerated: false
     };
   },
@@ -3544,7 +3547,8 @@ __webpack_require__.r(__webpack_exports__);
       toast: toastr.options = {
         positionClass: "toast-top-full-width"
       },
-      uri: "/users/"
+      uri: "users/",
+      posturi: 'user'
     };
   },
   props: {
@@ -3626,7 +3630,7 @@ __webpack_require__.r(__webpack_exports__);
     createUser: function createUser() {
       var _this2 = this;
 
-      axios.post(this.uri, {
+      axios.post(this.posturi, {
         name: this.user.name,
         email: this.user.email,
         password: this.user.password,
@@ -3857,6 +3861,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3864,9 +3892,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      uri: "/technicians/",
-      datesUri: "/loaddates/",
-      jobsUri: "/loadjobs/",
+      uri: "technicians/",
+      datesUri: "loaddates/",
+      jobsUri: "loadjobs/",
       visitDates: [],
       openJobs: [],
       activeJob: [],
@@ -3906,7 +3934,8 @@ __webpack_require__.r(__webpack_exports__);
         done: this.activeJob.done,
         visitdate: this.activeJob.visitdate,
         cause: this.activeJob.cause,
-        message: this.activeJob.message
+        message: this.activeJob.message,
+        tel: this.activeJob.tel
       }).then(function (response) {
         $("#visitModal").modal("hide");
 
@@ -43177,9 +43206,27 @@ var render = function() {
                           staticClass: "border border-danger col-12 pt-3 mb-2"
                         },
                         [
-                          _c("p", [
+                          _c("label", { attrs: { for: "" } }, [
                             _vm._v(
                               "Time restriction: " + _vm._s(_vm.activeJob.time)
+                            )
+                          ])
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.activeJob.callfirst != null &&
+                  _vm.activeJob.callfirst != ""
+                    ? _c(
+                        "span",
+                        {
+                          staticClass: "border border-danger col-12 pt-3 mb-2"
+                        },
+                        [
+                          _c("label", { attrs: { for: "" } }, [
+                            _vm._v(
+                              "Call before visiting: " +
+                                _vm._s(_vm.activeJob.tel)
                             )
                           ])
                         ]
@@ -43198,42 +43245,34 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "description" } }, [
-                        _vm._v("Description:")
-                      ]),
-                      _vm._v(" "),
-                      _c("textarea", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.activeJob.description,
-                            expression: "activeJob.description"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          disabled: "",
-                          name: "",
-                          id: "description",
-                          cols: "30",
-                          rows: "5"
-                        },
-                        domProps: { value: _vm.activeJob.description },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.activeJob,
-                              "description",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
+                    _c("div", { staticClass: "form-group border" }, [
+                      _c("p", [
+                        _vm._v(
+                          "\n                    Address: " +
+                            _vm._s(_vm.activeJob.address) +
+                            "\n                  "
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "\n                    Zipcode: " +
+                            _vm._s(_vm.activeJob.zip) +
+                            " / City: " +
+                            _vm._s(_vm.activeJob.city) +
+                            "\n                  "
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "\n                    Tel: " +
+                            _vm._s(_vm.activeJob.tel) +
+                            "\n                  "
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "\n                    Description: " +
+                            _vm._s(_vm.activeJob.description) +
+                            "\n                "
+                        )
+                      ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
@@ -43474,6 +43513,37 @@ var render = function() {
                                   } else {
                                     _vm.$set(_vm.activeJob, "callfirst", $$c)
                                   }
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.activeJob.tel,
+                                  expression: "activeJob.tel"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                id: "tel",
+                                maxlength: "10",
+                                placeholder: "Tel"
+                              },
+                              domProps: { value: _vm.activeJob.tel },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.activeJob,
+                                    "tel",
+                                    $event.target.value
+                                  )
                                 }
                               }
                             })
@@ -57318,9 +57388,9 @@ var app = new Vue({
       jobs: [],
       jobstatus: 0,
       searchString: "",
-      userUri: "/users/",
-      jobUri: "/jobs/",
-      clientUri: "/clients"
+      userUri: "users/",
+      jobUri: "jobs/",
+      clientUri: "clients/"
     };
   },
   computed: {

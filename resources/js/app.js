@@ -59,9 +59,9 @@ const app = new Vue({
             jobstatus: 0,
             searchString: "",
 
-            userUri: "/users/",
-            jobUri: "/jobs/",
-            clientUri: "/clients"
+            userUri: "users/",
+            jobUri: "jobs/",
+            clientUri: "clients/"
         }
     },
     computed: {
