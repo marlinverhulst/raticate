@@ -192,6 +192,7 @@ class JobsController extends Controller
         'time' => $request->time,
         'done' => $request->done,   
         'tel' => $request->tel,
+        'priority' => $request->priority,
         
         
         

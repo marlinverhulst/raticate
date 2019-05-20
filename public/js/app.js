@@ -3369,21 +3369,111 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      selectedTechnician: ''
+      selectedTechnicianId: "",
+      datesUri: "routebuilder/",
+      dates: [],
+      jobs: [],
+      orderedJobs: []
     };
   },
   props: {
     users: Array
   },
   methods: {
+    updateTheJob: function updateTheJob() {
+      var _this = this;
+
+      this.jobs.forEach(function (job) {
+        axios.patch(_this.datesUri + job.id, {
+          priority: parseInt(job.priority, 10)
+        }).catch(function (error) {
+          _this.$root.messageError("Error while saving " + job.address);
+        });
+      });
+      this.$root.messageSuccess("Route has been saves");
+    },
+    getDatesForUser: function getDatesForUser(userId) {
+      var _this2 = this;
+
+      this.jobs = [];
+      axios.get(this.datesUri, {
+        params: {
+          id: userId
+        }
+      }).then(function (response) {
+        _this2.dates = response.data.dates;
+      });
+    },
+    getJobs: function getJobs(userId, visitdate) {
+      var _this3 = this;
+
+      axios.get("routebuilderjobs", {
+        params: {
+          id: userId,
+          visitdate: visitdate
+        }
+      }).then(function (response) {
+        _this3.jobs = response.data.jobs;
+        _this3.orderedJobs = response.data.jobs;
+      });
+    },
     openModal: function openModal() {
-      $('#RouteBuilderModal').modal('show');
+      $("#RouteBuilderModal").modal("show");
     },
     closeModal: function closeModal() {
-      $('#RouteBuilderModal').modal('hide');
+      $("#RouteBuilderModal").modal("hide");
     }
   },
   computed: {
@@ -3392,6 +3482,13 @@ __webpack_require__.r(__webpack_exports__);
       return this.users.filter(function (user) {
         return user.role_id == 2;
       });
+    },
+    sortJobs: function sortJobs() {
+      var array = [];
+      array = this.orderedJobs.sort(function (a, b) {
+        return a.priority - b.priority;
+      });
+      return array;
     }
   },
   mounted: function mounted() {
@@ -42608,7 +42705,7 @@ var render = function() {
       },
       [
         _c("i", { staticClass: "fas fa-route fa-sm text-white-50" }),
-        _vm._v("\n      Route Builder       \n  ")
+        _vm._v("\n    Route Builder       \n  ")
       ]
     ),
     _vm._v(" "),
@@ -42669,26 +42766,33 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.selectedTechnician,
-                            expression: "selectedTechnician"
+                            value: _vm.selectedTechnicianId,
+                            expression: "selectedTechnicianId"
                           }
                         ],
                         staticClass: "form-control",
                         attrs: { name: "selectClient", id: "selectClient" },
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.selectedTechnician = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedTechnicianId = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.getDatesForUser(
+                                _vm.selectedTechnicianId
+                              )
+                            }
+                          ]
                         }
                       },
                       [
@@ -42702,6 +42806,138 @@ var render = function() {
                             { domProps: { value: user.id } },
                             [_vm._v(_vm._s(user.name))]
                           )
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-row mt-3" },
+                  _vm._l(_vm.dates, function(date) {
+                    return _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "btn btn-sm btn-outline-primary mr-1 mb-2",
+                          on: {
+                            click: function($event) {
+                              return _vm.getJobs(
+                                _vm.selectedTechnicianId,
+                                date.visitdate
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.$root.getFormattedDate(date.visitdate))
+                          )
+                        ]
+                      )
+                    ])
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-row mt3" }, [
+                  _c("div", { staticClass: "col-6" }, [
+                    _c(
+                      "table",
+                      { staticClass: "table table-striped" },
+                      [
+                        _c("tr", [
+                          _c("th", [_vm._v("Address")]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("Priorty")]),
+                          _vm._v(" "),
+                          _c("th", [
+                            _vm.jobs.length != 0
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary btn-sm",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.updateTheJob()
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("save")]
+                                )
+                              : _vm._e()
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.jobs, function(job, index) {
+                          return _c("tr", [
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(job.address) + " , " + _vm._s(job.city)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: job.priority,
+                                    expression: "job.priority"
+                                  }
+                                ],
+                                attrs: { type: "number", id: "" },
+                                domProps: { value: job.priority },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      job,
+                                      "priority",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("td")
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-6" }, [
+                    _c(
+                      "table",
+                      { staticClass: "table table-striped" },
+                      [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _vm._l(_vm.sortJobs, function(job, index) {
+                          return _c("tr", [
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(job.address) + " , " + _vm._s(job.city)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
+                            _c("td")
+                          ])
                         })
                       ],
                       2
@@ -42732,7 +42968,20 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th"),
+      _vm._v(" "),
+      _c("th", [_vm._v("Preview")]),
+      _vm._v(" "),
+      _c("th")
+    ])
+  }
+]
 render._withStripped = true
 
 

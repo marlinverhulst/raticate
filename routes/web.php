@@ -20,6 +20,7 @@ Route::patch('/message/{id}',[
 
 
 
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -35,5 +36,5 @@ Route::resource('/routebuilder','RouteBuilderController');
 route::get('/reportclient', 'ReportController@generateByClient');
 route::get('/loaddates', 'TechnicianController@getVisits');
 route::get('/loadjobs', 'TechnicianController@getJobs');
-
+Route::get('routebuilderjobs/', 'RouteBuilderController@getJobs');
 

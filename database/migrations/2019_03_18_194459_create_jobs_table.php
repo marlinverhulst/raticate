@@ -32,7 +32,7 @@ class CreateJobsTable extends Migration
             $table->string('time')->nullable();
             $table->boolean('done');
             $table->string('cause')->nullable();
-            $table->integer('priority')->default('0');
+            $table->integer('priority')->default('999');
 
 
 

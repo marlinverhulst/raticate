@@ -3,15 +3,14 @@
     <!-- Route Builder -->
 
     <a
-      
       href="#"
       @click="openModal()"
       class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
     >
       <i class="fas fa-route fa-sm text-white-50"></i>
-        Route Builder&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Route Builder&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </a>
-     <!-- Modal -->
+    <!-- Modal -->
     <div
       class="modal fade"
       id="RouteBuilderModal"
@@ -30,21 +29,70 @@
           </div>
           <div class="modal-body">
             <div class="form-row mt-3">
-                    <div class="col-12">
-                      <select
-                        name="selectClient"
-                        id="selectClient"
-                        v-model="selectedTechnician"
-                        class="form-control"
-                      >
-                        <option disabled value>Select Technician</option>
-                        
-                        <option v-for="user in getTechnicians" :value="user.id">{{user.name}}</option>
-                      </select>
-                    </div>
-                  </div>
-           
-                 
+              <div class="col-12">
+                <select
+                  @change="getDatesForUser(selectedTechnicianId)"
+                  name="selectClient"
+                  id="selectClient"
+                  v-model="selectedTechnicianId"
+                  class="form-control"
+                >
+                  <option disabled value>Select Technician</option>
+
+                  <option v-for="user in getTechnicians" :value="user.id">{{user.name}}</option>
+                </select>
+              </div>
+            </div>
+            <hr>
+            <div class="form-row mt-3">
+              <span v-for="date in dates">
+                <button
+                  class="btn btn-sm btn-outline-primary mr-1 mb-2"
+                  @click="getJobs(selectedTechnicianId,date.visitdate)"
+                >{{$root.getFormattedDate(date.visitdate)}}</button>
+              </span>
+            </div>
+            <hr>
+            <div class="form-row mt3">
+              <div class="col-6">
+                <table class="table table-striped">
+                  <tr>
+                    <th>Address</th>
+                    <th>Priorty</th>
+                    <th>
+                      <button
+                        @click="updateTheJob()"
+                        v-if="jobs.length != 0"
+                        class="btn btn-primary btn-sm"
+                      >save</button>
+                    </th>
+                  </tr>
+                  <tr v-for="(job, index) in jobs">
+                    <td>{{job.address}} , {{job.city}}</td>
+                    <td>
+                      <input type="number" id v-model="job.priority">
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-6">
+                <table class="table table-striped">
+                  <tr>
+                    <th></th>
+                    <th>Preview</th>
+                    <th></th>
+                  </tr>
+                  <tr v-for="(job, index) in sortJobs">
+                    <td>{{job.address}} , {{job.city}}</td>
+                    <td>
+                      
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
           </div>
           <!--end of modal body -->
           <div class="modal-footer">
@@ -54,48 +102,83 @@
       </div>
     </div>
     <!-- end of Modal -->
-  </div> <!-- End Of App -->
+  </div>
+  <!-- End Of App -->
 </template>
 
 <script>
 export default {
   data() {
     return {
-      selectedTechnician: '',
-      datesUri: 'routebuilder/'
-      
+      selectedTechnicianId: "",
+      datesUri: "routebuilder/",
+
+      dates: [],
+      jobs: [],
+      orderedJobs: []
     };
   },
   props: {
-
-    users: Array 
-    
+    users: Array
   },
 
   methods: {
+    updateTheJob() {
+      this.jobs.forEach(job => {
+        axios
+          .patch(this.datesUri + job.id, {
+            priority: parseInt(job.priority, 10)
+          })
 
-    getDates() {
-      axios.get(this.datesUri).then(response => {
-        this.visitDates = response.data.dates;
+          .catch(error => {
+            this.$root.messageError("Error while saving " + job.address);
+          });
+      });
+      this.$root.messageSuccess("Route has been saves");
+    },
+    getDatesForUser(userId) {
+      this.jobs = [];
+      axios.get(this.datesUri, { params: { id: userId } }).then(response => {
+        this.dates = response.data.dates;
       });
     },
-
-    openModal(){
-      $('#RouteBuilderModal').modal('show');
+    getJobs(userId, visitdate) {
+      axios
+        .get("routebuilderjobs", {
+          params: { id: userId, visitdate: visitdate }
+        })
+        .then(response => {
+          this.jobs = response.data.jobs;
+          this.orderedJobs = response.data.jobs;
+        });
+        
     },
-    closeModal(){
-      $('#RouteBuilderModal').modal('hide');
+
+    openModal() {
+      $("#RouteBuilderModal").modal("show");
+    },
+    closeModal() {
+      $("#RouteBuilderModal").modal("hide");
     }
-    
   },
 
   computed: {
-     // Returns list of technicians filtered from Users
+    // Returns list of technicians filtered from Users
     getTechnicians: function() {
       return this.users.filter(user => {
         return user.role_id == 2;
       });
     },
+
+    sortJobs: function() {
+      let array = []
+         array = this.orderedJobs.sort(function(a, b) {
+        return a.priority - b.priority;
+
+        
+      });
+      return array;
+    }
   },
   mounted() {
     console.log("RouteBuilder mounted.");

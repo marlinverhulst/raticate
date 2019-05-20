@@ -24,7 +24,8 @@ class Job extends Model
         'time',
         'done',
         'visitdate',
-        'cause'
+        'cause',
+        'priority'
 
 
     ];
@@ -62,7 +63,7 @@ class Job extends Model
         $userId = Auth::user();
         
 
-        $jobs = $userId->jobs()->where([['done','=', 0],['visitdate', '=', $date]])->orderBy('zip')->with('inspections')->get();
+        $jobs = $userId->jobs()->where([['done','=', 0],['visitdate', '=', $date]])->orderBy('priority')->with('inspections')->get();
         
         return response()->json([
             'jobs' => $jobs,
