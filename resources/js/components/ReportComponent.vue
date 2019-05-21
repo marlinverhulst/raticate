@@ -264,6 +264,7 @@ export default {
     },
     closeModal() {
       this.reportGenerated = false;
+      this.reportData = [];
       $("#ReportModal").modal("hide");
     },
     getReportbyClients() {

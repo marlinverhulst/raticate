@@ -407,7 +407,7 @@
                 <div class="form-group col-6">
                   <label v-if="updateJob.noVisit == 0 && updateJob.done == 0 " for="updateDatepicker">Visit date* :&nbsp;</label>
                   <div v-if="updateJob.noVisit == 0 && updateJob.done == 0 ">
-                    <vuejs-datepicker name="updateDatepicker" v-model="updateJob.visitDate"></vuejs-datepicker>
+                    <vuejs-datepicker name="updateDatepicker" v-model="updateJob.visitdate"></vuejs-datepicker>
                   </div>
                   <div v-else>
                     <p>Visitdate has been set.. press Do not visit 2x to reset it.</p>
@@ -615,14 +615,15 @@ export default {
           pricetag_id: this.updateJob.pricetag_id,
           user_id: this.updateJob.user_id,
           description: this.updateJob.description,
-          visitDate: this.updateJob.visitDate,
+          visitDate: this.updateJob.visitdate,
           callfirst: this.updateJob.callfirst,
           comments: this.updateJob.comments,
           time: this.updateJob.time,
           done: this.updateJob.done,
           noVisit: this.updateJob.noVisit,
           cause: this.updateJob.cause,
-          message: this.updateJob.message
+          message: this.updateJob.message,
+          priority: this.updateJob.priority
         })
         .then(response => {
           $("#update-job-modal").modal("hide");

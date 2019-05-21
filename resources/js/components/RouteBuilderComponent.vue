@@ -54,8 +54,9 @@
             </div>
             <hr>
             <div class="form-row mt3">
-              <div class="col-6">
-                <table class="table table-striped">
+              <div class="col-12">
+              <div class="d-flex flex-row align-items-center justify-content-between">
+                <table class="table ">
                   <tr>
                     <th>Address</th>
                     <th>Priorty</th>
@@ -64,7 +65,14 @@
                         @click="updateTheJob()"
                         v-if="jobs.length != 0"
                         class="btn btn-primary btn-sm"
-                      >save</button>
+                      >Save Route</button>
+                    </th>
+                    <th>
+                      <button
+                        @click="sortJobs()"
+                        v-if="jobs.length != 0"
+                        class="btn btn-primary btn-sm"
+                      >Preview Route</button>
                     </th>
                   </tr>
                   <tr v-for="(job, index) in jobs">
@@ -73,24 +81,10 @@
                       <input type="number" id v-model="job.priority">
                     </td>
                     <td></td>
-                  </tr>
-                </table>
-              </div>
-              <div class="col-6">
-                <table class="table table-striped">
-                  <tr>
-                    <th></th>
-                    <th>Preview</th>
-                    <th></th>
-                  </tr>
-                  <tr v-for="(job, index) in sortJobs">
-                    <td>{{job.address}} , {{job.city}}</td>
-                    <td>
-                      
-                    </td>
                     <td></td>
                   </tr>
                 </table>
+              </div>
               </div>
             </div>
           </div>
@@ -115,7 +109,7 @@ export default {
 
       dates: [],
       jobs: [],
-      orderedJobs: []
+     
     };
   },
   props: {
@@ -149,15 +143,28 @@ export default {
         })
         .then(response => {
           this.jobs = response.data.jobs;
-          this.orderedJobs = response.data.jobs;
+          
         });
         
     },
+     sortJobs: function() {
+      
+        return this.jobs.sort(function(a, b) {
+        return a.priority - b.priority;
+
+        
+      });
+      
+    },
 
     openModal() {
+      
       $("#RouteBuilderModal").modal("show");
     },
     closeModal() {
+      this.jobs = [];
+      this.selectedTechnicianId = '';
+      this.dates = [];
       $("#RouteBuilderModal").modal("hide");
     }
   },
@@ -168,17 +175,9 @@ export default {
       return this.users.filter(user => {
         return user.role_id == 2;
       });
-    },
-
-    sortJobs: function() {
-      let array = []
-         array = this.orderedJobs.sort(function(a, b) {
-        return a.priority - b.priority;
-
-        
-      });
-      return array;
     }
+
+   
   },
   mounted() {
     console.log("RouteBuilder mounted.");
